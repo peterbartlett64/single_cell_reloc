@@ -1,6 +1,7 @@
 
 #%%
 from os import path, chdir, cpu_count
+print('test')
 #%%
 def slash_switch(path): ## This function is currently unused but could be usefull in the future for the cwd setting
 	new = path.replace(os.sep, '/')
