@@ -7,6 +7,40 @@ def slash_switch(path): ## This function is currently unused but could be useful
 	new = path.replace(os.sep, '/')
 	return (new)
 
+def Experimental_info():
+	while True:
+		try:
+			timepoint_space = float(input("What is the time between images?")) #* If the number is converted to a float, then it should be acceptable downstream
+		except ValueError:
+			continue
+		conf_ts = input(f"To confirm, are there {timepoint_space} minutes between frames?")
+		
+		if conf_ts == "yes" or "Yes" or 1:
+			break
+		else:
+			continue
+
+	cell_tracking = True
+
+	while True:
+		user_input = input('Segment with fluorescent channels? True/False')
+		if user_input.capitalize() == 'True':
+			fluorescent_seg = True
+			break
+		elif user_input.capitalize() == 'False':
+			fluorescent_seg = False
+			break
+		else:
+			continue
+
+	Experimental_info = {
+		"timepoint_space" : timepoint_space,
+		"cell_tracking" : cell_tracking,
+		"fluorescent_seg" : fluorescent_seg
+	}
+
+	return(Experimental_info)
+
 def global_vars():
 	# global analyze
 	# global microfluidic_results
@@ -72,17 +106,19 @@ def global_vars():
 			perc = 1
 		else:
 			percentiles_input = str.split(percentiles_input, ",")
-			percentiles = [int(i) for i in percentiles_input]
+			percentiles_input = [int(i) for i in percentiles_input]
 
-			if percentiles == [95, 99]:
+			if percentiles_input == [95, 99]:
+				percentiles = [95,99]
 				perc = 1
 			else:
-				if type(percentiles) is str or int:
-					percentiles = [percentiles, 95, 99] #* The system shoudl still run on 95h and 99th percentiles
+				
+				if type(percentiles_input) is list:
+					percentiles = percentiles_input + [95, 99]
 					perc = 1
-				elif type(percentiles) is list:
-					percentiles = [percentiles] + [95, 99]
-					perc = 1
+				# elif type(percentiles) is str or int:
+				# 	percentiles = [percentiles_input, 95, 99] #* The system shoudl still run on 95h and 99th percentiles
+				# 	perc = 1
 				else:
 					print("Non permissible")
 					pass
@@ -122,3 +158,4 @@ if __name__ == "__main__": #* Allow the program to be run individually to chang 
 	del cont
 
 # %%
+#? There is a version that makes global varaibles and thre is a version that stroes the globals in a dictionary
