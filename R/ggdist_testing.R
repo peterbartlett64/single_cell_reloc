@@ -1,8 +1,8 @@
 require(pacman)
 pacman:: p_load(ggdist,dplyr, GGally, ggplot2, ggthemes, ggvis, httr, lubridate, plotly, rio, rmarkdown, shiny, stringr, tidyr, ggpmisc)
-# pacman:: p_load(httpgd)
+pacman:: p_load(httpgd)
 # here() #Set the working directory to the current folder
-# hgd()
+hgd()
 # hgd_browse()
 
 setwd("D:/Microfluidics/RESULTS_ALL/Most_final_collected/Combined_by_perc/Col_with_Abund") #!This is temporary
@@ -34,15 +34,16 @@ df2$past = 2
 df3 <- rbind(df,df2)
 
 file %>% 
-  file$Frame_x = as.character(file$Frame_x) %>% 
+  # file$Frame_x = as.character(file$Frame_x) %>% 
   ggplot(aes(
     y = Frame_x,
     x = Loc_score))+
   stat_eye(aes(fill = stat(1 < x))) +
-  geom_dotsinterval(side = 'bottom', scale = 1.2, height = 0.6, fill = file$Reloc_yet)+
-  scale_fill_manual(values = c("#d9d9d9fe", "skyblue"))+
+  geom_dotsinterval(side = 'bottom', scale = 1.2, height = 0.6, fill = file$Reloc_yet) +
+  scale_fill_manual(values = c("#d9d9d9fe", "skyblue")) +
   scale_color_brewer(palette = "Dark2")+
   theme_clean()
+hgd_browse()
 
 df3 %>% 
   ggplot(aes(
