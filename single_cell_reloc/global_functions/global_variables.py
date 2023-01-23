@@ -1,6 +1,6 @@
-
 #%%
-from os import path, chdir, cpu_count
+from os import path, cpu_count
+import json
 import os
 
 #%%
@@ -50,7 +50,14 @@ def global_vars():
 	# global percentiles
 
 	a = 0
+	loop = 1
 	while a == 0:
+		if loop >= 3:
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			if try_again.lower() == 'y' or try_again.lower() == 'yes':
+				pass
+			else:
+				return('Failed to input all global variables')
 		analyze = input("Where are the images stored?\n")
 		analyze = slash_switch(analyze)
 		if path.isdir(analyze) == True:
@@ -60,8 +67,17 @@ def global_vars():
 		else:
 			print("Non permissible\n")
 			pass
+		loop += 1
+
 	m = 0
+	loop = 1
 	while m == 0:
+		if loop >= 3:
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			if try_again.lower() == 'y' or try_again.lower() == 'yes':
+				pass
+			else:
+				return('Failed to input all global variables')
 		microfluidics_results =  input("Microfluidics results folder\n")
 		microfluidics_results = slash_switch(microfluidics_results)
 		if path.isdir(microfluidics_results) == True:
@@ -71,9 +87,17 @@ def global_vars():
 		else:
 			print("Non permissible\n")
 			pass
+		loop += 1
 
 	p = 0
+	loop = 1
 	while p == 0:
+		if loop >= 3:
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			if try_again.lower() == 'y' or try_again.lower() == 'yes':
+				pass
+			else:
+				return('Failed to input all global variables')
 		post_path = input("Post_quant results folder\n")
 		post_path = slash_switch(post_path)
 		if path.isdir(post_path) == True:
@@ -83,11 +107,19 @@ def global_vars():
 		else:
 			print("Non permissible\n")
 			pass
+		loop += 1
 
 	cpu_number = cpu_count()
 
 	cp = 0
+	loop = 1
 	while cp == 0:
+		if loop >= 3:
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			if try_again.lower() == 'y' or try_again.lower() == 'yes':
+				pass
+			else:
+				return('Failed to input all global variables')
 		try:
 			cpu_se  = int(input(f"Sytem has {cpu_number} cores. How many would you like to use? \n"))
 		except ValueError:
@@ -98,9 +130,17 @@ def global_vars():
 			cp = 1
 		else:
 			print(f"That is an invalid number of cpu cores. Please select a number <= {cpu_number} \n")
+		loop += 1
 
 	perc = 0
+	loop = 1
 	while perc == 0:
+		if loop >= 3:
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			if try_again.lower() == 'y' or try_again.lower() == 'yes':
+				pass
+			else:
+				return('Failed to input all global variables')
 		percentiles_input = input("Pipeline set to auto-run on 95th and 99th pecentile. Would you like to run on EXTRA intensity? If yes, enter the numerical intensity. If no, press ENTER \n")
 		if percentiles_input == "":
 			percentiles = [95, 99]
@@ -123,12 +163,26 @@ def global_vars():
 				else:
 					print("Non permissible")
 					pass
+		loop += 1
 
 		mult = 0
+		loop = 1
 		while mult == 0:
+			if loop >= 3:
+				try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+				if try_again.lower() == 'y' or try_again.lower() == 'yes':
+					pass
+				else:
+					return('Failed to input all global variables')
+
 			multiplex = input("Does this experiment have muliplexed samples? \n")
-
-
+			if multiplex.lower() == 'yes':
+				multiplex = True
+				mult = 1
+			if multiplex.lower() == 'no':
+				multiplex = False
+				mult = 1 #* This will exit
+			loop += 1
 
 	global Global_variables
 	Global_variables = {"analyze": analyze,
@@ -137,6 +191,10 @@ def global_vars():
 						"cpu_se": cpu_se,
 						"percentiles": percentiles,
 						"multiplex": multiplex}
+
+	os.chdir(microfluidics_results)
+	with open("Global_variables.json", "w") as write_file:
+		json.dump(Global_variables, write_file, indent=4) #*Write the global variables to a JSON file
 
 	return(Global_variables)
 	# return(f"percentiles are {percentiles}.")
@@ -149,7 +207,17 @@ def global_continue(): #* Confirm that the paths given are correct
 		cont = 1
 	return(cont)
 
-	#//
+def manager():
+	global_vars()
+	cont = 0
+	while cont != 1:
+		cont = global_continue()
+
+
+
+Global_variables = manager()
+
+	#// I don't know what this is from
 	#! None
 	#! Analyze at ,
 	#! microfluidics_results at ,
@@ -158,12 +226,14 @@ def global_continue(): #* Confirm that the paths given are correct
 	#! Running with cpu_se cpu cores out of 12
 	#//
 
+#? There is a version that makes global varaibles and there is a version that stores the globals in a dictionary
 if __name__ == "__main__": #* Allow the program to be run individually to change the global variables
-	print(global_vars())
-	cont = 0
-	while cont != 1:
-		cont  = global_continue()
-	del cont
+	manager()
+	print(Global_variables)
+	# cont = 0
+	# while cont != 1:
+	# 	cont = global_continue()
+	# del cont
+
 
 # %%
-#? There is a version that makes global varaibles and thre is a version that stroes the globals in a dictionary
