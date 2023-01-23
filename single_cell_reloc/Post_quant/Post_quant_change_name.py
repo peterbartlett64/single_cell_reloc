@@ -1,12 +1,12 @@
 import os
 import pandas as pd
-import global_variables.global_variables as global_variables
 
-def Strain_ID_single(p, recover = False, n_rem = 0, n_rem_s = 0): #! This is not functional yet
+global_variables.global_variables as global_variables
+
+def Strain_ID_single(p, recover = False, retreat = False): #! This is not functional yet
 	try:
 		Quant_ALL = pd.read_csv(Quant_ALL_index.iloc[p,0])
 		Quant_ALL.drop(Quant_ALL.columns[Quant_ALL.columns.str.contains('Unnamed',case = False)],axis = 1, inplace = True)
-		print(p)
 
 		# frame_max = np.max(Quant_ALL["Frame"])  This is not needed for the Strain_single as the final frame intenstity is not taken into account. In the multiplex version, they Myo1 intensity is used to get stain identity
 
@@ -15,9 +15,9 @@ def Strain_ID_single(p, recover = False, n_rem = 0, n_rem_s = 0): #! This is not
 			return(f"Fail on index {p} at trackedCells Stage")
 
 		if len(trackedCells) < 50:       ### Not sure if it would be a good idea to make sure that the position has enough cells. This does not gauruntee enough cells in future factor determination.
-			return("Thre are less than 50 cells in time series")
-	
-		Pos = Quant_ALL["Cell_Barcode"].values[0] # This is a temporary and false value, based on the first cell barcode as all within df will have the same position  
+			return("There are less than 50 cells in time series")
+
+		Pos = Quant_ALL["Cell_Barcode"].values[0] # This is a temporary and false value, based on the first cell barcode as all within df will have the same position
 		Pos = Pos[0:Pos.find("c")]
 
 		s = Pos.find("r")
@@ -29,36 +29,47 @@ def Strain_ID_single(p, recover = False, n_rem = 0, n_rem_s = 0): #! This is not
 		Time_treat = Run_info["Time_treat"].values[0]
 		if recover == True:
 			Time_recover = Run_info["Time_recover"].values[0]
+		if retreat == True:
+			Time_retreat = Run_info["Time_retreat"].values[0]
 
 		Col = int(Pos[Pos.find("p")+1:-4])  # This is the column of the postion which is being tested
 		Pos_info = Run_info[Run_info["MapID (Col_Range)"]>=Col].reset_index (drop=True) # Col HERE represents the NAME and NOT the information. eg. info column 10,20,30 etc.  >= pos_col 10
-		Pos_info = Pos_info.iloc[0] # THIS IS A VERY IMPORTANT LINE to make sure that only the 
+		Pos_info = Pos_info.iloc[0] # THIS IS A VERY IMPORTANT LINE to make sure that only the
 		Prot_strain = Pos_info["Protein"].values[0]
 		Col_info = Pos_info["MapID (Col_Range)"].values[0]
 
 		def Section_stage(frame, recovery = recover):
 			frame = frame.values[0] # Again, this is for the barcode grouped version
-		
-			if frame >= n_rem_s #If the frame is larger
-				frame = frame + n_rem
-			else:
-				pass
-			
+
 			f_treated = Time_treat/time_per_frame
-			if recovery == True: 
+			if recovery == True and retreat == False:
 				f_recovery = Time_recover/time_per_frame
-				if frame < f_treated :
+				if frame < f_treated:
+					return (0)
+				elif frame >= f_treated and frame < f_recovery:
+					return(1)
+				elif frame >= f_recovery:
+					return(2)
+			elif recovery == False and retreat == False:
+				if frame < f_treated:
 					return (0)
 				elif frame >= f_treated and < f_recovery:
 					return(1)
-				elif frame <= f_recovery:
-					return(2)
-
-			elif recovery == False: 
+			elif recover == False and retreat == True: #* This is impossible, so I could either handle with
+				return(float(NaN)) #* The function could be written to return an error message, but that would take a lot of downstream handling
+			elif recovery == True and retreat == True:
+				f_recovery = Time_recover/time_per_frame
+				f_retreated = Time_retreat/time_per_frame
 				if frame < f_treated:
-				return (0)
-				elif frame >= f_treated and < f_recovery:
-				return(1)
+					print(0)
+				elif frame >= f_treated and frame < f_recovery:
+					return(1)
+				elif frame > f_recovery and frame < f_retreated:
+					return(2)
+				elif frame >= f_retreated:
+					return(3)
+			else:
+				pass
 
 		Quant_FIN_primary["Col_info"] = int(Col_info)
 		# Quant_FIN_primary["Protein"] = pd.Series(Quant_FIN_primary["Myo1Identity"]).apply(Protein_label_multi)
@@ -88,11 +99,10 @@ def Strain_ID_single(p, recover = False, n_rem = 0, n_rem_s = 0): #! This is not
 		return(f"IndexError on {p}")
 	except ValueError:
 		return(f"ValueError on {p}")
-	
+
 if __name__ == "__main__":
 	global_variables()
-	form Post_quant import *
 	Quant_all_index()
-	
 
-	
+
+

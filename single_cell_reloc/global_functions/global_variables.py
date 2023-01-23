@@ -1,6 +1,7 @@
 
 #%%
 from os import path, chdir, cpu_count
+import os
 
 #%%
 def slash_switch(path): ## This function is currently unused but could be usefull in the future for the cwd setting
@@ -10,12 +11,12 @@ def slash_switch(path): ## This function is currently unused but could be useful
 def Experimental_info():
 	while True:
 		try:
-			timepoint_space = float(input("What is the time between images?")) #* If the number is converted to a float, then it should be acceptable downstream
+			timepoint_space = float(input("What is the time between images?\n")) #* If the number is converted to a float, then it should be acceptable downstream
 		except ValueError:
 			continue
 		conf_ts = input(f"To confirm, are there {timepoint_space} minutes between frames?")
-		
-		if conf_ts == "yes" or "Yes" or 1:
+
+		if conf_ts.lower() == "yes" or 1:
 			break
 		else:
 			continue
@@ -23,11 +24,11 @@ def Experimental_info():
 	cell_tracking = True
 
 	while True:
-		user_input = input('Segment with fluorescent channels? True/False')
-		if user_input.capitalize() == 'True':
+		user_input = input('Segment with fluorescent channels? True/False\n')
+		if user_input.lower() == 'true':
 			fluorescent_seg = True
 			break
-		elif user_input.capitalize() == 'False':
+		elif user_input.lower() == 'false':
 			fluorescent_seg = False
 			break
 		else:
@@ -50,45 +51,45 @@ def global_vars():
 
 	a = 0
 	while a == 0:
-		analyze = input("Where are the images stored?")
+		analyze = input("Where are the images stored?\n")
 		analyze = slash_switch(analyze)
 		if path.isdir(analyze) == True:
 			a = 1
 		elif analyze == '':
 			a = 1
 		else:
-			print("Non permissible")
+			print("Non permissible\n")
 			pass
 	m = 0
 	while m == 0:
-		microfluidics_results =  input("Microfluidics results folder")
+		microfluidics_results =  input("Microfluidics results folder\n")
 		microfluidics_results = slash_switch(microfluidics_results)
 		if path.isdir(microfluidics_results) == True:
 			m = 1
 		elif microfluidics_results == '':
 			m = 1
 		else:
-			print("Non permissible")
+			print("Non permissible\n")
 			pass
 
 	p = 0
 	while p == 0:
-		post_path = input("Post_quant results folder")
+		post_path = input("Post_quant results folder\n")
 		post_path = slash_switch(post_path)
 		if path.isdir(post_path) == True:
 			p = 1
 		elif post_path == '':
-			p = 1 
+			p = 1
 		else:
-			print("Non permissible")
+			print("Non permissible\n")
 			pass
-	
+
 	cpu_number = cpu_count()
-	
+
 	cp = 0
 	while cp == 0:
 		try:
-			cpu_se  = int(input(f"Sytem has {cpu_number} cores. How many would you like to use"))
+			cpu_se  = int(input(f"Sytem has {cpu_number} cores. How many would you like to use? \n"))
 		except ValueError:
 			continue
 		if cpu_se <= cpu_number:
@@ -96,11 +97,11 @@ def global_vars():
 		elif analyze == '':
 			cp = 1
 		else:
-			print(f"That is an invalid number of cpu cores. Please select a number <= {cpu_number}")
-	
+			print(f"That is an invalid number of cpu cores. Please select a number <= {cpu_number} \n")
+
 	perc = 0
 	while perc == 0:
-		percentiles_input = input("Pipeline set to auto-run on 95th and 99th pecentile. Would you like to run on EXTRA intensity? If yes, enter the numerical intensity. If no, press ENTER")
+		percentiles_input = input("Pipeline set to auto-run on 95th and 99th pecentile. Would you like to run on EXTRA intensity? If yes, enter the numerical intensity. If no, press ENTER \n")
 		if percentiles_input == "":
 			percentiles = [95, 99]
 			perc = 1
@@ -112,7 +113,7 @@ def global_vars():
 				percentiles = [95,99]
 				perc = 1
 			else:
-				
+
 				if type(percentiles_input) is list:
 					percentiles = percentiles_input + [95, 99]
 					perc = 1
@@ -123,14 +124,21 @@ def global_vars():
 					print("Non permissible")
 					pass
 
+		mult = 0
+		while mult == 0:
+			multiplex = input("Does this experiment have muliplexed samples? \n")
+
+
+
 	global Global_variables
 	Global_variables = {"analyze": analyze,
 						"microfluidics_results": microfluidics_results,
 						"post_path": post_path,
 						"cpu_se": cpu_se,
-						"percentiles": percentiles}
+						"percentiles": percentiles,
+						"multiplex": multiplex}
 
-	return(None)
+	return(Global_variables)
 	# return(f"percentiles are {percentiles}.")
 	# return(f"Analyze at {analyze},\nmicrofluidics_results at {microfluidics_results},\npost_path at {post_path},\npercentiles are {percentiles}.\nRunning with {cpu_se} cpu cores out of {cpu_number}")
 
@@ -140,7 +148,7 @@ def global_continue(): #* Confirm that the paths given are correct
 	if cont == "Yes" or "yes" or 1:
 		cont = 1
 	return(cont)
-	
+
 	#//
 	#! None
 	#! Analyze at ,
@@ -149,8 +157,8 @@ def global_continue(): #* Confirm that the paths given are correct
 	#! percentiles are [[12], 95, 99].
 	#! Running with cpu_se cpu cores out of 12
 	#//
-	
-if __name__ == "__main__": #* Allow the program to be run individually to chang the global variables
+
+if __name__ == "__main__": #* Allow the program to be run individually to change the global variables
 	print(global_vars())
 	cont = 0
 	while cont != 1:
