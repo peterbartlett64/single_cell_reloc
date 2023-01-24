@@ -7,6 +7,7 @@ from scipy.stats import variation
 import single_cell_reloc.Post_quant.post_quant_JAN20_2023 as post_quant_funcs
 import single_cell_reloc.Post_quant.Strain_ID as Strain_ID_funcs
 import os
+import pandas as pd
 
 def Post_quant_manager(percentiles, mulitplex) -> None:
 	Quant_ALL_index = post_quant_funcs.Quantification_index_er()
@@ -17,10 +18,10 @@ def Post_quant_manager(percentiles, mulitplex) -> None:
 		Strain_ID = Strain_ID_funcs.Strain_ID_single()
 
 	l = len(Quant_ALL_index)
-	if l < pn:
+	if l < Global_variables:
 		use_cores = l
 	else:
-		use_cores = Global_variables[""]
+		use_cores = Global_variables["cpu_se"]
 
 	Parallel(n_jobs=use_cores, verbose = 100)(delayed(Strain_ID)(p) for p in range(len(Quant_ALL_index)))
 
@@ -48,17 +49,14 @@ def Post_quant_manager(percentiles, mulitplex) -> None:
 	Quant_prim_index.sort_values(by = "PositionID", inplace = True)
 	Quant_prim_index.to_csv("Quant_prim_index.csv")# , index = False)
 
-	for p in percentiles:
-
-
-
+	# for p in percentiles:
 
 
 
 if __name__ == "__main__": #* This should be included in all major folders
 	import single_cell_reloc.global_functions.global_variables as glbl_vars
 	Global_variables = glbl_vars.global_vars()
-	Post_quant_manager(percentiles=Global_variables["percentiles"], strains = )
+	Post_quant_manager(percentiles=Global_variables["percentiles"], mulitplex= Global_variables["mulitplex"] )
 
 
 

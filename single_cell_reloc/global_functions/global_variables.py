@@ -65,7 +65,7 @@ def global_vars():
 		elif analyze == '':
 			a = 1
 		else:
-			print("Non permissible\n")
+			print("Non permissible. The directory given does not exist\n")
 			pass
 		loop += 1
 
@@ -153,36 +153,39 @@ def global_vars():
 				percentiles = [95,99]
 				perc = 1
 			else:
-
 				if type(percentiles_input) is list:
 					percentiles = percentiles_input + [95, 99]
-					perc = 1
-				# elif type(percentiles) is str or int:
-				# 	percentiles = [percentiles_input, 95, 99] #* The system shoudl still run on 95h and 99th percentiles
-				# 	perc = 1
+
+					perc = 1 #* Check that all values are indeed percentiles
+					for p in percentiles:
+						if 0 < p <= 100:
+							pass
+						else:
+							print("Non permissible values given")
+							perc = 0
+							continue
 				else:
-					print("Non permissible")
-					pass
+					print("Non permissible values given")
 		loop += 1
 
-		mult = 0
-		loop = 1
-		while mult == 0:
-			if loop >= 3:
-				try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
-				if try_again.lower() == 'y' or try_again.lower() == 'yes':
-					pass
-				else:
-					return('Failed to input all global variables')
+	mult = 0
+	loop = 1
+	while mult == 0:
+		if loop >= 3:
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			if try_again.lower() == 'y' or try_again.lower() == 'yes':
+				pass
+			else:
+				return('Failed to input all global variables')
 
-			multiplex = input("Does this experiment have muliplexed samples? \n")
-			if multiplex.lower() == 'yes':
-				multiplex = True
-				mult = 1
-			if multiplex.lower() == 'no':
-				multiplex = False
-				mult = 1 #* This will exit
-			loop += 1
+		multiplex = input("Does this experiment have muliplexed samples? \n")
+		if multiplex.lower() == 'yes':
+			multiplex = True
+			mult = 1
+		if multiplex.lower() == 'no':
+			multiplex = False
+			mult = 1 #* This will exit
+		loop += 1
 
 	global Global_variables
 	Global_variables = {"analyze": analyze,
@@ -213,10 +216,6 @@ def manager():
 	while cont != 1:
 		cont = global_continue()
 
-
-
-Global_variables = manager()
-
 	#// I don't know what this is from
 	#! None
 	#! Analyze at ,
@@ -234,6 +233,3 @@ if __name__ == "__main__": #* Allow the program to be run individually to change
 	# while cont != 1:
 	# 	cont = global_continue()
 	# del cont
-
-
-# %%

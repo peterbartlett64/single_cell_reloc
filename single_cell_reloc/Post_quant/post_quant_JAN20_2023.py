@@ -419,10 +419,8 @@ def Strain_ID_multiplex(p, multiplex = True):
 		psuedo_map.reset_index(inplace=True, drop = True) #Reindex to make sure that the index numbers are correct and can be used for comparison
 		i_pt = psuedo_map[psuedo_map["Is_treated"] == 1].index[0] - 1 # This isn't the most pretty way to go about but works for now
 		psuedo_map["Frames_post_treatment"] = pd.Series(psuedo_map.index).apply(lambda x: f_Frames_post_treatment_shift(x, i_pt))
-
-		psuedo_map.drop(columns = ["Is_treated"], inplace = True)
+		psuedo_map.drop(columns=["Frame", "Is_treated"], inplace= True) #* This corrects the Frame_x issue issue the existed in prior versions
 		Quant_FIN_primary = pd.merge(Quant_FIN_primary, psuedo_map, how = "left", on='ImageID')
-
 		Quant_FIN_primary.to_csv(f"Quant_{Pos}_primary.csv")
 	except IndexError:
 		return(f"IndexError on {p}")
@@ -508,7 +506,7 @@ Quant_prim_index.to_csv("Quant_prim_index.csv")# , index = False)
 
 def I_move(p, percentile = percentile):
 	try: #TODO: Rename Frame_x to just Frame
-		Quant_prim = pd.read_csv(Quant_prim_index.iloc[p,0], usecols = ['Cell_Barcode', 'ImageID', 'Date', 'Frame_x', 'Unique_Frame', 'factor_median_OBJ_GFP', 'factor_mean_OBJ_GFP', 'x90thPercentile_norm_OBJ_Median_GFP', 'x95thPercentile_norm_OBJ_Median_GFP', 'x99thPercentile_norm_OBJ_Median_GFP', 'Progen_bud', 'x90thPercentile_GFP_RAW', 'x95thPercentile_GFP_RAW', 'x99thPercentile_GFP_RAW', 'max_GFP_RAW', 'max_mKa_RAW', 'max_mKO_RAW', 'TrackID_valid', 'Myo1Identity', 'mKO_foldChange', 'mKO_direction', 'mKA_foldChange', 'mKa_direction', 'byProgen_bud', 'byRange', 'Col_info', 'Protein', 'Is_treated', 'Frames_post_treatment', #* From here on are newly added columns to determine the cell stage. Could do a pd.merge at the end instead.
+		Quant_prim = pd.read_csv(Quant_prim_index.iloc[p,0], usecols = ['Cell_Barcode', 'ImageID', 'Date', 'Frame', 'Unique_Frame', 'factor_median_OBJ_GFP', 'factor_mean_OBJ_GFP', 'x90thPercentile_norm_OBJ_Median_GFP', 'x95thPercentile_norm_OBJ_Median_GFP', 'x99thPercentile_norm_OBJ_Median_GFP', 'Progen_bud', 'x90thPercentile_GFP_RAW', 'x95thPercentile_GFP_RAW', 'x99thPercentile_GFP_RAW', 'max_GFP_RAW', 'max_mKa_RAW', 'max_mKO_RAW', 'TrackID_valid', 'Myo1Identity', 'mKO_foldChange', 'mKO_direction', 'mKA_foldChange', 'mKa_direction', 'byProgen_bud', 'byRange', 'Col_info', 'Protein', 'Is_treated', 'Frames_post_treatment', #* From here on are newly added columns to determine the cell stage. Could do a pd.merge at the end instead.
 		"x80thPercentile_Diff_background_mKate", "x90thPercentile_Diff_background_mKate", "x99thPercentile_Diff_background_mKate", "x80thPercentile_Diff_background_mKO", "x90thPercentile_Diff_background_mKO", "x99thPercentile_Diff_background_mKO", "averageIntensity_mKO_Frame", "averageIntesntiy_mKO_Background", "averageIntensity_mKO_Object", "mKO_spread", "averageIntensity_mKate_Frame", "averageIntesntiy_mKate_Background", "averageIntensity_mKate_Object", "mKate_spread", "factor_median _OBJ_KO", "factor_mean_OBJ_KO", "factor_total_OBJ_KO", "factor_mKO_background_Med", "factor_mKO_background_Avg", "factor_mKO_background_Tot", "factor_median_OBJ_mKate", "factor_mean_OBJ_mKate", "factor_total_OBJ_mKate", "factor_mKate_background_Med", "factor_mKate_background_Avg", "factor_mKate_background_Tot", "x60thPercentile_mKa_RAW", "x80thPercentile_mKa_RAW", "x90thPercentile_mKa_RAW", "x95thPercentile_mKa_RAW", "x99thPercentile_mKa_RAW", "max_mKa_RAW", "x60thPercentile_mKO_RAW", "x80thPercentile_mKO_RAW", "x90thPercentile_mKO_RAW", "x95thPercentile_mKO_RAW", "x99thPercentile_mKO_RAW", "max_mKO_RAW"])
 
 		Quant_prim["Unique_pos"] = pd.Series(Quant_prim["Unique_Frame"]).apply(lambda x: x[:x.find('f')]) #* This was added on AUG31,2022
@@ -529,7 +527,7 @@ def I_move(p, percentile = percentile):
 			mKa_skip = True
 
 		#This is for the removal of dead cells based on high mKa and low GFP relative to the population.  The code is not complete and will remove to many cells
-		Quant_f__twe = Quant_prim.loc[(Quant_prim["Frame_x"] <= 20) & (Quant_prim["Is_treated"] == 0)].copy()
+		Quant_f__twe = Quant_prim.loc[(Quant_prim["Frame"] <= 20) & (Quant_prim["Is_treated"] == 0)].copy()
 		Median_pop = Quant_f__twe.groupby(by = "Cell_Barcode").agg('min').groupby(by = "Myo1Identity").agg('median')
 		Std_pop = Quant_f__twe.groupby(by = "Cell_Barcode").agg('min').groupby(by = "Myo1Identity").agg('std')
 
@@ -742,11 +740,11 @@ pr = pn # pn # 8 #8 #pn - 1
 
 # #, Testing this new code to make sure that all cells presnet at treatment are
 # Tracked_subset_pres_end = Tracked_subset[Tracked_subset["Cell_Barcode"].isin(Tracked_subset.iloc[-1,:]["Cell_Barcode"])]
-# unif_mKa["Max_frame_pos"] = unif_mKa.groupby(["Unique_Pos"])["Frame_x"].transform('max') #* This is the max frame for a given position
+# unif_mKa["Max_frame_pos"] = unif_mKa.groupby(["Unique_Pos"])["Frame"].transform('max') #* This is the max frame for a given position
 
 # #!WhyTF is Unique_frame being ouput as an obbject and not a string?!
-# df.groupby("Cell_Barcode")["Frame_x"].transform('max') #* This is the max frame for a given cell barcode
-# df["Max_frame_pos"] = df.groupby(["Unique_Pos"])["Frame_x"].transform('max')
+# df.groupby("Cell_Barcode")["Frame"].transform('max') #* This is the max frame for a given cell barcode
+# df["Max_frame_pos"] = df.groupby(["Unique_Pos"])["Frame"].transform('max')
 
 
 # def compare:
@@ -756,7 +754,7 @@ pr = pn # pn # 8 #8 #pn - 1
 # 		return(1)
 
 
-# df["Pres_end"] = df.apply(lambda x: x["Frame_x"] - x["Max_frame_pos"])
+# df["Pres_end"] = df.apply(lambda x: x["Frame"] - x["Max_frame_pos"])
 
 # df = df.loc[df["Pres_end"] == 1]
 # dropped = df.loc[df["Pres_end"] != 1]
