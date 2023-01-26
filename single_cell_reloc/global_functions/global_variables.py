@@ -16,7 +16,7 @@ def Experimental_info():
 			continue
 		conf_ts = input(f"To confirm, are there {timepoint_space} minutes between frames?")
 
-		if conf_ts.lower() == "yes" or 1:
+		if conf_ts.lower() == "yes" or conf_ts.lower() == "y":
 			break
 		else:
 			continue
@@ -53,7 +53,7 @@ def global_vars():
 	loop = 1
 	while a == 0:
 		if loop >= 3:
-			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]\n")
 			if try_again.lower() == 'y' or try_again.lower() == 'yes':
 				pass
 			else:
@@ -73,7 +73,7 @@ def global_vars():
 	loop = 1
 	while m == 0:
 		if loop >= 3:
-			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]\n")
 			if try_again.lower() == 'y' or try_again.lower() == 'yes':
 				pass
 			else:
@@ -93,7 +93,7 @@ def global_vars():
 	loop = 1
 	while p == 0:
 		if loop >= 3:
-			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]\n")
 			if try_again.lower() == 'y' or try_again.lower() == 'yes':
 				pass
 			else:
@@ -115,7 +115,7 @@ def global_vars():
 	loop = 1
 	while cp == 0:
 		if loop >= 3:
-			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]\n")
 			if try_again.lower() == 'y' or try_again.lower() == 'yes':
 				pass
 			else:
@@ -136,7 +136,7 @@ def global_vars():
 	loop = 1
 	while perc == 0:
 		if loop >= 3:
-			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]\n")
 			if try_again.lower() == 'y' or try_again.lower() == 'yes':
 				pass
 			else:
@@ -168,11 +168,34 @@ def global_vars():
 					print("Non permissible values given")
 		loop += 1
 
+	sub = 0
+	loop = 1
+	while sub == 0:
+		if loop >= 3:
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]\n")
+			if try_again.lower() == 'y' or try_again.lower() == 'yes':
+				pass
+			else:
+				return('Failed to input all global variables')
+
+		subset = input("Is this experiment subseted? [y/n]\n")
+		if subset.lower() == "yes" or subset.lower() == "y":
+			subset_by = input("What should the analysis be subsetted by?[date, run, OR position_barcode (d<mmdd>r<run>p<xxxxxxx>)]\n")
+			subset_collection = input(f"Enter the list of {subset_by}s that you would like to analyze. [Full structure is d<mmdd>|date|r<run>|run|p<xxxxxxx>|position| ]\n")
+			try:
+				subset_collection.split(", ") #TODO: Complete the confirmation that the entrys are permissible
+			except:
+				continue
+		else:
+			subset_by = ''
+			subset_collection = ''
+		loop += 1
+
 	mult = 0
 	loop = 1
 	while mult == 0:
 		if loop >= 3:
-			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]\n")
 			if try_again.lower() == 'y' or try_again.lower() == 'yes':
 				pass
 			else:
@@ -191,6 +214,9 @@ def global_vars():
 	Global_variables = {"analyze": analyze,
 						"microfluidics_results": microfluidics_results,
 						"post_path": post_path,
+						"subset": subset,
+						'subset_by': subset_by,
+						'subset_collection': subset_collection,
 						"cpu_se": cpu_se,
 						"percentiles": percentiles,
 						"multiplex": multiplex}
@@ -210,7 +236,7 @@ def global_continue(): #* Confirm that the paths given are correct
 		cont = 1
 	return(cont)
 
-def manager():
+def global_manager():
 	global_vars()
 	cont = 0
 	while cont != 1:
@@ -227,7 +253,7 @@ def manager():
 
 #? There is a version that makes global varaibles and there is a version that stores the globals in a dictionary
 if __name__ == "__main__": #* Allow the program to be run individually to change the global variables
-	manager()
+	global_manager()
 	print(Global_variables)
 	# cont = 0
 	# while cont != 1:

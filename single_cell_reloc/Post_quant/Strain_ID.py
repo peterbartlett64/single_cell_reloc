@@ -187,16 +187,13 @@ def Strain_ID_multiplex(p, multiplex = True):
 		psuedo_map.reset_index(inplace=True, drop = True) #Reindex to make sure that the index numbers are correct and can be used for comparison
 		i_pt = psuedo_map[psuedo_map["Is_treated"] == 1].index[0] - 1 # This isn't the most pretty way to go about but works for now
 		psuedo_map["Frames_post_treatment"] = pd.Series(psuedo_map.index).apply(lambda x: f_Frames_post_treatment_shift(x, i_pt))
-
-		psuedo_map.drop(columns = ["Is_treated"], inplace = True)
+		psuedo_map.drop(columns=["Frame", "Is_treated"], inplace= True) #* This corrects the Frame_x issue issue the existed in prior versions
 		Quant_FIN_primary = pd.merge(Quant_FIN_primary, psuedo_map, how = "left", on='ImageID')
-
 		Quant_FIN_primary.to_csv(f"Quant_{Pos}_primary.csv")
 	except IndexError:
 		return(f"IndexError on {p}")
 	except ValueError:
 		return(f"ValueError on {p}")
-
 
 def Strain_ID_single(p, recover = False, retreat = False): #! This is not functional yet
 	try:
@@ -295,3 +292,4 @@ def Strain_ID_single(p, recover = False, retreat = False): #! This is not functi
 	except ValueError:
 		return(f"ValueError on {p}")
 
+ 

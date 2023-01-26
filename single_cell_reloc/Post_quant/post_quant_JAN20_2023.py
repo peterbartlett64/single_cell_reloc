@@ -14,7 +14,6 @@ from glob import glob
 from scipy.stats import variation
 
 #%%
-
 # post_path =  "C:/Users/Peter/Desktop/Subset_Images/JAN2/2022-01-03"
 microfluidic_results = Global_variables["microfluidic_results"]
 post_path= Global_variables["post_path"]
@@ -426,7 +425,6 @@ def Strain_ID_multiplex(p, multiplex = True):
 		return(f"IndexError on {p}")
 	except ValueError:
 		return(f"ValueError on {p}")
-
 # def Protein_label_multi(myo1):
 # 	if myo1 == "Myo1_mKO":
 # 		return(BHY131)
