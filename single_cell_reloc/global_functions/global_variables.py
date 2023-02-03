@@ -180,6 +180,7 @@ def global_vars():
 
 		subset = input("Is this experiment subseted? [y/n]\n")
 		if subset.lower() == "yes" or subset.lower() == "y":
+			subset = True
 			subset_by = input("What should the analysis be subsetted by?[date, run, OR position_barcode (d<mmdd>r<run>p<xxxxxxx>)]\n")
 			subset_collection = input(f"Enter the list of {subset_by}s that you would like to analyze. [Full structure is d<mmdd>|date|r<run>|run|p<xxxxxxx>|position| ]\n")
 			try:
@@ -187,9 +188,20 @@ def global_vars():
 			except:
 				continue
 		else:
+			subset = False
 			subset_by = ''
 			subset_collection = ''
 		loop += 1
+
+	gap = 0
+	while gap == 0:
+		timepoint_gap = int(input("How many minutes between frames? [Enter integer]\n"))
+		response = input(f"{timepoint_gap} minutes? [y/n]")
+		if response.lower == "yes" or response.lower == "y":
+			gap = 1
+		else:
+			pass
+		del response
 
 	mult = 0
 	loop = 1
@@ -218,6 +230,7 @@ def global_vars():
 						'subset_by': subset_by,
 						'subset_collection': subset_collection,
 						"cpu_se": cpu_se,
+						"timepoint_space": timepoint_gap,
 						"percentiles": percentiles,
 						"multiplex": multiplex}
 
@@ -229,10 +242,23 @@ def global_vars():
 	# return(f"percentiles are {percentiles}.")
 	# return(f"Analyze at {analyze},\nmicrofluidics_results at {microfluidics_results},\npost_path at {post_path},\npercentiles are {percentiles}.\nRunning with {cpu_se} cpu cores out of {cpu_number}")
 
-def global_continue(): #* Confirm that the paths given are correct
-	print(f"Analyze at {Global_variables['analyze']},\nmicrofluidics_results at {Global_variables['microfluidics_results']},\npost_path at {Global_variables['post_path']},\npercentiles are {Global_variables['percentiles']}.\nRunning with {'cpu_se'} cpu cores out of {Global_variables['cpu_se']}")
-	cont = input("Would you like to continue?")
-	if cont == "Yes" or "yes" or 1:
+def global_continue(Global_variables): #* Confirm that the paths given are correct
+	if Global_variables['multiplex'] == True:
+		mult_a = "ARE"
+	else:
+		mult_a = "ARE NOT"
+
+	if Global_variables["subset"] == True:
+		wording = 'WILL'
+
+		print(f"Analyze at {Global_variables['analyze']};\nmicrofluidics_results at {Global_variables['microfluidics_results']};\npost_path at {Global_variables['post_path']}; \nThere {wording} be subsetting by{Global_variables['subset_by']} and will include {Global_variables['subset_collection']}\nRunning with {'cpu_se'} cpu cores out of {Global_variables['cpu_se']};\nThere are {Global_variables['timepoint_gap']} minutes between frames\npercentiles are {Global_variables['percentiles']};\nSamples {mult_a} multiplexed")
+		
+	else:
+		wording = 'WILL NOT'
+
+		print(f"Analyze at {Global_variables['analyze']};\nmicrofluidics_results at {Global_variables['microfluidics_results']};\npost_path at {Global_variables['post_path']}; \nThere {wording} be subsetting by{Global_variables['subset_by']} and will include {Global_variables['subset_collection']};\nRunning with {'cpu_se'} cpu cores out of {Global_variables['cpu_se']};There are {Global_variables['timepoint_gap']} minutes between frames;\npercentiles are {Global_variables['percentiles']};/n Samples {mult_a} multiplexed")
+	cont = input("Are all these values correct? [y/n]")
+	if cont.lower == "yes" or cont.lower == "y":
 		cont = 1
 	return(cont)
 

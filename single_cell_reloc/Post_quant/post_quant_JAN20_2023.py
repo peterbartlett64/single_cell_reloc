@@ -171,32 +171,34 @@ Parallel(n_jobs=pr, verbose = 100)(delayed(combine_pos)(p) for p in positions)
 # # Create an index of Quantification dfs
 ############################################
 
-year = str(datetime.datetime.now().year) #this assumes the analysis is completed within the same decade of starting. A reasonable expectation, but something to check if running aroudn the new year
-decade = year[:3]
-del year
+def Quant_ALL_index_er():
+	year = str(datetime.datetime.now().year) #this assumes the analysis is completed within the same decade of starting. A reasonable expectation, but something to check if running aroudn the new year
+	decade = year[:3]
+	del year
 
-def f_Position_ID_qALLi(z):
-	start = z.find('ant_')+4
-	end = z.find("_ALL")
-	return(z[start:end])
+	def f_Position_ID_qALLi(z):
+		start = z.find('ant_')+4
+		end = z.find("_ALL")
+		return(z[start:end])
 
-# def Quant_ALL_index_er():
-Quant_ALL_index  = []
-count = 0
-for root, dirs, files, in os.walk(os.getcwd()):
-	for name in files:
-		if name.endswith("_ALL.csv") and name.startswith("Quant"): # fix naming
-			Quant_ALL_index.append({'Path': os.path.join(root, name)})
-			count = count + 1
-			print(count, end="\r")
-		else:
-			pass
-	break #This makes the program run non-recursively and not decend into daughter folders
 
-Quant_ALL_index = pd.DataFrame(Quant_ALL_index)
-Quant_ALL_index["PositionID"] = pd.Series(Quant_ALL_index.iloc[:,0]).apply(f_Position_ID_qALLi)
-Quant_ALL_index.sort_values(by = "PositionID", inplace = True)
-Quant_ALL_index.to_csv("Quant_ALL_index.csv")
+	Quant_ALL_index  = []
+	count = 0
+	for root, dirs, files, in os.walk(os.getcwd()):
+		for name in files:
+			if name.endswith("_ALL.csv") and name.startswith("Quant"): # fix naming
+				Quant_ALL_index.append({'Path': os.path.join(root, name)})
+				count = count + 1
+				print(count, end="\r")
+			else:
+				pass
+		break #This makes the program run non-recursively and not decend into daughter folders
+
+	Quant_ALL_index = pd.DataFrame(Quant_ALL_index)
+	Quant_ALL_index["PositionID"] = pd.Series(Quant_ALL_index.iloc[:,0]).apply(f_Position_ID_qALLi)
+	Quant_ALL_index.sort_values(by = "PositionID", inplace = True)
+	Quant_ALL_index.to_csv("Quant_ALL_index.csv")
+	return(Quant_ALL_index)
 
 ###### Function run
 Quant_ALL_index = Quant_ALL_index_er()
@@ -205,8 +207,8 @@ Quant_ALL_index = Quant_ALL_index_er()
 #%%
 # Cell_index_timing = info_simple[["track_index", "track_start_frame"]]
 # os.chdir(microfluidics_results)
-Quant_ALL_index = pd.read_csv("Quant_ALL_index.csv") #*#* Does the file need to read in to work?
-Quant_ALL_index.drop(Quant_ALL_index.columns[Quant_ALL_index.columns.str.contains('Unnamed',case = False)],axis = 1, inplace= True)
+# Quant_ALL_index = pd.read_csv("Quant_ALL_index.csv") #*#* Does the file need to read in to work?
+# Quant_ALL_index.drop(Quant_ALL_index.columns[Quant_ALL_index.columns.str.contains('Unnamed',case = False)],axis = 1, inplace= True)
 #%%
 os.chdir(microfluidic_results)
 Condition_information = pd.read_excel("MicrofluidicsMap_wCol.xlsx", sheet_name='ProteinLocations', dtype={'Date' : str})
