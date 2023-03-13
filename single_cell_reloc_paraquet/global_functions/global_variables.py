@@ -173,31 +173,29 @@ def global_vars():
 	while sub == 0:
 		if loop >= 3:
 			try_again = input(f"There have been {loop} failed atempts to input variable. Would you like to try again? [y/n]")
-			if try_again.lower() == 'n' or try_again.lower() == 'no':
-				return('Failed to input all global variables')
-			else:
+			if try_again.lower() == 'y' or try_again.lower() == 'yes':
 				pass
+			else:
+				return('Failed to input all global variables')
 
 		else:
 			pass
 
 		subset = input("Is this experiment subseted? [y/n]")
+
 		if subset.lower() == "yes" or subset.lower() == "y":
 			subset = True
-			subset_by = input("What should the analysis be subsetted by?[Date, Run, OR position_barcode (d<mmdd>r<run>p<xxxxxxx>)]")
+			subset_by = input("What should the analysis be subsetted by?[date, run, OR position_barcode (d<mmdd>r<run>p<xxxxxxx>)]")
 			subset_collection = input(f"Enter the list of {subset_by}s that you would like to analyze. [Full structure is d<mmdd>|date|r<run>|run|p<xxxxxxx>|position| ]")
 			try:
-				subset_collection.split(", ") #TODO: Complete the confirmation that the entries are permissible
+				subset_collection.split(", ") #TODO: Complete the confirmation that the entrys are permissible
 			except:
 				continue
-			sub =  1
-		elif subset.lower() == "no" or subset.lower() == "n":
+		if subset.lower() == "no" or subset.lower() == "n":
 			subset = False
 			subset_by = ''
 			subset_collection = ''
-			sub = 1
-		else:
-			loop += 1
+		loop += 1
 
 	gap = 0
 	while gap == 0:

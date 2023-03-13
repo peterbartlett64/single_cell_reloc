@@ -10,7 +10,6 @@ import single_cell_reloc.Post_quant.File_indexers as pq_files
 import single_cell_reloc.Post_quant.Move as Move
 import os
 import pandas as pd
-#%%
 
 def Post_quant_strain_manager(percentiles, mulitplex, cores) -> None:
 	Quantification_index = pq_files.Quantification_index_er()
@@ -40,7 +39,7 @@ def Post_quant_strain_manager(percentiles, mulitplex, cores) -> None:
 
 	for p in percentiles:
 		Move.I_move(p)
-
+		
 
 	return()#* This is to automate running both percentages
 
