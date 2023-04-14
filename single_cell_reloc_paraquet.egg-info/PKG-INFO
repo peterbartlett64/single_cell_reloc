@@ -1,5 +1,5 @@
 Metadata-Version: 1.0
-Name: single-cell-reloc
+Name: single-cell-reloc-paraquet
 Version: 0.0.0
 Summary: Integration and automation of segmentation, single cell tracking, quantification, protein relocalization measurment, and figure creation
 Home-page: UNKNOWN

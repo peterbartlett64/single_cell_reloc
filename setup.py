@@ -1,5 +1,4 @@
 import setuptools
-import
 
 setuptools.setup(
 	name = "single_cell_reloc",

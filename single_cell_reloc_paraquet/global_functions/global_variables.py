@@ -2,6 +2,7 @@
 from os import path, cpu_count
 import json
 import os
+import logging 
 
 #%%
 def slash_switch(path): ## This function is currently unused but could be usefull in the future for the cwd setting
@@ -185,12 +186,16 @@ def global_vars():
 
 		if subset.lower() == "yes" or subset.lower() == "y":
 			subset = True
-			subset_by = input("What should the analysis be subsetted by?[date, run, OR position_barcode (d<mmdd>r<run>p<xxxxxxx>)]")
-			subset_collection = input(f"Enter the list of {subset_by}s that you would like to analyze. [Full structure is d<mmdd>|date|r<run>|run|p<xxxxxxx>|position| ]")
-			try:
-				subset_collection.split(", ") #TODO: Complete the confirmation that the entrys are permissible
-			except:
-				continue
+			subset_by = input("What should the analysis be subsetted by?[date, run, OR position_barcode (d<mmdd>r<run>p<xxxxxxx>), OR specific range]")
+
+			if subset_by == 'specific range':
+				subset_collection = position_range()
+			else:
+				subset_collection = input(f"Enter the list of {subset_by}s that you would like to analyze. [Full structure is d<mmdd>|date|r<run>|run|p<xxxxxxx>|position| ]")
+				try:
+					subset_collection.split(", ")
+				except:
+					continue
 		if subset.lower() == "no" or subset.lower() == "n":
 			subset = False
 			subset_by = ''
@@ -280,6 +285,28 @@ def global_manager():
 	#! percentiles are [[12], 95, 99].
 	#! Running with cpu_se cpu cores out of 12
 	#//
+
+def position_range(): # Input in form "dMMDDrNpNN-NN", use the gloabl version of imgIndex #TODO: Move this function to gloabl functions
+	range_string = input("Provide comma deliminated postion ranges in form dMMDDrNpNN-NN. (3-digit codes will be accepted)")
+	position_list = imgIndex['Unique_pos'].unique()
+	options = []
+	range_string = range_string.split(", ")
+	for x in range_string:
+		delim = x.find("-")
+		first_part = x[:x.find("p")]
+		middle = int(x[x.find("p")+1:delim]) + 1
+		end_part = int(x[delim+1:])
+		for n in range(middle,end_part): #* This nested for loop shouldn't be too big of an issue
+			if n < 100:
+				options.append(first_part + "p" + str(n).zfill(2) + "0") #* must add a trailing zero
+			else:
+				options.append(first_part + "p" + str(n).zfill(3) + "0")
+	accept = []
+	for o in options:
+		for p_t in position_list:
+			if p_t.startswith(o):
+				accept.append(p_t)
+	return(accept)
 
 #? There is a version that makes global varaibles and there is a version that stores the globals in a dictionary
 if __name__ == "__main__": #* Allow the program to be run individually to change the global variables
