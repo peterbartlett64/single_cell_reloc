@@ -17,7 +17,7 @@ from pandas.core.indexing import IndexingError
 # which will be populated with the metadata from the image
 # file name
 os.chdir(microfluidics_results)
-imgIndex = pd.read_paraquet('imgIndex.paraquet')
+imgIndex = pd.read_parquet('imgIndex.parquet')
 
 #%%
 # THIS SHOULD ALREADY BE DONE IN THE PREVIOUS PIPELINE

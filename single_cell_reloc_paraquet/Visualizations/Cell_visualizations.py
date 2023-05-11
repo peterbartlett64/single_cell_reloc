@@ -35,7 +35,7 @@ def mask_load(m):
 def visual_images(barcode, myo_chan, composite = False, blackout = False, spec_cell = False) -> None:
 	ReadInList = [f"Raw_factorUpper_{myo_chan}", f"Raw_factorLower_{myo_chan}", "Myo1Indentity"]
 
-	temp_thresh_table = pd.read_paraquet(f"Movement_treat_course_{barcode}.paraquet", usecols= ReadInList) #* This can either be the composite
+	temp_thresh_table = pd.read_parquet(f"Movement_treat_course_{barcode}.parquet", usecols= ReadInList) #* This can either be the composite
 	row =  temp_thresh_table.iloc[0:1] #* leave a small dataframe instead of converting to a series
 	threshold_higher = row["threshold_higher"]
 	threshold_lower = row["threshold_lower"]
@@ -115,7 +115,7 @@ def visual_images(barcode, myo_chan, composite = False, blackout = False, spec_c
 		image_threshold_lower.save(f"{image_position}_composite_threshold_lower.tif")
 
 # def create_thresh_table():
-# 	pd.read_paraquet()
+# 	pd.read_parquet()
 
 def visualization_manager(threshold_table, blackout = False): #, Manager for the visual cell creation, allows the results to called with the speciic params
 	image_prompt_visual = input("What is the image that you would like to create a threshold set for?")
@@ -124,7 +124,7 @@ def visualization_manager(threshold_table, blackout = False): #, Manager for the
 	if blackout == True:
 		seg_index_path = input("Where is the cell index?")
 		seg_index_path = global_functions.slash_switch(seg_index_path) #, define the global functions group
-		seg_index = pd.read_paraquet(seg_index_path).set_index(["Unique_frame"], drop = True)
+		seg_index = pd.read_parquet(seg_index_path).set_index(["Unique_frame"], drop = True)
 
 	temp_thresh_table = threshold_table.loc[threshold_table[:].isin(image_prompt_visual)]
 	x = Parallel(n_jobs= pr, verbose= 100)(delayed(visual_images)(temp_thresh_table, i) for i in temp_thresh_table)

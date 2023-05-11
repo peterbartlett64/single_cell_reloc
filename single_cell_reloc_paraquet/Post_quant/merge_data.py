@@ -1,7 +1,7 @@
 #%%
 import pandas as pd
 import os
-import single_cell_reloc_paraquet.global_functions.global_variables as glv
+import single_cell_reloc_parquet.global_functions.global_variables as glv
 #%%
 #TODO Finish the automated version for upload
 

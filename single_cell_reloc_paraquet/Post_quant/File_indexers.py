@@ -8,7 +8,7 @@ def Quantification_index_er():
 	count = 0
 	for root, dirs, files, in os.walk(os.getcwd()):
 		for name in files:
-			if name.endswith(".paraquet") and name.startswith("Quantification_d"):
+			if name.endswith(".parquet") and name.startswith("Quantification_d"):
 				Quantification_index.append({'Path': os.path.join(root, name)})
 				count = count + 1
 				print(count, end="\r")
@@ -74,7 +74,7 @@ def Quantification_index_er():
 	else:
 		pass
 	Quantification_index.sort_values(by = "PositionID", inplace = True)
-	Quantification_index.to_paraquet("Quantification_index.paraquet")
+	Quantification_index.to_parquet("Quantification_index.parquet")
 	return(Quantification_index)
 
 def combine_pos(pos):
@@ -83,11 +83,11 @@ def combine_pos(pos):
 	subset_s = subset.sort_values(by = "Frame")
 	for qf in range(len(subset)):
 		try:
-			q = pd.read_paraquet(subset_s.iloc[qf,0])
+			q = pd.read_parquet(subset_s.iloc[qf,0])
 		except:
 			continue
 		Quant_frame_comb = pd.concat([Quant_frame_comb, q])
-	Quant_frame_comb.to_paraquet(f"Quant_{pos}_ALL.paraquet")
+	Quant_frame_comb.to_parquet(f"Quant_{pos}_ALL.parquet")
 	return(f"{pos} frame merging is complete")
 
 def Quant_ALL_index_er():
@@ -105,7 +105,7 @@ def Quant_ALL_index_er():
 	count = 0
 	for root, dirs, files, in os.walk(os.getcwd()):
 		for name in files:
-			if name.endswith("_ALL.paraquet") and name.startswith("Quant"): # fix naming
+			if name.endswith("_ALL.parquet") and name.startswith("Quant"): # fix naming
 				Quant_ALL_index.append({'Path': os.path.join(root, name)})
 				count = count + 1
 				print(count, end="\r")
@@ -116,7 +116,7 @@ def Quant_ALL_index_er():
 	Quant_ALL_index = pd.DataFrame(Quant_ALL_index)
 	Quant_ALL_index["PositionID"] = pd.Series(Quant_ALL_index.iloc[:,0]).apply(f_Position_ID_qALLi)
 	Quant_ALL_index.sort_values(by = "PositionID", inplace = True)
-	Quant_ALL_index.to_paraquet("Quant_ALL_index.paraquet")
+	Quant_ALL_index.to_parquet("Quant_ALL_index.parquet")
 	return(Quant_ALL_index)
 
 def Quant_prim_index_er():
@@ -144,7 +144,7 @@ def Quant_prim_index_er():
 	count = 0
 	for root, dirs, files, in os.walk(os.getcwd()):
 		for name in files:
-			if name.endswith("mary.paraquet") and name.startswith("Quant"): # fix naming
+			if name.endswith("mary.parquet") and name.startswith("Quant"): # fix naming
 				Quant_prim_index.append({'Path': os.path.join(root, name)})
 				count = count + 1
 				print(count, end="\r")
@@ -160,7 +160,7 @@ def Quant_prim_index_er():
 	# Quant_prim_index["Date"] = pd.Series(Quant_prim_index["Position"]).apply(f_expdate)
 
 	Quant_prim_index.sort_values(by = "PositionID", inplace = True)
-	Quant_prim_index.to_paraquet("Quant_prim_index.paraquet")# , index = False)
+	Quant_prim_index.to_parquet("Quant_prim_index.parquet")# , index = False)
 	return(Quant_prim_index)
 
 

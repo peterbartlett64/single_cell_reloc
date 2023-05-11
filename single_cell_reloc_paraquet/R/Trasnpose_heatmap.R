@@ -5,7 +5,7 @@ here() # Set
 
 
 setwd("D:/Microfluidics/RESULTS_ALL/Most_final_collected/Combined_by_perc/Col_with_Abund")#!This is temporary
-masters = fread("Subset_concat.paraquet", sep = ",")
+masters = fread("Subset_concat.parquet", sep = ",")
 install.packages("here")
 master_sub <- subset(masters, select = c(Protein, Loc_score, Abundance, z_score_Loc, z_score_Abund, Pearson_coeff_Loc_Abund))
 master_sub_u <- master_sub[!duplicated(master_sub)]

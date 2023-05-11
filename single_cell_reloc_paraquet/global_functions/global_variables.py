@@ -2,14 +2,15 @@
 from os import path, cpu_count
 import json
 import os
-import logging 
+import logging
+import pickle as pk
 
 #%%
 def slash_switch(path): ## This function is currently unused but could be usefull in the future for the cwd setting
 	new = path.replace(os.sep, '/')
 	return (new)
 
-def Experimental_info():
+#* def Experimental_info(): This has been included in global_vars
 	while True:
 		try:
 			timepoint_space = float(input("What is the time between images?")) #* If the number is converted to a float, then it should be acceptable downstream
@@ -105,6 +106,26 @@ def global_vars():
 			p = 1
 		elif post_path == '':
 			p = 1
+		else:
+			print("Non permissible\n")
+			pass
+		loop += 1
+
+	spg = 0
+	loop = 1
+	while p == 0:
+		if loop >= 3:
+			try_again = input("There have been 3 failed atempts to input variable. Would you like to try again? [y/n]")
+			if try_again.lower() == 'y' or try_again.lower() == 'yes':
+				pass
+			else:
+				return('Failed to input all global variables')
+		spg_path = input("SegProg_lib folder")
+		spg_path = slash_switch(spg_path)
+		if path.isdir(spg_path) == True:
+			spg = 1
+		elif spg_path == '':
+			spg = 1
 		else:
 			print("Non permissible\n")
 			pass
@@ -235,6 +256,7 @@ def global_vars():
 	Global_variables = {"analyze": analyze,
 						"microfluidics_results": microfluidics_results,
 						"post_path": post_path,
+						"seg_progLib": spg_path,
 						"subset": subset,
 						'subset_by': subset_by,
 						'subset_collection': subset_collection,
@@ -246,6 +268,8 @@ def global_vars():
 	os.chdir(microfluidics_results)
 	with open("Global_variables.json", "w") as write_file:
 		json.dump(Global_variables, write_file, indent=4) #*Write the global variables to a JSON file
+	with open("Global_variables.json", "w") as write_pk_file:
+		pk.dump(Global_variables, write_pk_file) #*Write the global variables to a pickle file
 
 	return(Global_variables)
 	# return(f"percentiles are {percentiles}.")

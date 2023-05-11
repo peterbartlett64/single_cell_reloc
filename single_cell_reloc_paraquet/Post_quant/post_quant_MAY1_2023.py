@@ -1,31 +1,35 @@
 #%%
 #, This document was modified from the AUG2 tree. This is a major modifiacation to make try and deal with the DivideByZero error which removes some cells
-#? These are a lot of imports. I doubt that I need them all
 from datetime import datetime
 from decimal import DivisionByZero
 import math
 import pandas as pd
 import numpy as np
-import glob
 import os
 import datetime
 from scipy import stats
 from joblib import Parallel, delayed
 from glob import glob
 from scipy.stats import variation
+import single_cell_reloc_paraquet.global_functions.global_variables as gv
 
 #%%
-
 # post_path =  "C:/Users/Peter/Desktop/Subset_Images/JAN2/2022-01-03"
-microfluidic_results = Global_variables["microfluidic_results"]
-post_path= Global_variables["post_path"]
-pr = Global_variables["cpu_se"]
+# microfluidic_results = Global_variables["microfluidic_results"]
+# microfluidic_results  = slash_switch(microfluidic_results)
+
+microfluidic_results = "D:/testingSUPPORT/New_training/Just_the_one/d0222r2p340200"
+
+
+# post_path= Global_variables["post_path"]
+# pr = Global_variables["cpu_se"]
 
 percentile = int(input("What percentile would you like to run on"))
 
 #Change the paths to the corrected version becuase of the windows input
-microfluidic_results = slash_switch(microfluidic_results)
-post_path = slash_switch(post_path)
+# microfluidic_results = slash_switch(microfluidic_results)
+# post_path = slash_switch(post_path)
+post_path = "D:/testingSUPPORT/New_training/Just_the_one/d0222r2p340200/2023-04-20"
 os.chdir(post_path) # This would normally be the path set in the quantification scipt
 
 #%%
@@ -45,7 +49,7 @@ else:
 	pass
 
 try: subdat
-except NameError: pass
+except NameError: pass#0085CA#9de0ad
 else: del subdat
 
 #%% # Below was just copied from Quantificaiton.py becuase it was working at last check.
@@ -125,7 +129,7 @@ def Quantification_index_er():
 	return(Quantification_index)
 
 ####### Function run
-# Quantification_index = Quantification_index_er()
+Quantification_index = Quantification_index_er()
 #######
 
 # Quantification_index = pd.read_parquet("Quantification_index.parquet") # Temp added because want to read the version whiich was created pre-quant today
@@ -148,7 +152,7 @@ def combine_pos(pos):
 
 positions = Quantification_index["PositionID"].unique()
 
-
+pn = 12 #Todo: Change this to Global_variables["cp_use"]
 l = len(positions)
 if  l > pn:
 	pr = pn
@@ -173,32 +177,34 @@ Parallel(n_jobs=pr, verbose = 100)(delayed(combine_pos)(p) for p in positions)
 # # Create an index of Quantification dfs
 ############################################
 
-year = str(datetime.datetime.now().year) #this assumes the analysis is completed within the same decade of starting. A reasonable expectation, but something to check if running aroudn the new year
-decade = year[:3]
-del year
+def Quant_ALL_index_er():
+	year = str(datetime.datetime.now().year) #this assumes the analysis is completed within the same decade of starting. A reasonable expectation, but something to check if running aroudn the new year
+	decade = year[:3]
+	del year
 
-def f_Position_ID_qALLi(z):
-	start = z.find('ant_')+4
-	end = z.find("_ALL")
-	return(z[start:end])
+	def f_Position_ID_qALLi(z):
+		start = z.find('ant_')+4
+		end = z.find("_ALL")
+		return(z[start:end])
 
-# def Quant_ALL_index_er():
-Quant_ALL_index  = []
-count = 0
-for root, dirs, files, in os.walk(os.getcwd()):
-	for name in files:
-		if name.endswith("_ALL.parquet") and name.startswith("Quant"): # fix naming
-			Quant_ALL_index.append({'Path': os.path.join(root, name)})
-			count = count + 1
-			print(count, end="\r")
-		else:
-			pass
-	break #This makes the program run non-recursively and not decend into daughter folders
 
-Quant_ALL_index = pd.DataFrame(Quant_ALL_index)
-Quant_ALL_index["PositionID"] = pd.Series(Quant_ALL_index.iloc[:,0]).apply(f_Position_ID_qALLi)
-Quant_ALL_index.sort_values(by = "PositionID", inplace = True)
-Quant_ALL_index.to_parquet("Quant_ALL_index.parquet")
+	Quant_ALL_index  = []
+	count = 0
+	for root, dirs, files, in os.walk(os.getcwd()):
+		for name in files:
+			if name.endswith("_ALL.parquet") and name.startswith("Quant"): # fix naming
+				Quant_ALL_index.append({'Path': os.path.join(root, name)})
+				count = count + 1
+				print(count, end="\r")
+			else:
+				pass
+		break #This makes the program run non-recursively and not decend into daughter folders
+
+	Quant_ALL_index = pd.DataFrame(Quant_ALL_index)
+	Quant_ALL_index["PositionID"] = pd.Series(Quant_ALL_index.iloc[:,0]).apply(f_Position_ID_qALLi)
+	Quant_ALL_index.sort_values(by = "PositionID", inplace = True)
+	Quant_ALL_index.to_parquet("Quant_ALL_index.parquet")
+	return(Quant_ALL_index)
 
 ###### Function run
 Quant_ALL_index = Quant_ALL_index_er()
@@ -207,8 +213,8 @@ Quant_ALL_index = Quant_ALL_index_er()
 #%%
 # Cell_index_timing = info_simple[["track_index", "track_start_frame"]]
 # os.chdir(microfluidics_results)
-Quant_ALL_index = pd.read_parquet("Quant_ALL_index.parquet") #*#* Does the file need to read in to work?
-Quant_ALL_index.drop(Quant_ALL_index.columns[Quant_ALL_index.columns.str.contains('Unnamed',case = False)],axis = 1, inplace= True)
+# Quant_ALL_index = pd.read_parquet("Quant_ALL_index.parquet") #*#* Does the file need to read in to work?
+# Quant_ALL_index.drop(Quant_ALL_index.columns[Quant_ALL_index.columns.str.contains('Unnamed',case = False)],axis = 1, inplace= True)
 #%%
 os.chdir(microfluidic_results)
 Condition_information = pd.read_excel("MicrofluidicsMap_wCol.xlsx", sheet_name='ProteinLocations', dtype={'Date' : str})
@@ -234,6 +240,226 @@ Condition_information["Date"] = pd.Series(Condition_information["Date"]).apply(f
 #Instead of being just based on the max and min of each channel, this version also takes into account the start frame and also the dynamic range
 os.chdir(post_path)
 
+def Strain_ID_multiplex(p, multiplex = True):
+	try:
+		Quant_ALL = pd.read_parquet(Quant_ALL_index.iloc[p,0])
+		Quant_ALL.drop(Quant_ALL.columns[Quant_ALL.columns.str.contains('Unnamed',case = False)],axis = 1, inplace = True)
+		print(p)
+
+		frame_max= np.max(Quant_ALL["Frame"])
+
+		try: trackedCells = np.unique(Quant_ALL['Cell_Barcode'])
+		except KeyError:
+			return(f"Fail on index {p} at trackedCells Stage")
+
+		if len(trackedCells) < 50:       ### Not sure if it would be a good idea to make sure that the position has enough cells. This does not gauruntee enough cells in future factor determination.
+			return("There are less than 50 cells in time series")
+
+		# def f_start_frame_test(cell):
+		# 	start_frame = info_simple.loc[cell]["track_start_frame"].values[0]
+		# 	return(start_frame)
+
+		#* Modified what was originally written by Brandon
+
+		Myo1_info= pd.DataFrame([])
+		for i in trackedCells: #* This is a very easy line to miss! The function is bassically just a position specific manager for making cell measurements so that more calculations can be done in parrallel with the proper rate of turnover
+			trackSubset = Quant_ALL.loc[Quant_ALL['Cell_Barcode'] == i]
+
+			#only accept cells that have been tracked in the experiment for more than 15 frames (105 minutes)
+			# if len(trackSubset) > 15:  ######## The was a check to make sure that cells were present for more than 15 frams. This is would throw out new cells born within the last 105 minutes
+			validTrackedCells = i
+			# else:
+				# continue
+
+			range_direct = 0 #* This line was not in use
+
+			if len(trackSubset[(trackSubset["Progen_bud"] == 1) & (trackSubset["Frame"] != 1)])>0:
+				mKAstart_bud_actv = trackSubset[trackSubset["Progen_bud"] ==1]['x99thPercentile_Diff_background_mKate'].values[0]
+				mKOstart_bud_actv = trackSubset[trackSubset["Progen_bud"] == 1]['x99thPercentile_Diff_background_mKO'].values[0]
+			else:
+				try:
+					mKAstart_bud_actv = trackSubset[trackSubset["Frame"] == frame_max]['x99thPercentile_Diff_background_mKate'].values[0]
+					mKOstart_bud_actv = trackSubset[trackSubset["Frame"] == frame_max]['x99thPercentile_Diff_background_mKO'].values[0]
+				except IndexError:
+					mKAstart_bud_actv = 0
+					mKOstart_bud_actv = 0
+
+			mKOmax = trackSubset.iloc[trackSubset['x99thPercentile_Diff_background_mKO'].argmax(),:]
+			mKOmin = trackSubset.iloc[trackSubset['x99thPercentile_Diff_background_mKO'].argmin(),:]
+
+			if mKOmax['Frame'] > mKOmin['Frame']:
+				KOdirection = 'Increase'
+			else:
+				KOdirection = 'Decrease'
+
+			if mKOmin['x99thPercentile_Diff_background_mKO'] >0:
+				mKOsignalChange = mKOmax['x99thPercentile_Diff_background_mKO']/mKOmin['x99thPercentile_Diff_background_mKO'] #* are some min values of the difference too close to zero?????
+			else: #? Not sure which of the options below should be used
+				# mKOsignalChange = mKOmax['x99thPercentile_Diff_background_mKO']/mKOmin['factor_mKO_background_Avg'] #* This may work but it is not as accurate as the one below
+				mKOsignalChange = (mKOmax['x99thPercentile_Diff_background_mKO'] + mKOmin['factor_mKO_background_Avg'])/mKOmin['factor_mKO_background_Avg']
+
+			mKOsignalChange = abs(mKOsignalChange)#/64.05)
+
+			mKAmax = trackSubset.iloc[trackSubset['x99thPercentile_Diff_background_mKate'].argmax(),:]
+			mKAmin = trackSubset.iloc[trackSubset['x99thPercentile_Diff_background_mKate'].argmin(),:]
+			if mKAmax['Frame'] > mKAmin['Frame']: # for now this is just just a what is greater. Must modifiy to a threshold
+				KAdirection = 'Increase'
+			else:
+				KAdirection = 'Decrease'
+
+			if mKAmin['x99thPercentile_Diff_background_mKate'] > 0:
+				mKAsignalChange = mKAmax['x99thPercentile_Diff_background_mKate']/mKAmin['x99thPercentile_Diff_background_mKate']
+			else: #? Not sure which of the options below should be used
+				# mKAsignalChange = mKAmax['x99thPercentile_Diff_background_mKate']/mKAmin['factor_mKate_background_Avg'] #* This is not as accurate as below
+				mKAsignalChange = (mKAmax['x99thPercentile_Diff_background_mKate'] + mKAmin['factor_mKate_background_Avg'])/mKAmin['factor_mKate_background_Avg']
+
+			mKAsignalChange = abs(mKAsignalChange)#/25)
+
+
+			# if range_direct == 0: #* This line was not in use
+			if mKAstart_bud_actv > 1.25*mKOstart_bud_actv: #This was just changed back to comparison, but threshold of 2000 was being used before ## 14-12-21 Added a 25% confidence over the lower value
+				Myo1ID = 'Myo1_mKa'
+				foldChangeKO = mKOsignalChange
+				foldChangeKA = mKAsignalChange
+				boolRange = 0
+				boolProgen = 1
+
+			elif mKOstart_bud_actv> 1.25*mKAstart_bud_actv:
+				Myo1ID = 'Myo1_mKO'
+				foldChangeKO = mKOsignalChange
+				foldChangeKA = mKAsignalChange
+				boolRange = 0
+				boolProgen = 1
+			else:
+				# Now determine whether the given tracked cells is mKO of mKa Myo1. This is only for now as this can be determined in TracX
+				if mKAsignalChange > 1.25*mKOsignalChange: #This was just changed back to comparison, but threshold of 2000 was being used before
+					Myo1ID = 'Myo1_mKa'
+					foldChangeKO = mKOsignalChange
+					foldChangeKA = mKAsignalChange
+					boolRange = 1
+					boolProgen = 0
+
+				elif mKOsignalChange > 1.25*mKAsignalChange:
+					Myo1ID = 'Myo1_mKO'
+					foldChangeKO = mKOsignalChange
+					foldChangeKA = mKAsignalChange
+					boolRange = 1
+					boolProgen = 0
+
+				else:
+					Myo1ID = 'Cannot Be Determined'
+					foldChangeKO = mKOsignalChange
+					foldChangeKA = mKAsignalChange
+					boolRange = 0
+					boolProgen = 0
+
+			measurements = {
+				"TrackID_valid" : [validTrackedCells],
+				"Myo1Identity" : [Myo1ID],
+				"mKO_foldChange" : [foldChangeKO],
+				"mKO_direction" : [KOdirection],
+				"mKA_foldChange" : [foldChangeKA],
+				"mKa_direction" : [KAdirection],
+				"byProgen_bud": [boolProgen],
+				"byRange": [boolRange]
+			}
+
+			measurements = pd.DataFrame(measurements)
+			Myo1_info = pd.concat([Myo1_info, measurements])
+
+		try: Quant_FIN_primary = pd.merge(Quant_ALL, Myo1_info, left_on="Cell_Barcode", right_on = "TrackID_valid")
+		except KeyError:
+			return(f"index {p} of Quant_ALL_index may be too short. Cell was not found in >15 frames. Pos skipped")
+
+		Pos = Quant_ALL["Cell_Barcode"].values[0] # This is a temporary and false value, based on the first cell barcode as all within df will have the same position
+		Pos = Pos[0:Pos.find("c")]
+
+		s = Pos.find("r")
+		Run_n = int(Pos[s+1 : s+2])
+
+		Run_info = Condition_information[(Condition_information["Date"] == Quant_ALL.iloc[0,:]["Date"]) & (Condition_information["Run Number"] == Run_n)]
+
+		# DateCond = Run_info["Date"].values[0]
+		Time_treat = Run_info["Time"].values[0]
+
+		Col = int(Pos[Pos.find("p")+1:-4])  # This is the column of the postion which is being tested
+		Pos_info = Run_info[Run_info["MapID (Col_Range)"]>=Col].reset_index (drop=True) # Col HERE represents the NAME and NOT the information. eg. info column 10,20,30 etc.  >= pos_col 10
+		Pos_info = Pos_info.iloc[0:2] # THIS IS A VERY IMPORTANT LINE
+		Prot_strain1 = Pos_info[Pos_info["Myo1Marker"] == "mKO"]["Protein"].values[0]
+		Prot_strain2 = Pos_info[Pos_info["Myo1Marker"] == "mKa"]["Protein"].values[0]
+		Col_info = Pos_info["MapID (Col_Range)"].values[0]
+
+		def Protein_label_multi(myo1): #, The purpose of this funtion is to associate the determinined Myo1 major fluorescence to the apppropriate protien
+			myo1 = myo1.values[0] # This is for the barcode grouped version. It should run faster
+			if myo1 == "Myo1_mKO":
+				return(Prot_strain1)
+			elif myo1 == "Myo1_mKa":
+				return(Prot_strain2)
+			else:
+				return(myo1)
+
+		def Is_treated(frame): #, The purpose of this function is to label each frame by the relative time from treatment in frames. These values can later be converted to time values by multiplying by the appropriate scaling value.
+			frame = frame.values[0] # Again, this is for the barcode grouped version
+			f_treated = Time_treat/ time_per_frame
+			if frame < f_treated:
+				return (0)
+			if frame >= f_treated:
+				return(1)
+
+		Quant_FIN_primary["Col_info"] = int(Col_info)
+		# Quant_FIN_primary["Protein"] = pd.Series(Quant_FIN_primary["Myo1Identity"]).apply(Protein_label_multi)
+		Quant_FIN_primary["Protein"] = Quant_FIN_primary.groupby(by = ["Cell_Barcode"])["Myo1Identity"].transform(Protein_label_multi) # This is the grouped run. This should be faster because it is only applyong once per cell
+
+		# Quant_FIN_primary["Protein"] = pd.Series
+		# (Quant_FIN_primary["Myo1Identity"]).apply(Protein_label_multi) #fix the lookup table
+
+		# Quant_FIN_primary["Is_treated"] = pd.Series(Quant_FIN_primary["Frame"]).apply(Is_treated)
+		Quant_FIN_primary["Is_treated"] = Quant_FIN_primary.groupby(by = ["ImageID"])["Frame"].transform(Is_treated)
+
+		def f_Frames_post_treatment_shift(i, i_pt):
+			v = i - i_pt
+			return(v)
+
+		psuedo_map = Quant_FIN_primary[["ImageID", "Is_treated", "Frame"]].drop_duplicates() # Grab just the imageID, "Is_treated", and "Frame"
+		psuedo_map.sort_values(by = ["Frame"], inplace=True)   ####  Add sorting to make sure that the index comparison will be correct
+
+		psuedo_map.reset_index(inplace=True, drop = True) #Reindex to make sure that the index numbers are correct and can be used for comparison
+		i_pt = psuedo_map[psuedo_map["Is_treated"] == 1].index[0] - 1 # This isn't the most pretty way to go about but works for now
+		psuedo_map["Frames_post_treatment"] = pd.Series(psuedo_map.index).apply(lambda x: f_Frames_post_treatment_shift(x, i_pt))
+		psuedo_map.drop(columns=["Frame", "Is_treated"], inplace= True) #* This corrects the Frame_x issue issue the existed in prior versions
+		Quant_FIN_primary = pd.merge(Quant_FIN_primary, psuedo_map, how = "left", on='ImageID')
+		Quant_FIN_primary.to_parquet(f"Quant_{Pos}_primary.parquet")
+	except IndexError:
+		return(f"IndexError on {p}")
+	except ValueError:
+		return(f"ValueError on {p}")
+# def Protein_label_multi(myo1):
+# 	if myo1 == "Myo1_mKO":
+# 		return(BHY131)
+# 	if myo1 == "Myo1_mKa":
+# 		return(BHY175)
+
+# def Is_treated(frame):
+# 	f_treated = Time_treat/ time_per_frame
+# 	if frame < f_treated:
+# 		return (0)
+# 	if frame >= f_treated:
+# 		return(1)
+
+
+l = len(Quant_ALL_index)
+if l < pn:
+	pr = l
+else:
+	pr = pn # 8 #pn - 1
+
+# for p in range(len(Quant_ALL_index)):
+# 	Strain_ID_multiplex(p)
+
+
+# Strain_ID_multiplex(0)
+
+Parallel(n_jobs=pr, verbose = 100)(delayed(Strain_ID_multiplex)(p) for p in range(len(Quant_ALL_index)))
 
 #%%
 def f_Position_ID_qALLi(z):
@@ -255,7 +481,28 @@ def f_Position_ID_qALLi(z):
 # 	e = s+1
 # 	r = x[s:e]
 # 	return(r)
+os.chdir(post_path)
+Quant_prim_index = []
+count = 0
+for root, dirs, files, in os.walk(os.getcwd()):
+	for name in files:
+		if name.endswith("mary.parquet") and name.startswith("Quant"): # fix naming
+			Quant_prim_index.append({'Path': os.path.join(root, name)})
+			count = count + 1
+			print(count, end="\r")
+		else:
+			pass
+	break #This makes the program run non recursively and not decend into daughter folders
 
+Quant_prim_index = pd.DataFrame(Quant_prim_index)
+Quant_prim_index["PositionID"] = pd.Series(Quant_prim_index.iloc[:,0]).apply(f_Position_ID_qALLi)
+# Quant_prim_index["Position"] = pd.Series(Quant_prim_index["Path"]).apply(f_Position_ID_qALLi)
+# Quant_prim_index["Run"] = pd.Series(Quant_prim_index["Position"]).apply(f_run)
+# Quant_prim_index["Col"] = pd.Series(Quant_prim_index["Position"]).apply(f_col)
+# Quant_prim_index["Date"] = pd.Series(Quant_prim_index["Position"]).apply(f_expdate)
+
+Quant_prim_index.sort_values(by = "PositionID", inplace = True)
+Quant_prim_index.to_parquet("Quant_prim_index.parquet")# , index = False)
 
 ##### MOVED THE FRAME JUSTIFICATION UPSTREAM
 #%%
@@ -265,8 +512,8 @@ def f_Position_ID_qALLi(z):
 
 def I_move(p, percentile = percentile):
 	try: #TODO: Rename Frame_x to just Frame
-		Quant_prim = pd.read_parquet(Quant_prim_index.iloc[p,0], usecols = ['Cell_Barcode', 'ImageID', 'Date', 'Frame_x', 'Unique_Frame', 'factor_median_OBJ_GFP', 'factor_mean_OBJ_GFP', 'x90thPercentile_norm_OBJ_Median_GFP', 'x95thPercentile_norm_OBJ_Median_GFP', 'x99thPercentile_norm_OBJ_Median_GFP', 'Progen_bud', 'x90thPercentile_GFP_RAW', 'x95thPercentile_GFP_RAW', 'x99thPercentile_GFP_RAW', 'max_GFP_RAW', 'max_mKa_RAW', 'max_mKO_RAW', 'TrackID_valid', 'Myo1Identity', 'mKO_foldChange', 'mKO_direction', 'mKA_foldChange', 'mKa_direction', 'byProgen_bud', 'byRange', 'Col_info', 'Protein', 'Is_treated', 'Frames_post_treatment', #* From here on are newly added columns to determine the cell stage. Could do a pd.merge at the end instead.
-		"x80thPercentile_Diff_background_mKate", "x90thPercentile_Diff_background_mKate", "x99thPercentile_Diff_background_mKate", "x80thPercentile_Diff_background_mKO", "x90thPercentile_Diff_background_mKO", "x99thPercentile_Diff_background_mKO", "averageIntensity_mKO_Frame", "averageIntesntiy_mKO_Background", "averageIntensity_mKO_Object", "mKO_spread", "averageIntensity_mKate_Frame", "averageIntesntiy_mKate_Background", "averageIntensity_mKate_Object", "mKate_spread", "factor_median _OBJ_KO", "factor_mean_OBJ_KO", "factor_total_OBJ_KO", "factor_mKO_background_Med", "factor_mKO_background_Avg", "factor_mKO_background_Tot", "factor_median_OBJ_mKate", "factor_mean_OBJ_mKate", "factor_total_OBJ_mKate", "factor_mKate_background_Med", "factor_mKate_background_Avg", "factor_mKate_background_Tot", "x60thPercentile_mKa_RAW", "x80thPercentile_mKa_RAW", "x90thPercentile_mKa_RAW", "x95thPercentile_mKa_RAW", "x99thPercentile_mKa_RAW", "max_mKa_RAW", "x60thPercentile_mKO_RAW", "x80thPercentile_mKO_RAW", "x90thPercentile_mKO_RAW", "x95thPercentile_mKO_RAW", "x99thPercentile_mKO_RAW", "max_mKO_RAW"])
+		Quant_prim = pd.read_parquet(Quant_prim_index.iloc[p,0])#. , usecols = ['Cell_Barcode', 'ImageID', 'Date', 'Frame', 'Unique_Frame', 'factor_median_OBJ_GFP', 'factor_mean_OBJ_GFP', 'x90thPercentile_norm_OBJ_Median_GFP', 'x95thPercentile_norm_OBJ_Median_GFP', 'x99thPercentile_norm_OBJ_Median_GFP', 'Progen_bud', 'x90thPercentile_GFP_RAW', 'x95thPercentile_GFP_RAW', 'x99thPercentile_GFP_RAW', 'max_GFP_RAW', 'max_mKa_RAW', 'max_mKO_RAW', 'TrackID_valid', 'Myo1Identity', 'mKO_foldChange', 'mKO_direction', 'mKA_foldChange', 'mKa_direction', 'byProgen_bud', 'byRange', 'Col_info', 'Protein', 'Is_treated', 'Frames_post_treatment', #* From here on are newly added columns to determine the cell stage. Could do a pd.merge at the end instead.
+		# "x80thPercentile_Diff_background_mKate", "x90thPercentile_Diff_background_mKate", "x99thPercentile_Diff_background_mKate", "x80thPercentile_Diff_background_mKO", "x90thPercentile_Diff_background_mKO", "x99thPercentile_Diff_background_mKO", "averageIntensity_mKO_Frame", "averageIntesntiy_mKO_Background", "averageIntensity_mKO_Object", "mKO_spread", "averageIntensity_mKate_Frame", "averageIntesntiy_mKate_Background", "averageIntensity_mKate_Object", "mKate_spread", "factor_median _OBJ_KO", "factor_mean_OBJ_KO", "factor_total_OBJ_KO", "factor_mKO_background_Med", "factor_mKO_background_Avg", "factor_mKO_background_Tot", "factor_median_OBJ_mKate", "factor_mean_OBJ_mKate", "factor_total_OBJ_mKate", "factor_mKate_background_Med", "factor_mKate_background_Avg", "factor_mKate_background_Tot", "x60thPercentile_mKa_RAW", "x80thPercentile_mKa_RAW", "x90thPercentile_mKa_RAW", "x95thPercentile_mKa_RAW", "x99thPercentile_mKa_RAW", "max_mKa_RAW", "x60thPercentile_mKO_RAW", "x80thPercentile_mKO_RAW", "x90thPercentile_mKO_RAW", "x95thPercentile_mKO_RAW", "x99thPercentile_mKO_RAW", "max_mKO_RAW"])
 
 		Quant_prim["Unique_pos"] = pd.Series(Quant_prim["Unique_Frame"]).apply(lambda x: x[:x.find('f')]) #* This was added on AUG31,2022
 
@@ -286,7 +533,7 @@ def I_move(p, percentile = percentile):
 			mKa_skip = True
 
 		#This is for the removal of dead cells based on high mKa and low GFP relative to the population.  The code is not complete and will remove to many cells
-		Quant_f__twe = Quant_prim.loc[(Quant_prim["Frame_x"] <= 20) & (Quant_prim["Is_treated"] == 0)].copy()
+		Quant_f__twe = Quant_prim.loc[(Quant_prim["Frame"] <= 20) & (Quant_prim["Is_treated"] == 0)].copy()
 		Median_pop = Quant_f__twe.groupby(by = "Cell_Barcode").agg('min').groupby(by = "Myo1Identity").agg('median')
 		Std_pop = Quant_f__twe.groupby(by = "Cell_Barcode").agg('min').groupby(by = "Myo1Identity").agg('std')
 
@@ -348,7 +595,7 @@ def I_move(p, percentile = percentile):
 		Quant_no = Quant_f__twe[(Quant_f__twe["min_max_GFP_Object"] > gGFP_sel) & (Quant_f__twe["min_max_mKate_Object"] > gKa_sel)]["Cell_Barcode"] # Creat a list of cells which are above the GFP and mKa thresholds.
 
 		Quant_prim = Quant_prim.loc[~Quant_prim["Cell_Barcode"].isin(Quant_no)] # This is functional but messy. Remove the cells marked as too flourescent to be considered viable. Removal is only performed BASED ON the first 10 frames
-		Quant_no.to_parquet(f"Dropped_dead_{Pos}.parquet")
+		Quant_no.to_csv(f"Dropped_dead_{Pos}.csv")
 
 		Quant_prim.set_index(["Cell_Barcode", "ImageID"], inplace = True)
 
@@ -499,11 +746,11 @@ pr = pn # pn # 8 #8 #pn - 1
 
 # #, Testing this new code to make sure that all cells presnet at treatment are
 # Tracked_subset_pres_end = Tracked_subset[Tracked_subset["Cell_Barcode"].isin(Tracked_subset.iloc[-1,:]["Cell_Barcode"])]
-# unif_mKa["Max_frame_pos"] = unif_mKa.groupby(["Unique_Pos"])["Frame_x"].transform('max') #* This is the max frame for a given position
+# unif_mKa["Max_frame_pos"] = unif_mKa.groupby(["Unique_Pos"])["Frame"].transform('max') #* This is the max frame for a given position
 
 # #!WhyTF is Unique_frame being ouput as an obbject and not a string?!
-# df.groupby("Cell_Barcode")["Frame_x"].transform('max') #* This is the max frame for a given cell barcode
-# df["Max_frame_pos"] = df.groupby(["Unique_Pos"])["Frame_x"].transform('max')
+# df.groupby("Cell_Barcode")["Frame"].transform('max') #* This is the max frame for a given cell barcode
+# df["Max_frame_pos"] = df.groupby(["Unique_Pos"])["Frame"].transform('max')
 
 
 # def compare:
@@ -513,7 +760,7 @@ pr = pn # pn # 8 #8 #pn - 1
 # 		return(1)
 
 
-# df["Pres_end"] = df.apply(lambda x: x["Frame_x"] - x["Max_frame_pos"])
+# df["Pres_end"] = df.apply(lambda x: x["Frame"] - x["Max_frame_pos"])
 
 # df = df.loc[df["Pres_end"] == 1]
 # dropped = df.loc[df["Pres_end"] != 1]

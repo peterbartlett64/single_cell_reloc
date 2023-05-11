@@ -52,7 +52,7 @@ def Quantification_index_er():
 	count = 0
 	for root, dirs, files, in os.walk(os.getcwd()):
 		for name in files:
-			if name.endswith(".paraquet") and name.startswith("Quantification_d"):
+			if name.endswith(".parquet") and name.startswith("Quantification_d"):
 				Quantification_index.append({'Path': os.path.join(root, name)})
 				count = count + 1
 				print(count, end="\r")
@@ -118,14 +118,14 @@ def Quantification_index_er():
 	else:
 		pass
 	Quantification_index.sort_values(by = "PositionID", inplace = True)
-	Quantification_index.to_paraquet("Quantification_index.paraquet")
+	Quantification_index.to_parquet("Quantification_index.parquet")
 	return(Quantification_index)
 
 ####### Function run
-# Quantification_index = Quantification_index_er()
+Quantification_index = Quantification_index_er()
 #######
 
-# Quantification_index = pd.read_paraquet("Quantification_index.paraquet") # Temp added because want to read the version whiich was created pre-quant today
+# Quantification_index = pd.read_parquet("Quantification_index.parquet") # Temp added because want to read the version whiich was created pre-quant today
 
 #%% Combine frames into posision
 from joblib import Parallel, delayed
@@ -136,11 +136,11 @@ def combine_pos(pos):
 	subset_s = subset.sort_values(by = "Frame")
 	for qf in range(len(subset)):
 		try:
-			q = pd.read_paraquet(subset_s.iloc[qf,0])
+			q = pd.read_parquet(subset_s.iloc[qf,0])
 		except:
 			continue
 		Quant_frame_comb = pd.concat([Quant_frame_comb, q])
-	Quant_frame_comb.to_paraquet(f"Quant_{pos}_ALL.paraquet")
+	Quant_frame_comb.to_parquet(f"Quant_{pos}_ALL.parquet")
 	return(f"{pos} frame merging is complete")
 
 positions = Quantification_index["PositionID"].unique()
@@ -157,9 +157,9 @@ else:
 # 	subset = Quantification_index.loc[Quantification_index["PositionID"] == pos]
 # 	subset.sort_values(by = "Frame", inplace = True)
 # 	for qf in range(len(subset)):
-# 		q = pd.read_paraquet(subset.iloc[qf,0])
+# 		q = pd.read_parquet(subset.iloc[qf,0])
 # 		Quant_frame_comb = pd.concat([Quant_frame_comb, q])
-# 	Quant_frame_comb.to_paraquet(f"Quant_{pos}_ALL.paraquet")
+# 	Quant_frame_comb.to_parquet(f"Quant_{pos}_ALL.parquet")
 # 	print(f"{pos} merging is complete")
 ####### Function run
 Parallel(n_jobs=pr, verbose = 100)(delayed(combine_pos)(p) for p in positions)
@@ -185,7 +185,7 @@ def Quant_ALL_index_er():
 	count = 0
 	for root, dirs, files, in os.walk(os.getcwd()):
 		for name in files:
-			if name.endswith("_ALL.paraquet") and name.startswith("Quant"): # fix naming
+			if name.endswith("_ALL.parquet") and name.startswith("Quant"): # fix naming
 				Quant_ALL_index.append({'Path': os.path.join(root, name)})
 				count = count + 1
 				print(count, end="\r")
@@ -196,7 +196,7 @@ def Quant_ALL_index_er():
 	Quant_ALL_index = pd.DataFrame(Quant_ALL_index)
 	Quant_ALL_index["PositionID"] = pd.Series(Quant_ALL_index.iloc[:,0]).apply(f_Position_ID_qALLi)
 	Quant_ALL_index.sort_values(by = "PositionID", inplace = True)
-	Quant_ALL_index.to_paraquet("Quant_ALL_index.paraquet")
+	Quant_ALL_index.to_parquet("Quant_ALL_index.parquet")
 	return(Quant_ALL_index)
 
 ###### Function run
@@ -206,7 +206,7 @@ Quant_ALL_index = Quant_ALL_index_er()
 #%%
 # Cell_index_timing = info_simple[["track_index", "track_start_frame"]]
 # os.chdir(microfluidics_results)
-# Quant_ALL_index = pd.read_paraquet("Quant_ALL_index.paraquet") #*#* Does the file need to read in to work?
+# Quant_ALL_index = pd.read_parquet("Quant_ALL_index.parquet") #*#* Does the file need to read in to work?
 # Quant_ALL_index.drop(Quant_ALL_index.columns[Quant_ALL_index.columns.str.contains('Unnamed',case = False)],axis = 1, inplace= True)
 #%%
 os.chdir(microfluidic_results)
@@ -235,7 +235,7 @@ os.chdir(post_path)
 
 def Strain_ID_multiplex(p, multiplex = True):
 	try:
-		Quant_ALL = pd.read_paraquet(Quant_ALL_index.iloc[p,0])
+		Quant_ALL = pd.read_parquet(Quant_ALL_index.iloc[p,0])
 		Quant_ALL.drop(Quant_ALL.columns[Quant_ALL.columns.str.contains('Unnamed',case = False)],axis = 1, inplace = True)
 		print(p)
 
@@ -421,7 +421,7 @@ def Strain_ID_multiplex(p, multiplex = True):
 		psuedo_map["Frames_post_treatment"] = pd.Series(psuedo_map.index).apply(lambda x: f_Frames_post_treatment_shift(x, i_pt))
 		psuedo_map.drop(columns=["Frame", "Is_treated"], inplace= True) #* This corrects the Frame_x issue issue the existed in prior versions
 		Quant_FIN_primary = pd.merge(Quant_FIN_primary, psuedo_map, how = "left", on='ImageID')
-		Quant_FIN_primary.to_paraquet(f"Quant_{Pos}_primary.paraquet")
+		Quant_FIN_primary.to_parquet(f"Quant_{Pos}_primary.parquet")
 	except IndexError:
 		return(f"IndexError on {p}")
 	except ValueError:
@@ -479,7 +479,7 @@ Quant_prim_index = []
 count = 0
 for root, dirs, files, in os.walk(os.getcwd()):
 	for name in files:
-		if name.endswith("mary.paraquet") and name.startswith("Quant"): # fix naming
+		if name.endswith("mary.parquet") and name.startswith("Quant"): # fix naming
 			Quant_prim_index.append({'Path': os.path.join(root, name)})
 			count = count + 1
 			print(count, end="\r")
@@ -495,7 +495,7 @@ Quant_prim_index["PositionID"] = pd.Series(Quant_prim_index.iloc[:,0]).apply(f_P
 # Quant_prim_index["Date"] = pd.Series(Quant_prim_index["Position"]).apply(f_expdate)
 
 Quant_prim_index.sort_values(by = "PositionID", inplace = True)
-Quant_prim_index.to_paraquet("Quant_prim_index.paraquet")# , index = False)
+Quant_prim_index.to_parquet("Quant_prim_index.parquet")# , index = False)
 
 ##### MOVED THE FRAME JUSTIFICATION UPSTREAM
 #%%
@@ -505,7 +505,7 @@ Quant_prim_index.to_paraquet("Quant_prim_index.paraquet")# , index = False)
 
 def I_move(p, percentile = percentile):
 	try: #TODO: Rename Frame_x to just Frame
-		Quant_prim = pd.read_paraquet(Quant_prim_index.iloc[p,0], usecols = ['Cell_Barcode', 'ImageID', 'Date', 'Frame', 'Unique_Frame', 'factor_median_OBJ_GFP', 'factor_mean_OBJ_GFP', 'x90thPercentile_norm_OBJ_Median_GFP', 'x95thPercentile_norm_OBJ_Median_GFP', 'x99thPercentile_norm_OBJ_Median_GFP', 'Progen_bud', 'x90thPercentile_GFP_RAW', 'x95thPercentile_GFP_RAW', 'x99thPercentile_GFP_RAW', 'max_GFP_RAW', 'max_mKa_RAW', 'max_mKO_RAW', 'TrackID_valid', 'Myo1Identity', 'mKO_foldChange', 'mKO_direction', 'mKA_foldChange', 'mKa_direction', 'byProgen_bud', 'byRange', 'Col_info', 'Protein', 'Is_treated', 'Frames_post_treatment', #* From here on are newly added columns to determine the cell stage. Could do a pd.merge at the end instead.
+		Quant_prim = pd.read_parquet(Quant_prim_index.iloc[p,0], usecols = ['Cell_Barcode', 'ImageID', 'Date', 'Frame', 'Unique_Frame', 'factor_median_OBJ_GFP', 'factor_mean_OBJ_GFP', 'x90thPercentile_norm_OBJ_Median_GFP', 'x95thPercentile_norm_OBJ_Median_GFP', 'x99thPercentile_norm_OBJ_Median_GFP', 'Progen_bud', 'x90thPercentile_GFP_RAW', 'x95thPercentile_GFP_RAW', 'x99thPercentile_GFP_RAW', 'max_GFP_RAW', 'max_mKa_RAW', 'max_mKO_RAW', 'TrackID_valid', 'Myo1Identity', 'mKO_foldChange', 'mKO_direction', 'mKA_foldChange', 'mKa_direction', 'byProgen_bud', 'byRange', 'Col_info', 'Protein', 'Is_treated', 'Frames_post_treatment', #* From here on are newly added columns to determine the cell stage. Could do a pd.merge at the end instead.
 		"x80thPercentile_Diff_background_mKate", "x90thPercentile_Diff_background_mKate", "x99thPercentile_Diff_background_mKate", "x80thPercentile_Diff_background_mKO", "x90thPercentile_Diff_background_mKO", "x99thPercentile_Diff_background_mKO", "averageIntensity_mKO_Frame", "averageIntesntiy_mKO_Background", "averageIntensity_mKO_Object", "mKO_spread", "averageIntensity_mKate_Frame", "averageIntesntiy_mKate_Background", "averageIntensity_mKate_Object", "mKate_spread", "factor_median _OBJ_KO", "factor_mean_OBJ_KO", "factor_total_OBJ_KO", "factor_mKO_background_Med", "factor_mKO_background_Avg", "factor_mKO_background_Tot", "factor_median_OBJ_mKate", "factor_mean_OBJ_mKate", "factor_total_OBJ_mKate", "factor_mKate_background_Med", "factor_mKate_background_Avg", "factor_mKate_background_Tot", "x60thPercentile_mKa_RAW", "x80thPercentile_mKa_RAW", "x90thPercentile_mKa_RAW", "x95thPercentile_mKa_RAW", "x99thPercentile_mKa_RAW", "max_mKa_RAW", "x60thPercentile_mKO_RAW", "x80thPercentile_mKO_RAW", "x90thPercentile_mKO_RAW", "x95thPercentile_mKO_RAW", "x99thPercentile_mKO_RAW", "max_mKO_RAW"])
 
 		Quant_prim["Unique_pos"] = pd.Series(Quant_prim["Unique_Frame"]).apply(lambda x: x[:x.find('f')]) #* This was added on AUG31,2022
@@ -588,7 +588,7 @@ def I_move(p, percentile = percentile):
 		Quant_no = Quant_f__twe[(Quant_f__twe["min_max_GFP_Object"] > gGFP_sel) & (Quant_f__twe["min_max_mKate_Object"] > gKa_sel)]["Cell_Barcode"] # Creat a list of cells which are above the GFP and mKa thresholds.
 
 		Quant_prim = Quant_prim.loc[~Quant_prim["Cell_Barcode"].isin(Quant_no)] # This is functional but messy. Remove the cells marked as too flourescent to be considered viable. Removal is only performed BASED ON the first 10 frames
-		Quant_no.to_paraquet(f"Dropped_dead_{Pos}.paraquet")
+		Quant_no.to_parquet(f"Dropped_dead_{Pos}.parquet")
 
 		Quant_prim.set_index(["Cell_Barcode", "ImageID"], inplace = True)
 
@@ -644,8 +644,8 @@ def I_move(p, percentile = percentile):
 		# MMS_mKO["mKO_factor_upper"] = UNT_GFP_mKO_factor_upper * GFP_normal_avg_mKO
 		# MMS_mKO["mKO_factor_lower"] = UNT_GFP_mKO_factor_lower * GFP_normal_avg_mKO
 
-		UNT_mKa.to_paraquet(f"UNT_{Pos}mKa.paraquet") # Output the cells and information on which parameters are derived
-		UNT_mKO.to_paraquet(f"UNT_{Pos}mKO.paraquet")
+		UNT_mKa.to_parquet(f"UNT_{Pos}mKa.parquet") # Output the cells and information on which parameters are derived
+		UNT_mKO.to_parquet(f"UNT_{Pos}mKO.parquet")
 
 		def reloc_score_mKa(row):
 			metric = row[fluor_perc]
@@ -707,8 +707,8 @@ def I_move(p, percentile = percentile):
 		MMS_mKa["Relocalized"] = pd.Series(MMS_mKa["Loc_score"]).apply(loc_score_to_binary)
 		MMS_mKO["Relocalized"] = pd.Series(MMS_mKO["Loc_score"]).apply(loc_score_to_binary)
 
-		MMS_mKa.to_paraquet(f"MMS_{Pos}mKa_wReloc.paraquet") #These are just the post_treatment observations
-		MMS_mKO.to_paraquet(f"MMS_{Pos}mKO_wReloc.paraquet")
+		MMS_mKa.to_parquet(f"MMS_{Pos}mKa_wReloc.parquet") #These are just the post_treatment observations
+		MMS_mKO.to_parquet(f"MMS_{Pos}mKO_wReloc.parquet")
 
 		# unif_mKa = pd.concat([UNT_mKa_all, MMS_mKa])
 		# unif_mKO = pd.concat([UNT_mKO_all, MMS_mKO])
@@ -721,11 +721,11 @@ def I_move(p, percentile = percentile):
 		CV_table_mKO.rename(columns  = {"lambda_x": "CV_sp", "count" : "cell_count"})
 		unif_mKO = pd.merge(unif_mKO, CV_table_mKa, left_on= "Frames_post_treatment", right_index=True)
 
-		unif_mKa.to_paraquet(f"unif_mKa_{Pos}.paraquet")
-		unif_mKO.to_paraquet(f"unif_mKO_{Pos}.paraquet")
+		unif_mKa.to_parquet(f"unif_mKa_{Pos}.parquet")
+		unif_mKO.to_parquet(f"unif_mKO_{Pos}.parquet")
 
 		Movement_treat_course = pd.concat([unif_mKa, unif_mKO]) # was previously names Movement_pseudo
-		Movement_treat_course.to_paraquet(f"Movement_treat_course_{Pos}.paraquet")
+		Movement_treat_course.to_parquet(f"Movement_treat_course_{Pos}.parquet")
 
 		return(f"The movement calculation and identification for position {Pos} is complete. Based on {percentile}th percentile")
 	except:
@@ -780,7 +780,7 @@ movement_unif_index = []
 count = 0
 for root, dirs, files, in os.walk(os.getcwd()):
 	for name in files:
-		if name.startswith("Move") and name.endswith(".paraquet") : # fix naming
+		if name.startswith("Move") and name.endswith(".parquet") : # fix naming
 			movement_unif_index.append({'Path': os.path.join(root, name)})
 			count = count + 1
 			print(count, end="\r")
@@ -795,7 +795,7 @@ def f_col(p):
 
 def f_Position_move(z):
 	start = z.find('course_')+7 #Note: The shift forward is dependant upon how you write out position
-	end = z.find(".paraquet")   #Make sure that the 'n' is present in the array to confirm no place 0 has been lost
+	end = z.find(".parquet")   #Make sure that the 'n' is present in the array to confirm no place 0 has been lost
 	return(z[start:end])
 
 def f_expdate(x):
@@ -817,12 +817,12 @@ movement_unif_index["Date"] = pd.Series(movement_unif_index["Position"]).apply(f
 movement_unif_index.sort_values(by = ["Col"], inplace= True)  # the sorting is not required but makes it easier to track the progress of the jobs
 movement_unif_index.reset_index(inplace= True, drop = True) #even though it is dropped when saving, leaving this here in case I do not want to read in later. Would be faster but don't want to change anything right now
 
-movement_unif_index.to_paraquet("index_Movement.paraquet", index = False)
+movement_unif_index.to_parquet("index_Movement.parquet", index = False)
 
 #%%
 Col_list = Condition_information[["Date", "MapID (Col_Range)", "Run Number"]]
 Col_list = Col_list.drop_duplicates().reset_index(drop = True) # This is the set of combination for the above information components
-movement_unif_index = pd.read_paraquet("index_Movement.paraquet")
+movement_unif_index = pd.read_parquet("index_Movement.parquet")
 positions = movement_unif_index["Position"].unique()
 #%%
 os.chdir(post_path)
@@ -846,14 +846,14 @@ def f_Prot_combine_df(col_i): #This function runs based on the information file 
 			Run = col_inf["Run Number"] #Return the run number which the postional file falls within
 			concated = pd.DataFrame([])
 			for pos in matches["Path"]: #Sequentially read in each matching postion data files and add it to the Column dataframe
-				p = pd.read_paraquet(pos)
+				p = pd.read_parquet(pos)
 				concated = pd.concat([concated, p])
 
 
 			CV_table= concated.groupby(['Protein', 'Frames_post_treatment']).Loc_score.agg([lambda x: variation(x), 'count']) #Calculated the varation and the count of cells for each protein in each postion file
 			CV_table.rename(columns  = {"lambda_0": "CV_apos", "count" : "cell_count"}) # Should rename, but does not seem to be working
 			concated = pd.merge(concated, CV_table, left_on= ['Protein', 'Frames_post_treatment'], right_index=True)
-			concated.to_paraquet(f"Chamber_Col_{Date}_r{Run}_Ch{Col}_{today}.paraquet")
+			concated.to_parquet(f"Chamber_Col_{Date}_r{Run}_Ch{Col}_{today}.parquet")
 			return("Complete")
 	except: #This is bad practice but should be fine for now
 		return("Failed")
@@ -875,8 +875,8 @@ Chamber_index = []
 count = 0
 for root, dirs, files, in os.walk(os.getcwd()):
 	for name in files:
-		if name.startswith("Chamber") and name.endswith(f".paraquet"): # fix naming
-			if name.endswith("index.paraquet"):
+		if name.startswith("Chamber") and name.endswith(f".parquet"): # fix naming
+			if name.endswith("index.parquet"):
 				pass
 			else:
 				Chamber_index.append({'Path': os.path.join(root, name)})
@@ -894,7 +894,7 @@ def f_chamber(col):
 
 Chamber_index["Chamber"] = pd.Series(Chamber_index.iloc[:,0]).apply(f_chamber)
 Chamber_index.sort_values(by = "Chamber", inplace = True)
-Chamber_index.to_paraquet("Chamber_index.paraquet")
+Chamber_index.to_parquet("Chamber_index.parquet")
 
 #%%
 
@@ -903,7 +903,7 @@ Chamber_index.to_paraquet("Chamber_index.paraquet")
 try: Chamber_index
 except NameError:
 	os.chdir(post_path)
-	Chamber_index = pd.read_paraquet("Chamber_index.paraquet")
+	Chamber_index = pd.read_parquet("Chamber_index.parquet")
 today = str(datetime.date.today())
 #%%
 
@@ -966,7 +966,7 @@ def new_percentages_post_t(chamber, Chamber_df): # This function calculated the 
 
 			percentage_reloc_p = pd.concat([percentage_reloc_p, f_row])
 
-		percentage_reloc_p.to_paraquet(f"percentage_reloc_pt_{chamber}.paraquet", index = False)
+		percentage_reloc_p.to_parquet(f"percentage_reloc_pt_{chamber}.parquet", index = False)
 		return(None)
 	except ZeroDivisionError:
 		return("ZeroDivisionError")
@@ -1021,7 +1021,7 @@ def new_percentages_all_t(chamber, Chamber_df): # This function calculated the p
 
 			percentage_reloc_p = pd.concat([percentage_reloc_p, f_row])
 
-		percentage_reloc_p.to_paraquet(f"percentage_reloc_allt_{chamber}.paraquet", index = False)
+		percentage_reloc_p.to_parquet(f"percentage_reloc_allt_{chamber}.parquet", index = False)
 		return(None)
 	except ZeroDivisionError:
 		return("ZeroDivisionError")
@@ -1030,7 +1030,7 @@ date_found = Chamber_index.iloc[0,0][-14:-4]
 
 def percentages_bt_manager(chamber):
 	try:
-		Chamber_df = pd.read_paraquet(f"Chamber_{chamber}_{date_found}.paraquet")
+		Chamber_df = pd.read_parquet(f"Chamber_{chamber}_{date_found}.parquet")
 	except FileNotFoundError:
 		return(f"Col_merge file not found for {chamber}")
 
@@ -1078,14 +1078,14 @@ All_pos_allt_unified_prot_percentages = pd.DataFrame({
 ########NOTE## The output is All_pos_allt_unified_prot_percentages at ALL TIMEPOINTS
 for c in Chamber_index["Chamber"]:
 	try:
-		percentage_reloc_p = pd.read_paraquet(f"percentage_reloc_allt_{c}.paraquet")
+		percentage_reloc_p = pd.read_parquet(f"percentage_reloc_allt_{c}.parquet")
 	except FileNotFoundError:
 		print(f"Percentage fiile missing for {c}")
 
 	All_pos_allt_unified_prot_percentages = pd.merge(All_pos_allt_unified_prot_percentages, percentage_reloc_p, how = 'outer', on='Frames_post_treatment')
 	All_pos_allt_unified_prot_percentages["Time_post_treatment"] = All_pos_allt_unified_prot_percentages["Frames_post_treatment"] *time_per_frame
 
-All_pos_allt_unified_prot_percentages.to_paraquet("All_pos_allt_percentage_sync.paraquet")
+All_pos_allt_unified_prot_percentages.to_parquet("All_pos_allt_percentage_sync.parquet")
 ########NOTE## The output is All_pos_allt_unified_prot_percentages at ALL TIMEPOINTS
 
 
@@ -1096,7 +1096,7 @@ All_pos_pt_unified_prot_percentages = pd.DataFrame({
 
 for c in Chamber_index["Chamber"]:
 	try:
-		percentage_reloc_p = pd.read_paraquet(f"percentage_reloc_pt_{c}.paraquet")
+		percentage_reloc_p = pd.read_parquet(f"percentage_reloc_pt_{c}.parquet")
 	except FileNotFoundError:
 		print(f"Percentage fiile missing for {c}")
 
@@ -1106,7 +1106,7 @@ for c in Chamber_index["Chamber"]:
 
 # All_pos_pt_unified_prot_percentages = All_pos_pt_unified_prot_percentages.loc[:,~All_pos_pt_unified_prot_percentages.columns.duplicated()]
 
-All_pos_pt_unified_prot_percentages.to_paraquet("All_pos_pt_percentage_sync.paraquet")
+All_pos_pt_unified_prot_percentages.to_parquet("All_pos_pt_percentage_sync.parquet")
 
 ########################################################################################
 #%%
@@ -1115,12 +1115,12 @@ list_prot_col_t = All_pos_pt_unified_prot_percentages.loc[:, (All_pos_pt_unified
 #Melt percentages for pt
 All_pos_pt_t_percentages_melt = pd.melt(All_pos_pt_unified_prot_percentages, id_vars=['Frames_post_treatment'], value_vars=list_prot_col_t, var_name='Protein', value_name='Percentage_reloc')
 All_pos_pt_t_percentages_melt["Time_post_treatment"] = All_pos_pt_t_percentages_melt["Frames_post_treatment"] *time_per_frame
-All_pos_pt_t_percentages_melt.to_paraquet("All_pos_pt_t_percentages_melt.paraquet")
+All_pos_pt_t_percentages_melt.to_parquet("All_pos_pt_t_percentages_melt.parquet")
 
 #Melt percentages for allt
 All_pos_allt_t_percentages_melt = pd.melt(All_pos_allt_unified_prot_percentages, id_vars=['Frames_post_treatment'], value_vars=list_prot_col_t, var_name='Protein', value_name='Percentage_reloc')
 All_pos_allt_t_percentages_melt["Time_post_treatment"] = All_pos_allt_t_percentages_melt["Frames_post_treatment"] *time_per_frame
-All_pos_allt_t_percentages_melt.to_paraquet("All_pos_allt_t_percentages_melt")
+All_pos_allt_t_percentages_melt.to_parquet("All_pos_allt_t_percentages_melt")
 
 #%%
 list_prot_col_less = All_pos_pt_unified_prot_percentages.loc[:, (All_pos_pt_unified_prot_percentages.columns.str.endswith("-perc_yet"))].columns
@@ -1128,12 +1128,12 @@ list_prot_col_less = All_pos_pt_unified_prot_percentages.loc[:, (All_pos_pt_unif
 #Melt percentages for pt_t less
 All_pos_pt_t_less_percentages_melt = pd.melt(All_pos_pt_unified_prot_percentages, id_vars=['Frames_post_treatment'], value_vars=list_prot_col_less, var_name='Protein', value_name='Percentage_reloc_less')
 All_pos_pt_t_less_percentages_melt["Time_post_treatment"] = All_pos_pt_t_percentages_melt["Frames_post_treatment"] *time_per_frame
-All_pos_pt_t_less_percentages_melt.to_paraquet("All_pos_pt_t_less_percentages_melt.paraquet")
+All_pos_pt_t_less_percentages_melt.to_parquet("All_pos_pt_t_less_percentages_melt.parquet")
 
 #Melt percentages for all_t less
 All_pos_allt_t_less_percentages_melt = pd.melt(All_pos_allt_unified_prot_percentages, id_vars=['Frames_post_treatment'], value_vars=list_prot_col_less, var_name='Protein', value_name='Percentage_reloc_less')
 All_pos_allt_t_less_percentages_melt["Time_post_treatment"] = All_pos_allt_t_percentages_melt["Frames_post_treatment"] *time_per_frame
-All_pos_allt_t_less_percentages_melt.to_paraquet("All_pos_allt_t_less_percentages_melt.paraquet")
+All_pos_allt_t_less_percentages_melt.to_parquet("All_pos_allt_t_less_percentages_melt.parquet")
 
 #%%
 # Calculate the percent trajectory for all_t
@@ -1150,7 +1150,7 @@ def f_percent_trajectory(prot, perc): #This is set to run on the version which i
 applied_df= All_pos_allt_t_percentages_melt.apply(lambda row: f_percent_trajectory(row.Protein, row.Percentage_reloc), axis='columns', result_type='expand').rename(columns={0:"Max_percent", 1:"Percent_of_max_percent", 2:"t_max_percent"})
 All_pos_t_percentages_melt= pd.concat([All_pos_allt_t_percentages_melt, applied_df], axis='columns')
 
-All_pos_t_percentages_melt.to_paraquet("All_pos_allt_percentages_melt.paraquet", index = False)
+All_pos_t_percentages_melt.to_parquet("All_pos_allt_percentages_melt.parquet", index = False)
 #%%
 #Calculate the trajectory for pt_t
 def f_percent_trajectory(prot, perc): #This is set to run on the version which includes pre-treatment v alues. I determined that it is enlightening to know dynamics pre-treatment
@@ -1167,12 +1167,12 @@ applied_df= All_pos_pt_t_percentages_melt.apply(lambda row: f_percent_trajectory
 All_pos_t_percentages_melt= pd.concat([All_pos_pt_t_percentages_melt, applied_df], axis='columns')
 
 
-All_pos_t_percentages_melt.to_paraquet("All_pos_pt_percentages_melt.paraquet", index = False)
+All_pos_t_percentages_melt.to_parquet("All_pos_pt_percentages_melt.parquet", index = False)
 #%%
-All_chambers_l = sorted(glob('Chamber_Col_*.paraquet'))
-All_chambers_df = pd.concat((pd.read_paraquet(file) for file in All_chambers_l), ignore_index= True)
+All_chambers_l = sorted(glob('Chamber_Col_*.parquet'))
+All_chambers_df = pd.concat((pd.read_parquet(file) for file in All_chambers_l), ignore_index= True)
 
-All_chambers_df.to_paraquet("ALL_CHAMBERS.paraquet")
+All_chambers_df.to_parquet("ALL_CHAMBERS.parquet")
 #%%
 # line = px.line(dataframe = )
 

@@ -3,7 +3,7 @@ import pandas as pd
 
 def Strain_ID_multiplex(p, multiplex = True):
 	try:
-		Quant_ALL = pd.read_paraquet(Quant_ALL_index.iloc[p,0])
+		Quant_ALL = pd.read_parquet(Quant_ALL_index.iloc[p,0])
 		Quant_ALL.drop(Quant_ALL.columns[Quant_ALL.columns.str.contains('Unnamed',case = False)],axis = 1, inplace = True)
 		print(p)
 
@@ -189,7 +189,7 @@ def Strain_ID_multiplex(p, multiplex = True):
 		psuedo_map["Frames_post_treatment"] = pd.Series(psuedo_map.index).apply(lambda x: f_Frames_post_treatment_shift(x, i_pt))
 		psuedo_map.drop(columns=["Frame", "Is_treated"], inplace= True) #* This corrects the Frame_x issue issue the existed in prior versions
 		Quant_FIN_primary = pd.merge(Quant_FIN_primary, psuedo_map, how = "left", on='ImageID')
-		Quant_FIN_primary.to_paraquet(f"Quant_{Pos}_primary.paraquet")
+		Quant_FIN_primary.to_parquet(f"Quant_{Pos}_primary.parquet")
 	except IndexError:
 		return(f"IndexError on {p}")
 	except ValueError:
@@ -197,7 +197,7 @@ def Strain_ID_multiplex(p, multiplex = True):
 
 def Strain_ID_single(p, recover = False, retreat = False): #! This is not functional yet
 	try:
-		Quant_ALL = pd.read_paraquet(Quant_ALL_index.iloc[p,0])
+		Quant_ALL = pd.read_parquet(Quant_ALL_index.iloc[p,0])
 		Quant_ALL.drop(Quant_ALL.columns[Quant_ALL.columns.str.contains('Unnamed',case = False)],axis = 1, inplace = True)
 
 		# frame_max = np.max(Quant_ALL["Frame"])  This is not needed for the Strain_single as the final frame intenstity is not taken into account. In the multiplex version, they Myo1 intensity is used to get stain identity
@@ -286,7 +286,7 @@ def Strain_ID_single(p, recover = False, retreat = False): #! This is not functi
 		psuedo_map.drop(columns = ["Is_treated"], inplace = True)
 		Quant_FIN_primary = pd.merge(Quant_FIN_primary, psuedo_map, how = "left", on='ImageID')
 
-		Quant_FIN_primary.to_paraquet(f"Quant_{Pos}_primary.paraquet")
+		Quant_FIN_primary.to_parquet(f"Quant_{Pos}_primary.parquet")
 	except IndexError:
 		return(f"IndexError on {p}")
 	except ValueError:

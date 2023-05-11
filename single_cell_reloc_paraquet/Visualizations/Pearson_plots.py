@@ -48,7 +48,7 @@ pr = os.cpu_count()
 
 if __name__ == "__main__":
 	full_data_name = input("FileName")
-	full_data = pd.read_paraquet(full_data_name)
+	full_data = pd.read_parquet(full_data_name)
 	x = Parallel(n_jobs= pr, verbose= 100)(delayed(graph_pearson_plus_minus)(i = i, full_data = full_data) for i in range(len(max_agg_Loc_score)))
 	print(x)
 

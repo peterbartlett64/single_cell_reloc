@@ -51,7 +51,7 @@ Fluorescent = {'GFP': 'PROT', 'mKa': 'BHY175_Myo1', 'mKO': 'BHY131_Myo1'}
 # microfluidics_results = "C:/Users/Peter/Desktop/Subset_Images/DEC15RESULTS" ##################################### SUBSET  FOLDER
 # microfluidics_results = "D:/Microfluidics/RESULTS" #This is a folder containing all image masks and other output from CellX. It should be of shape ALL/Date/[GFP],[RFP].../  AND the HDF5 file in my c
 
-microfluidics_results = str(input("microfluidics_results"))
+microfluidics_results = str(input("microfluidics_results")) #TODO: change this to if_name method
 microfluidics_results = switch_slash(microfluidics_results)
 
 #Where are the CellX parameters stored
@@ -82,7 +82,7 @@ def simp_mask_load(m):
 # instances = str(input("Specific positins? ('ALL' if not)"))
 # instances = instances + ", " # This is a fast way of getting the program to accept single instance
 
-# instances = ['d0214r1p010200', 'd0214r1p010300', 'd0214r1p030200', 'd0214r1p030300', 'd0214r1p040200', 'd0214r1p040300', 'd0214r1p050200', 'd0214r1p050300', 'd0214r1p070200', 'd0214r1p070300', 'd0214r1p080200', 'd0214r1p080300', 'd0214r1p090200', 'd0214r1p090300', 'd0214r1p110200', 'd0214r1p110300', 'd0214r1p120200', 'd0214r1p120300','d0214r1p130200', 'd0214r1p130300', 'd0214r1p150300', 'd0214r1p160200', 'd0214r2p150200', 'd0215r1p090200', 'd0215r1p160200', 'd0216r1p050200', 'd0216r1p090300', 'd0216r1p110200', 'd0216r1p120300', 'd0216r1p130200', 'd0216r1p130300', 'd0216r2p040300', 'd0216r2p080200', 'd0216r2p150300', 'd0217r2p1000200', 'd0217r2p1010200', 'd0217r2p1020300', 'd0217r2p1030200', 'd0217r2p140200', 'd0217r2p170300', 'd0217r2p200200', 'd0217r2p240200', 'd0217r2p270300', 'd0217r2p300200', 'd0217r2p340200', 'd0217r2p370300', 'd0217r2p400200', 'd0217r2p440200', 'd0217r2p470300', 'd0217r2p500200', 'd0217r2p540200', 'd0217r2p570300', 'd0217r2p600200', 'd0217r2p640200', 'd0217r2p670300', 'd0217r2p700200', 'd0217r2p740200', 'd0217r2p770300', 'd0217r2p800200', 'd0217r2p840200', 'd0217r2p870300', 'd0217r2p900200', 'd0217r2p940200', 'd0217r2p970300', 'd0219r1p1010200', 'd0219r1p1030200', 'd0220r2p1140200', 'd0220r2p1170300', 'd0220r2p1200200', 'd0221r1p040200', 'd0221r1p070300', 'd0221r1p1000200', 'd0221r1p100200', 'd0221r1p1040200', 'd0221r1p1070300', 'd0221r1p1100200', 'd0221r1p1140200', 'd0221r1p1170300', 'd0221r1p1200200', 'd0221r1p140200', 'd0221r1p170300', 'd0221r1p200200', 'd0221r1p240200', 'd0221r1p270300', 'd0221r1p300200', 'd0221r1p340200', 'd0221r1p370300', 'd0221r1p400200', 'd0221r1p440200', 'd0221r1p470300', 'd0221r1p540200', 'd0221r1p570300', 'd0221r1p600200', 'd0221r1p640200', 'd0221r1p670300', 'd0221r1p700200', 'd0221r1p740200', 'd0221r1p770300', 'd0221r1p800200', 'd0221r1p840200', 'd0221r1p870300', 'd0221r1p900200', 'd0221r1p940200', 'd0221r1p970300', 'd0222r1p040200']
+instances = ["d0222r2p340200"]
 
 # Set global variables here, but in future will be set in a parent function
 # os.chdir(microfluidics_results)
@@ -91,11 +91,17 @@ os.chdir(microfluidics_results)
 
 #, Files which are stored under the "microfluidics_results"
 #<Indices derived from the analysis folder?
-imgIndex = pd.read_parquet('imgIndex.parquet') #Index of all images to be loaded in
+# imgIndex = pd.read_parquet('imgIndex.parquet') #Index of all images to be loaded in
+imgIndex = pd.read_csv('imgIndex.csv') #Index of all images to be loaded in
 #<Indices derived from segmentaion folder>
-Allmasks = pd.read_parquet('Allmasks.parquet') # Index of masks which show the cell space for internal fluorescence
-Allmasks_exp = pd.read_parquet('Allmasks_exp.parquet') #Index of masks which show the expanded cell space for budneck fluorescence
-info_index = pd.read_parquet("info_index.parquet", error_bad_lines=False, warn_bad_lines= True).set_index("Pos")
+# Allmasks = pd.read_parquet('Allmasks.parquet') # Index of masks which show the cell space for internal fluorescence
+Allmasks = pd.read_csv('Allmasks.csv') # Index of masks which show the cell space for internal fluorescence
+
+# Allmasks_exp = pd.read_parquet('Allmasks_exp.parquet') #Index of masks which show the expanded cell space for budneck fluorescence
+Allmasks_exp = pd.read_csv('Allmasks_exp.csv') #Index of masks which show the expanded cell space for budneck fluorescence
+# info_index = pd.read_parquet("info_index.parquet", error_bad_lines=False, warn_bad_lines= True).set_index("Pos")
+info_index = pd.read_csv("info_index.csv", error_bad_lines=False, warn_bad_lines= True).set_index("Pos")
+
 
 # Info_all = pd.read_parquet('info_simple.parquet', error_bad_lines=False, warn_bad_lines= True)
 
@@ -144,9 +150,18 @@ def Quant_frame(i):
 		mKO_path = imgIndex_TP.loc[(i, "mKO"), ["Path"]].values[0]
 		mKate_path = imgIndex_TP.loc[(i, "mKa"), ["Path"]].values[0]
 
+		denGFP_path = imgIndex_TP.loc[(i, "GFPden"), ["Path"]].values[0]
+		denmKO_path = imgIndex_TP.loc[(i, "mKODen"), ["Path"]].values[0]
+		denmKate_path = imgIndex_TP.loc[(i, "mKaDen"), ["Path"]].values[0]
+
+
 		raw_GFP = np.array(Image.open(GFP_path))
 		raw_mKO = np.array(Image.open(mKO_path))
 		raw_mKate = np.array(Image.open(mKate_path))
+
+		raw_denGFP = np.array(Image.open(denGFP_path))
+		raw_denmKO = np.array(Image.open(denmKO_path))
+		raw_denmKate = np.array(Image.open(denmKate_path))
 
 		object_pxMAT = mask_load(segIndex_TP.loc[i,["Path"]].values[0])
 		bud_pxMAT = bud_mask_load(bud_segIndex_TP.loc[i,["Path"]].values[0])
@@ -156,24 +171,47 @@ def Quant_frame(i):
 		factor_GFP_background_Avg = np.mean(GFP_background_Raw)
 		factor_GFP_background_Tot = np.sum(GFP_background_Raw)
 
+		DenGFP_background_Raw = raw_denGFP[object_pxMAT == 0]
+		Denfactor_GFP_background_Med = np.median(DenGFP_background_Raw)
+		Denfactor_GFP_background_Avg = np.mean(DenGFP_background_Raw)
+		Denfactor_GFP_background_Tot = np.sum(DenGFP_background_Raw)
+
 		mKO_background_Raw = raw_mKO[bud_pxMAT == 0] # laod in the mKO area based on the expanded mask which should better capture the budneck
+		DenmKO_background_Raw = raw_denmKO[bud_pxMAT == 0] # laod in the mKO area based on the expanded mask which should better capture the budneck
+
 		backgroundKO_val = np.percentile(mKO_background_Raw, 75) # determine background KO at 75th percentile
 		factor_mKO_background_Med = np.median(mKO_background_Raw)
 		factor_mKO_background_Avg = np.mean(mKO_background_Raw)
 		factor_mKO_background_Tot = np.sum(mKO_background_Raw)
 
+		DenbackgroundKO_val = np.percentile(DenmKO_background_Raw, 75) # determine background KO at 75th percentile
+		Denfactor_mKO_background_Med = np.median(DenmKO_background_Raw)
+		Denfactor_mKO_background_Avg = np.mean(DenmKO_background_Raw)
+		Denfactor_mKO_background_Tot = np.sum(DenmKO_background_Raw)
+
+
 		mKate_background_Raw = raw_mKate[bud_pxMAT == 0] # laod in the mKa non-cell space based on the expanded mask which should better capture the budneck
+		DenmKate_background_Raw = raw_denmKate[bud_pxMAT == 0] # laod in the mKa non-cell space based on the expanded mask which should better capture the budneck
+
+
+
 		backgroundKA_val = np.percentile(mKate_background_Raw, 75) #determine the backgound mKa at 75th percentile
 		factor_mKate_background_Med = np.median(mKate_background_Raw)
 		factor_mKate_background_Avg = np.mean(mKate_background_Raw)
 		factor_mKate_background_Tot = np.sum(mKate_background_Raw)
+
+		DenbackgroundKA_val = np.percentile(DenmKate_background_Raw, 75) #determine the backgound mKa at 75th percentile
+		Denfactor_mKate_background_Med = np.median(DenmKate_background_Raw)
+		Denfactor_mKate_background_Avg = np.mean(DenmKate_background_Raw)
+		Denfactor_mKate_background_Tot = np.sum(DenmKate_background_Raw)
 
 		# object_pxMAT_copy = simp_mask_load(Allmask.iloc[k,0])  ### This is a legeacy line in case using the sparse function
 		## directly in the mask load function
 
 		def pos_info_read(unique_pos):
 			path =  info_index.loc[unique_pos, "Path"]
-			Info_all = pd.read_parquet(path, sep = "\t", usecols = ['cell_frame', 'cell_index', 'cell_majoraxis', 'cell_minoraxis', 'cell_area', 'cell_volume', 'cell_perimeter', 'cell_eccentricity', 'cell_fractionOfGoodMembranePixels', 'cell_mem_area', 'cell_mem_volume', 'cell_nuc_radius', 'cell_nuc_area', 'cell_pole1_age', 'cell_pole2_age', 'cell_timepoint', 'track_index', 'track_fingerprint_real_distance', 'track_age', 'track_parent', 'track_parent_frame', 'track_parent_prob', 'track_parent_score', 'track_generation', 'track_lineage_tree', 'track_cell_cycle_phase', 'track_assignment_fraction', 'track_start_frame', 'track_end_frame', 'track_index_corrected', 'track_has_bud', 'track_budneck_total'])
+			#! The below must be left as read_csv because it is taking in tabular data generated by tracking
+			Info_all = pd.read_csv(path, sep = "\t", usecols = ['cell_frame', 'cell_index', 'cell_majoraxis', 'cell_minoraxis', 'cell_area', 'cell_volume', 'cell_perimeter', 'cell_eccentricity', 'cell_fractionOfGoodMembranePixels', 'cell_mem_area', 'cell_mem_volume', 'cell_nuc_radius', 'cell_nuc_area', 'cell_pole1_age', 'cell_pole2_age', 'cell_timepoint', 'track_index', 'track_fingerprint_real_distance', 'track_age', 'track_parent', 'track_parent_frame', 'track_parent_prob', 'track_parent_score', 'track_generation', 'track_lineage_tree', 'track_cell_cycle_phase', 'track_assignment_fraction', 'track_start_frame', 'track_end_frame', 'track_index_corrected', 'track_has_bud', 'track_budneck_total'])
 
 			Info_all['Unique_pos'] = unique_pos
 
@@ -221,6 +259,11 @@ def Quant_frame(i):
 			mKO_object = raw_mKO[bud_pxMAT == tc] #load in the mKO values based on the expanded cell space
 			mKate_object = raw_mKate[bud_pxMAT == tc] #load in the mKa values based on the expanded cell space
 
+
+			DenGFP_object = raw_denGFP[object_pxMAT == tc] #load in the GFP values based on the regular cell space
+			DenmKO_object = raw_denmKO[bud_pxMAT == tc] #load in the mKO values based on the expanded cell space
+			DenmKate_object = raw_denmKate[bud_pxMAT == tc] #load in the mKa values based on the expanded cell space
+
 			#####
 			factor_median_OBJ_GFP = np.median(GFP_object)
 			factor_mean_OBJ_GFP = np.mean(GFP_object)
@@ -234,10 +277,26 @@ def Quant_frame(i):
 			factor_mean_OBJ_mKate = np.mean(mKate_object)
 			factor_total_OBJ_mKate = np.sum(mKate_object)
 
+			Denfactor_median_OBJ_GFP = np.median(DenGFP_object)
+			Denfactor_mean_OBJ_GFP = np.mean(DenGFP_object)
+			Denfactor_total_OBJ_GFP = np.sum(DenGFP_object)
+
+			Denfactor_median_OBJ_KO = np.median(DenmKO_object)
+			Denfactor_mean_OBJ_KO = np.mean(DenmKO_object)
+			Denfactor_total_OBJ_KO = np.sum(DenmKO_object)
+
+			Denfactor_median_OBJ_mKate = np.median(DenmKate_object)
+			Denfactor_mean_OBJ_mKate = np.mean(DenmKate_object)
+			Denfactor_total_OBJ_mKate = np.sum(DenmKate_object)
+
 			#######################################
 			averageIntensity_GFP_Frame = np.mean(raw_GFP) #average intesnity of frame including the CELLS and NON-CELL SPACES
 			averageIntesntiy_GFP_Background = np.mean(GFP_background_Raw) #average intensity of NON-CELL space
 			averageIntensity_GFP_Object= np.mean(GFP_object) #average intensity of GFP within cell
+
+			averageIntensity_denGFP_Frame = np.mean(raw_denGFP) #average intesnity of frame including the CELLS and NON-CELL SPACES
+			averageIntesntiy_denGFP_Background = np.mean(DenGFP_background_Raw) #average intensity of NON-CELL space
+			averageIntensity_denGFP_Object= np.mean(DenGFP_object) #average intensity of GFP within cell
 
 			## Normalizing by the median, mean and sum of intensity of the cell object
 			# normGFPbyMedian_object_less_aura = (GFP_object - GFP_aura_background_Raw)/factor_median_OBJ_GFP
@@ -253,6 +312,16 @@ def Quant_frame(i):
 			normGFPbyBackground_median = GFP_object/factor_GFP_background_Med
 			normGFPbyBackground_mean = GFP_object/factor_GFP_background_Avg
 			normGFPbyBackground_total = GFP_object/factor_GFP_background_Tot
+
+
+			DennormGFPbyMedian_object = DenGFP_object/Denfactor_median_OBJ_GFP
+			DennormGFPbyMean_object = DenGFP_object/Denfactor_mean_OBJ_GFP
+			DennormGFPbyTotal_intensity_object = DenGFP_object/Denfactor_total_OBJ_GFP
+
+			## Normalizing by the median mean and sum of intensity of the non-cell space
+			DennormGFPbyBackground_median = DenGFP_object/Denfactor_GFP_background_Med
+			DennormGFPbyBackground_mean = DenGFP_object/Denfactor_GFP_background_Avg
+			DennormGFPbyBackground_total = DenGFP_object/Denfactor_GFP_background_Tot
 
 
 			## Decile bins for normalized against OBJECT (cell) MEDIAN
@@ -430,6 +499,194 @@ def Quant_frame(i):
 			# x99thPercentile_norm_BKGRND_Total_intensity_mKate = np.percentile(normKatebyBackground_total, 99)
 
 			mKate_spread = len(mKate_object)
+
+			#,Modified Variables
+			DennormGFPbyMedian_object = DenGFP_object/factor_median_OBJ_GFP
+			DennormGFPbyMean_object = DenGFP_object/factor_mean_OBJ_GFP
+			DennormGFPbyTotal_intensity_object = DenGFP_object/Denfactor_total_OBJ_GFP
+
+			## Normalizing by the median mean and sum of intensity of the non-cell space
+			DennormGFPbyBackground_median = DenGFP_object/Denfactor_GFP_background_Med
+			DennormGFPbyBackground_mean = DenGFP_object/Denfactor_GFP_background_Avg
+			DennormGFPbyBackground_total = DenGFP_object/Denfactor_GFP_background_Tot
+
+
+			## Decile bins for normalized against OBJECT (cell) MEDIAN
+			# x10thPercentile_norm_OBJ_Median_GFP = np.percentile(DennormGFPbyMedian_object, 10, axis = 0)
+			# x20thPercentile_norm_OBJ_Median_GFP = np.percentile(DennormGFPbyMedian_object, 20, axis = 0)
+			# x30thPercentile_norm_OBJ_Median_GFP = np.percentile(DennormGFPbyMedian_object, 30, axis = 0)
+			# x40thPercentile_norm_OBJ_Median_GFP = np.percentile(DennormGFPbyMedian_object, 40, axis = 0)
+			# x50thPercentile_norm_OBJ_Median_GFP = np.percentile(DennormGFPbyMedian_object, 50, axis = 0)
+			# x60thPercentile_norm_OBJ_Median_GFP = np.percentile(DennormGFPbyMedian_object, 60, axis = 0)
+			# x70thPercentile_norm_OBJ_Median_GFP = np.percentile(DennormGFPbyMedian_object, 70, axis = 0)
+			x80thPercentile_norm_OBJ_Median_denGFP = np.percentile(DennormGFPbyMedian_object, 80, axis = 0)
+			x90thPercentile_norm_OBJ_Median_denGFP = np.percentile(DennormGFPbyMedian_object, 90, axis = 0)
+			x95thPercentile_norm_OBJ_Median_denGFP = np.percentile(DennormGFPbyMedian_object, 95, axis = 0)
+			x99thPercentile_norm_OBJ_Median_denGFP = np.percentile(DennormGFPbyMedian_object, 99, axis = 0) # This is for finding foci
+
+			## Decile bins for normalized against OBJECT (cell) MEAN
+			# x10thPercentile_norm_OBJ_Mean_Intensity_GFP = np.percentile(DennormGFPbyMean_object, 10, axis = 0)
+			# x20thPercentile_norm_OBJ_Mean_Intensity_GFP = np.percentile(DennormGFPbyMean_object, 20, axis = 0)
+			# x30thPercentile_norm_OBJ_Mean_Intensity_GFP = np.percentile(DennormGFPbyMean_object, 30, axis = 0)
+			# x40thPercentile_norm_OBJ_Mean_Intensity_GFP = np.percentile(DennormGFPbyMean_object, 40, axis = 0)
+			# x50thPercentile_norm_OBJ_Mean_Intensity_GFP = np.percentile(DennormGFPbyMean_object, 50, axis = 0)
+			# x60thPercentile_norm_OBJ_Mean_Intensity_GFP = np.percentile(DennormGFPbyMean_object, 60, axis = 0)
+			# x70thPercentile_norm_OBJ_Mean_Intensity_GFP = np.percentile(DennormGFPbyMean_object, 70, axis = 0)
+			# x80thPercentile_norm_OBJ_Mean_Intensity_GFP = np.percentile(DennormGFPbyMean_object, 80, axis = 0)
+			x90thPercentile_norm_OBJ_Mean_Intensity_denGFP = np.percentile(DennormGFPbyMean_object, 90, axis = 0)
+			x95thPercentile_norm_OBJ_Mean_Intensity_denGFP = np.percentile(DennormGFPbyMean_object, 95, axis = 0)
+			x99thPercentile_norm_OBJ_Mean_Intensity_denGFP = np.percentile(DennormGFPbyMean_object, 99, axis = 0)  # This is for finding foci
+
+			## Decile bins for normalized against OBJECT (cell) TOTAL
+			# x20thPercentile_norm_OBJ_Total_Intensity_GFP = np.percentile(DennormGFPbyTotal_intensity_object, 20, axis = 0)
+			# x10thPercentile_norm_OBJ_Total_Intensity_GFP = np.percentile(DennormGFPbyTotal_intensity_object, 10, axis = 0)
+			# x30thPercentile_norm_OBJ_Total_Intensity_GFP = np.percentile(DennormGFPbyTotal_intensity_object, 30, axis = 0)
+			# x40thPercentile_norm_OBJ_Total_Intensity_GFP = np.percentile(DennormGFPbyTotal_intensity_object, 40, axis = 0)
+			# x50thPercentile_norm_OBJ_Total_Intensity_GFP = np.percentile(DennormGFPbyTotal_intensity_object, 50, axis = 0)
+			# x60thPercentile_norm_OBJ_Total_Intensity_GFP = np.percentile(DennormGFPbyTotal_intensity_object, 60, axis = 0)
+			# x70thPercentile_norm_OBJ_Total_Intensity_GFP = np.percentile(DennormGFPbyTotal_intensity_object, 70, axis = 0)
+			# x80thPercentile_norm_OBJ_Total_Intensity_GFP = np.percentile(DennormGFPbyTotal_intensity_object, 80, axis = 0)
+			x90thPercentile_norm_OBJ_Total_Intensity_denGFP = np.percentile(DennormGFPbyTotal_intensity_object, 90, axis = 0)
+			x95thPercentile_norm_OBJ_Total_Intensity_denGFP = np.percentile(DennormGFPbyTotal_intensity_object, 95, axis = 0)
+			x99thPercentile_norm_OBJ_Total_Intensity_denGFP = np.percentile(DennormGFPbyTotal_intensity_object, 99, axis = 0)  # This is for finding foci
+
+			## Decile bins normalized against BACKGROUND intesntity MEDIAN
+			# x10thPercentile_norm_BKGRND_Median_GFP = np.percentile(DennormGFPbyBackground_median, 10, axis = 0)
+			# x20thPercentile_norm_BKGRND_Median_GFP = np.percentile(DennormGFPbyBackground_median, 20, axis = 0)
+			# x30thPercentile_norm_BKGRND_Median_GFP = np.percentile(DennormGFPbyBackground_median, 30, axis = 0)
+			# x40thPercentile_norm_BKGRND_Median_GFP = np.percentile(DennormGFPbyBackground_median, 40, axis = 0)
+			# x50thPercentile_norm_BKGRND_Median_GFP = np.percentile(DennormGFPbyBackground_median, 50, axis = 0)
+			# x60thPercentile_norm_BKGRND_Median_GFP = np.percentile(DennormGFPbyBackground_median, 60, axis = 0)
+			# x70thPercentile_norm_BKGRND_Median_GFP = np.percentile(DennormGFPbyBackground_median, 70, axis = 0)
+			# x80thPercentile_norm_BKGRND_Median_GFP = np.percentile(DennormGFPbyBackground_median, 80, axis = 0)
+			x90thPercentile_norm_BKGRND_Median_denGFP = np.percentile(DennormGFPbyBackground_median, 90, axis = 0)
+			x95thPercentile_norm_BKGRND_Median_denGFP = np.percentile(DennormGFPbyBackground_median, 95, axis = 0)
+			x99thPercentile_norm_BKGRND_Median_denGFP = np.percentile(DennormGFPbyBackground_median, 99, axis = 0)  # This is for finding foci
+
+			##  Decile bins normalized against BACKGROUND intenstiy MEAN
+			# x10thPercentile_norm_BKGRND_Mean_GFP = np.percentile(DennormGFPbyBackground_mean, 10, axis = 0)
+			# x20thPercentile_norm_BKGRND_Mean_GFP = np.percentile(DennormGFPbyBackground_mean, 20, axis = 0)
+			# x30thPercentile_norm_BKGRND_Mean_GFP = np.percentile(DennormGFPbyBackground_mean, 30, axis = 0)
+			# x40thPercentile_norm_BKGRND_Mean_GFP = np.percentile(DennormGFPbyBackground_mean, 40, axis = 0)
+			# x50thPercentile_norm_BKGRND_Mean_GFP = np.percentile(DennormGFPbyBackground_mean, 50, axis = 0)
+			# x60thPercentile_norm_BKGRND_Mean_GFP = np.percentile(DennormGFPbyBackground_mean, 60, axis = 0)
+			# x70thPercentile_norm_BKGRND_Mean_GFP = np.percentile(DennormGFPbyBackground_mean, 70, axis = 0)
+			# x80thPercentile_norm_BKGRND_Mean_GFP = np.percentile(DennormGFPbyBackground_mean, 80, axis = 0)
+			x90thPercentile_norm_BKGRND_Mean_denGFP = np.percentile(DennormGFPbyBackground_mean, 90, axis = 0)
+			x95thPercentile_norm_BKGRND_Mean_denGFP = np.percentile(DennormGFPbyBackground_mean, 95, axis = 0)
+			x99thPercentile_norm_BKGRND_Mean_denGFP = np.percentile(DennormGFPbyBackground_mean, 99, axis = 0)  # This is for finding foci
+
+			##  Decile bins normalized against BACKGROUND intensity TOTAL
+			# x10thPercentile_norm_BKGRND_Total_intensity_GFP = np.percentile(DennormGFPbyBackground_total, 10, axis = 0)
+			# x20thPercentile_norm_BKGRND_Total_intensity_GFP = np.percentile(DennormGFPbyBackground_total, 20, axis = 0)
+			# x30thPercentile_norm_BKGRND_Total_intensity_GFP = np.percentile(DennormGFPbyBackground_total, 30, axis = 0)
+			# x40thPercentile_norm_BKGRND_Total_intensity_GFP = np.percentile(DennormGFPbyBackground_total, 40, axis = 0)
+			# x50thPercentile_norm_BKGRND_Total_intensity_GFP = np.percentile(DennormGFPbyBackground_total, 50, axis = 0)
+			# x60thPercentile_norm_BKGRND_Total_intensity_GFP = np.percentile(DennormGFPbyBackground_total, 60, axis = 0)
+			# x70thPercentile_norm_BKGRND_Total_intensity_GFP = np.percentile(DennormGFPbyBackground_total, 70, axis = 0)
+			# x80thPercentile_norm_BKGRND_Total_intensity_GFP = np.percentile(DennormGFPbyBackground_total, 80, axis = 0)
+			x90thPercentile_norm_BKGRND_Total_intensity_denGFP = np.percentile(DennormGFPbyBackground_total, 90, axis = 0)
+			x95thPercentile_norm_BKGRND_Total_intensity_denGFP = np.percentile(DennormGFPbyBackground_total, 95, axis = 0)
+			x99thPercentile_norm_BKGRND_Total_intensity_denGFP = np.percentile(DennormGFPbyBackground_total, 99, axis = 0)  # This is for finding foci
+
+			denGFP_spread = len(DenGFP_object)
+
+			##### Metrics from KO intensity
+			averageIntensity_denmKO_Frame = np.mean(Denraw_mKO) #average intesnity of frame including the CELLS and NON-CEll SPACES
+			averageIntesntiy_mKO_Background = np.mean(DenmKO_background_Raw) #average intensity of NON-CELL space
+			averageIntensity_mKO_Object= np.mean(DenmKO_object) #average intensity of GFP within cell
+
+			segCellmKOvalues = DenmKO_object - backgroundKO_val # subtract background
+			finalKOvalues = segCellmKOvalues.copy()#*segCellmKOvalues*segCellmKOvalues # improve signal-noise ratio
+
+			normKObyMedian_object = DenmKO_object/factor_median_OBJ_mKate
+			normKObyMean_object = DenmKO_object/factor_mean_OBJ_mKate
+			normKObyTotal_intensity_object = DenmKO_object/factor_total_OBJ_mKate
+
+			# normKObyBackground_median = DenmKO_object/factor_mKO_background_Med
+			# normKObyBackground_mean = DenmKO_object/factor_mKO_background_Avg
+			# normKObyBackground_total = DenmKO_object/factor_mKO_background_Tot
+
+			x80thPercentile_Diff_background_mKO = np.percentile(finalKOvalues, 80)
+			x90thPercentile_Diff_background_mKO = np.percentile(finalKOvalues, 90)
+			x99thPercentile_Diff_background_mKO = np.percentile(finalKOvalues, 99)
+
+
+			x60thPercentile_denGFP_RAW = np.percentile(DenGFP_object,60)
+			x80thPercentile_denGFP_RAW = np.percentile(DenGFP_object,80)
+			x90thPercentile_denGFP_RAW = np.percentile(DenGFP_object,90)
+			x95thPercentile_denGFP_RAW = np.percentile(DenGFP_object,95)
+			x99thPercentile_denGFP_RAW = np.percentile(DenGFP_object,99)
+			max_denGFP_RAW = max(DenGFP_object)
+
+			x60thPercentile_denmKa_RAW = np.percentile(DenmKate_object,60)
+			x80thPercentile_denmKa_RAW = np.percentile(DenmKate_object,80)
+			x90thPercentile_denmKa_RAW = np.percentile(DenmKate_object,90)
+			x95thPercentile_denmKa_RAW = np.percentile(DenmKate_object,95)
+			x99thPercentile_denmKa_RAW = np.percentile(DenmKate_object,99)
+			max_denmKa_RAW = max(DenmKate_object)
+
+			x60thPercentile_denmKO_RAW = np.percentile(DenmKO_object,60)
+			x80thPercentile_denmKO_RAW = np.percentile(DenmKO_object,80)
+			x90thPercentile_denmKO_RAW = np.percentile(DenmKO_object,90)
+			x95thPercentile_denmKO_RAW = np.percentile(DenmKO_object,95)
+			x99thPercentile_denmKO_RAW = np.percentile(DenmKO_object,99)
+			max_denmKO_RAW = max(DenmKO_object)
+
+			# x90thPercentile_norm_OBJ_Median_mKO = np.percentile(normKObyMedian_object, 90)
+			# x99thPercentile_norm_OBJ_Median_mKO = np.percentile(normKObyMedian_object, 99)
+			# x90thPercentile_norm_OBJ_Mean_mKO = np.percentile(normKObyMean_object, 90)
+			# x99thPercentile_norm_OBJ_Mean_mKO = np.percentile(normKObyMean_object, 99)
+			# x90thPercentile_norm_OBJ_Total_intensity_mKO = np.percentile(normKObyTotal_intensity_object, 90)
+			# x99thPercentile_norm_OBJ_Total_intensity_mKO = np.percentile(normKObyTotal_intensity_object, 99)
+
+			# x90thPercentile_norm_BKGRND_Median_mKO = np.percentile(normKObyBackground_median, 90)
+			# x99thPercentile_norm_BKGRND_Median_mKO = np.percentile(normKObyBackground_median, 99)
+			# x90thPercentile_norm_BKGRND_Mean_mKO = np.percentile(normKObyBackground_mean, 90)
+			# x99thPercentile_norm_BKGRND_Mean_mKO = np.percentile(normKObyBackground_mean, 99)
+			# x90thPercentile_norm_BKGRND_Total_intensity_mKO = np.percentile(normKObyBackground_total, 90)
+			# x99thPercentile_norm_BKGRND_Total_intensity_mKO = np.percentile(normKObyBackground_total, 99)
+
+
+			mKO_spread = len(DenmKO_object)
+
+			#### Metrics from mKate intensity
+			averageIntensity_mKate_Frame = np.mean(raw_mKate) #average intesnity of frame including the CELLS and NON-CEll SPACES
+			averageIntesntiy_mKate_Background = np.mean(mKate_background_Raw) #average intensity of NON-CELL space
+			averageIntensity_mKate_Object= np.mean(DenmKate_object) #average intensity of GFP within cell
+
+			# normKatebyMedian_object = DenmKO_object/factor_median_OBJ_mKate
+			# normKatebyMean_object = DenmKO_object/factor_mean_OBJ_mKate
+			# normKatebyTotal_intensity_object = DenmKO_object/factor_total_OBJ_mKate
+
+			segCellmKAvalues = DenmKate_object - backgroundKA_val
+			finalKAvalues = segCellmKAvalues.copy()#*segCellmKAvalues*segCellmKAvalues
+
+			normKatebyBackground_median = DenmKate_object/factor_mKate_background_Med
+			normKatebyBackground_mean = DenmKate_object/factor_mKate_background_Avg
+			normKatebyBackground_total = np.sum(DenmKate_object)/factor_mKate_background_Tot
+
+			#Percentiles of Cubic
+			x80thPercentile_Diff_background_mKate = np.percentile(finalKAvalues, 80)
+			x90thPercentile_Diff_background_mKate = np.percentile(finalKAvalues, 90)
+			x99thPercentile_Diff_background_mKate = np.percentile(finalKAvalues, 99)
+
+			# x90thPercentile_norm_OBJ_Median_mKate = np.percentile(normKatebyMedian_object, 90)
+			# x99thPercentile_norm_OBJ_Median_mKate = np.percentile(normKatebyMedian_object, 99)
+			# x90thPercentile_norm_OBJ_Mean_mKate = np.percentile(normKatebyMean_object, 90)
+			# x99thPercentile_norm_OBJ_Mean_mKate = np.percentile(normKatebyMean_object, 99)
+			# x90thPercentile_norm_OBJ_Total_intensity_mKate = np.percentile(normKatebyTotal_intensity_object, 90)
+			# x99thPercentile_norm_OBJ_Total_intensity_mKate = np.percentile(normKatebyTotal_intensity_object, 99)
+
+			# x90thPercentile_norm_BKGRND_Median_mKate = np.percentile(normKatebyBackground_median, 90)
+			# x99thPercentile_norm_BKGRND_Median_mKate = np.percentile(normKatebyBackground_median, 99)
+			# x90thPercentile_norm_BKGRND_Mean_mKate = np.percentile(normKatebyBackground_mean, 90)
+			# x99thPercentile_norm_BKGRND_Mean_mKate = np.percentile(normKatebyBackground_mean, 99)
+			# x90thPercentile_norm_BKGRND_Total_intesnity_mKate = np.percentile(normKatebyBackground_total, 90)
+			# x99thPercentile_norm_BKGRND_Total_intensity_mKate = np.percentile(normKatebyBackground_total, 99)
+
+			DenmKate_spread = len(DenmKate_object)
+
 
 			# Create the metric row
 			object_measurements = {
@@ -679,17 +936,21 @@ from joblib import Parallel, delayed
 # Allmasks = Allmasks.iloc[763:]
 #%%
 
-# try:
-# 	path = os.path.join(microfluidics_results, str(today))
-# 	os.mkdir(path)
-# except FileExistsError:
-# 	path = os.path.join(microfluidics_results, str(today))
-# 	pass
+try:
+	path = os.path.join(microfluidics_results, str(today))
+	os.mkdir(path)
+except FileExistsError:
+	path = os.path.join(microfluidics_results, str(today))
+	pass
 
 # path = "D:/Microfluidics/Missing_RESULTS2/2022-06-15"
 
 ### THis is to dertermine the files that have already been completed. Could make recursive to test for all dates, but at this stage do not want to because there have been several tests within the "RESULTS" root
-path = "D:/Microfluidics/Missing_RESULTS/2022-08-08"
+
+
+# path = "D:/Microfluidics/Missing_RESULTS/2022-08-08" #TODO Fix this in other file
+
+
 # os.chdir("D:/Microfluidics/RESULTS/2022-03-09")5360
 os.chdir(path)
 

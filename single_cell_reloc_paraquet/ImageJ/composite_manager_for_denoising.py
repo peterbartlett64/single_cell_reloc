@@ -17,7 +17,7 @@ from scyjava import jimport
 #// 	ij = imagej.init('C:/Users/pcnba/OneDrive/Desktop/Fiji.app', mode='headless') #* Load the local instalation of imageJ.
 
 #// 	global imgaIndex
-#// 	imgIndex = pd.read_parquet('imgIndex.paraquet')
+#// 	imgIndex = pd.read_parquet('imgIndex.parquet')
 #// 	return(None)
 
 def macro_define(a_Ka, d_Ka, s_Ka, a_KO, d_KO, s_KO, directory, pos_core):
@@ -44,7 +44,7 @@ ij = imagej.init('C:/Users/pcnba/OneDrive/Desktop/Fiji.app')
 
 def composite_manger():
 	os.chdir(Global_Variables["microfluidics_results"]) #* When this is called, it will have been defined
-	# imgIndex = pd.read_paraquet('imgIndex.paraquet')
+	# imgIndex = pd.read_parquet('imgIndex.parquet')
 	imgIndex = pd.read_csv('imgIndex.csv')
 	positions = imgIndex['Unique_pos'].unique()
 

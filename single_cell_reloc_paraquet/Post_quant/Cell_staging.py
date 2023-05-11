@@ -58,12 +58,12 @@ def stage_from_frame(cell, frame) ->int: #? I should try implementing this as a 
 #. This should be implemented at the Quant_ALL stage of post quant. At this point, it is still based on the postion, which is the lowest level requirement, and still contains all the required information. It is not worth carrying all the needed rows through and not having access to the cell stage information
 def cell_stage_assocation(position_barcode):
 	try:
-		cell_cycle_df = pd.read_paraquet(f"{position_barcode}/", usecols=["track", "parent", "daughter", "tree", "generation", "age", "g2_st", "g2_e", "g2_dur", "div", "seg_st_track", "seg_st_daughter"]) #* Removed columns which do not have information based on input to TracX
+		cell_cycle_df = pd.read_parquet(f"{position_barcode}/", usecols=["track", "parent", "daughter", "tree", "generation", "age", "g2_st", "g2_e", "g2_dur", "div", "seg_st_track", "seg_st_daughter"]) #* Removed columns which do not have information based on input to TracX
 		cell_cycle_df["Cell_Barcode"] = position_barcode + pd.Series("track").apply(lambda x: str(x).zfill(4)) #*Create the cell barcodes based on the tracks and the the positional position_barcode from function
 		cell_cycle_df.set_index("Cell_Barcode", inplace= True) #* Set the table to be a lookup table to avoid having to the do a complex merge which would results in repetition
-		localization_df = pd.read_paraquet(f"Movement_treat_course_{position_barcode}.paraquet", usecols= ["Cell_Barcode", "Relocalized", "Frame_x"]) #! Decide if this is the correct input
+		localization_df = pd.read_parquet(f"Movement_treat_course_{position_barcode}.parquet", usecols= ["Cell_Barcode", "Relocalized", "Frame_x"]) #! Decide if this is the correct input
 		localization_df["Cell_stage"] = localization_df.apply(lambda x: stage_from_frame(x["Cell_Barcode"], x["Frame_x"])) #* This is done like a lookup table
-		localization_df.to_paraquet("localization_cell_stage.paraquet")
+		localization_df.to_parquet("localization_cell_stage.parquet")
 	except Exception as e:
 		return(e, position_barcode) #* This will be returned to the user in the terminal
 
@@ -73,7 +73,7 @@ def cell_stage_manager(all_pos, pr):
 	return(position_barcode) # return the bacode upon completion
 
 def stats_cell(Protein): #* This will have to be reffered to later on. It takes in a protein as input, which simplifies statistics
-	Protein_df = pd.read_paraquet(f"{Protein}.paraquet")
+	Protein_df = pd.read_parquet(f"{Protein}.parquet")
 	Protein_df.astype({"Cell_stage": 'category', "Relocalized": "category"})
 	temp_for_stats = Protein_df.dropna(subset=['Cell_stage']) #* Remove cells for which we do not know the cell stage
 

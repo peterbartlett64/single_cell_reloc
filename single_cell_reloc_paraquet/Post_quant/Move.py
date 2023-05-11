@@ -5,7 +5,7 @@ from decimal import DivisionByZero
 
 def I_move(p, percentile):
 	try: #TODO: Rename Frame_x to just Frame
-		Quant_prim = pd.read_paraquet(Quant_prim_index.iloc[p,0], usecols = ['Cell_Barcode', 'ImageID', 'Date', 'Frame', 'Unique_Frame', 'factor_median_OBJ_GFP', 'factor_mean_OBJ_GFP', 'x90thPercentile_norm_OBJ_Median_GFP', 'x95thPercentile_norm_OBJ_Median_GFP', 'x99thPercentile_norm_OBJ_Median_GFP', 'Progen_bud', 'x90thPercentile_GFP_RAW', 'x95thPercentile_GFP_RAW', 'x99thPercentile_GFP_RAW', 'max_GFP_RAW', 'max_mKa_RAW', 'max_mKO_RAW', 'TrackID_valid', 'Myo1Identity', 'mKO_foldChange', 'mKO_direction', 'mKA_foldChange', 'mKa_direction', 'byProgen_bud', 'byRange', 'Col_info', 'Protein', 'Is_treated', 'Frames_post_treatment', #* From here on are newly added columns to determine the cell stage. Could do a pd.merge at the end instead.
+		Quant_prim = pd.read_parquet(Quant_prim_index.iloc[p,0], usecols = ['Cell_Barcode', 'ImageID', 'Date', 'Frame', 'Unique_Frame', 'factor_median_OBJ_GFP', 'factor_mean_OBJ_GFP', 'x90thPercentile_norm_OBJ_Median_GFP', 'x95thPercentile_norm_OBJ_Median_GFP', 'x99thPercentile_norm_OBJ_Median_GFP', 'Progen_bud', 'x90thPercentile_GFP_RAW', 'x95thPercentile_GFP_RAW', 'x99thPercentile_GFP_RAW', 'max_GFP_RAW', 'max_mKa_RAW', 'max_mKO_RAW', 'TrackID_valid', 'Myo1Identity', 'mKO_foldChange', 'mKO_direction', 'mKA_foldChange', 'mKa_direction', 'byProgen_bud', 'byRange', 'Col_info', 'Protein', 'Is_treated', 'Frames_post_treatment', #* From here on are newly added columns to determine the cell stage. Could do a pd.merge at the end instead.
 		"x80thPercentile_Diff_background_mKate", "x90thPercentile_Diff_background_mKate", "x99thPercentile_Diff_background_mKate", "x80thPercentile_Diff_background_mKO", "x90thPercentile_Diff_background_mKO", "x99thPercentile_Diff_background_mKO", "averageIntensity_mKO_Frame", "averageIntesntiy_mKO_Background", "averageIntensity_mKO_Object", "mKO_spread", "averageIntensity_mKate_Frame", "averageIntesntiy_mKate_Background", "averageIntensity_mKate_Object", "mKate_spread", "factor_median _OBJ_KO", "factor_mean_OBJ_KO", "factor_total_OBJ_KO", "factor_mKO_background_Med", "factor_mKO_background_Avg", "factor_mKO_background_Tot", "factor_median_OBJ_mKate", "factor_mean_OBJ_mKate", "factor_total_OBJ_mKate", "factor_mKate_background_Med", "factor_mKate_background_Avg", "factor_mKate_background_Tot", "x60thPercentile_mKa_RAW", "x80thPercentile_mKa_RAW", "x90thPercentile_mKa_RAW", "x95thPercentile_mKa_RAW", "x99thPercentile_mKa_RAW", "max_mKa_RAW", "x60thPercentile_mKO_RAW", "x80thPercentile_mKO_RAW", "x90thPercentile_mKO_RAW", "x95thPercentile_mKO_RAW", "x99thPercentile_mKO_RAW", "max_mKO_RAW"])
 
 		Quant_prim["Unique_pos"] = pd.Series(Quant_prim["Unique_Frame"]).apply(lambda x: x[:x.find('f')]) #* This was added on AUG31,2022
@@ -88,7 +88,7 @@ def I_move(p, percentile):
 		Quant_no = Quant_f__twe[(Quant_f__twe["min_max_GFP_Object"] > gGFP_sel) & (Quant_f__twe["min_max_mKate_Object"] > gKa_sel)]["Cell_Barcode"] # Creat a list of cells which are above the GFP and mKa thresholds.
 
 		Quant_prim = Quant_prim.loc[~Quant_prim["Cell_Barcode"].isin(Quant_no)] # This is functional but messy. Remove the cells marked as too flourescent to be considered viable. Removal is only performed BASED ON the first 10 frames
-		Quant_no.to_paraquet(f"Dropped_dead_{Pos}.paraquet")
+		Quant_no.to_parquet(f"Dropped_dead_{Pos}.parquet")
 
 		Quant_prim.set_index(["Cell_Barcode", "ImageID"], inplace = True)
 
@@ -144,8 +144,8 @@ def I_move(p, percentile):
 		# MMS_mKO["mKO_factor_upper"] = UNT_GFP_mKO_factor_upper * GFP_normal_avg_mKO
 		# MMS_mKO["mKO_factor_lower"] = UNT_GFP_mKO_factor_lower * GFP_normal_avg_mKO
 
-		UNT_mKa.to_paraquet(f"UNT_{Pos}mKa.paraquet") # Output the cells and information on which parameters are derived
-		UNT_mKO.to_paraquet(f"UNT_{Pos}mKO.paraquet")
+		UNT_mKa.to_parquet(f"UNT_{Pos}mKa.parquet") # Output the cells and information on which parameters are derived
+		UNT_mKO.to_parquet(f"UNT_{Pos}mKO.parquet")
 
 		def reloc_score_mKa(row):
 			metric = row[fluor_perc]
@@ -207,8 +207,8 @@ def I_move(p, percentile):
 		MMS_mKa["Relocalized"] = pd.Series(MMS_mKa["Loc_score"]).apply(loc_score_to_binary)
 		MMS_mKO["Relocalized"] = pd.Series(MMS_mKO["Loc_score"]).apply(loc_score_to_binary)
 
-		MMS_mKa.to_paraquet(f"MMS_{Pos}mKa_wReloc.paraquet") #These are just the post_treatment observations
-		MMS_mKO.to_paraquet(f"MMS_{Pos}mKO_wReloc.paraquet")
+		MMS_mKa.to_parquet(f"MMS_{Pos}mKa_wReloc.parquet") #These are just the post_treatment observations
+		MMS_mKO.to_parquet(f"MMS_{Pos}mKO_wReloc.parquet")
 
 		# unif_mKa = pd.concat([UNT_mKa_all, MMS_mKa])
 		# unif_mKO = pd.concat([UNT_mKO_all, MMS_mKO])
@@ -221,11 +221,11 @@ def I_move(p, percentile):
 		CV_table_mKO.rename(columns  = {"lambda_x": "CV_sp", "count" : "cell_count"})
 		unif_mKO = pd.merge(unif_mKO, CV_table_mKa, left_on= "Frames_post_treatment", right_index=True)
 
-		unif_mKa.to_paraquet(f"unif_mKa_{Pos}.paraquet")
-		unif_mKO.to_paraquet(f"unif_mKO_{Pos}.paraquet")
+		unif_mKa.to_parquet(f"unif_mKa_{Pos}.parquet")
+		unif_mKO.to_parquet(f"unif_mKO_{Pos}.parquet")
 
 		Movement_treat_course = pd.concat([unif_mKa, unif_mKO]) # was previously names Movement_pseudo
-		Movement_treat_course.to_paraquet(f"Movement_treat_course_{Pos}.paraquet")
+		Movement_treat_course.to_parquet(f"Movement_treat_course_{Pos}.parquet")
 
 		return(f"The movement calculation and identification for position {Pos} is complete. Based on {percentile}th percentile")
 	except:

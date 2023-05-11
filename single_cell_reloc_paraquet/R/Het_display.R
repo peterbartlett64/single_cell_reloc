@@ -10,7 +10,7 @@ here()
 
 setwd("D:/Microfluidics/RESULTS_ALL/Most_final_collected/Combined_by_perc/Col_with_Abund") #!This is temporary
 
-file = read.paraquet("EXO1_test.paraquet") #* Load in the
+file = read.parquet("EXO1_test.parquet") #* Load in the
 
 # penetrance <- ggplot(data = file, mapping = aes(x = Protein, y = Percentage_reloc, fill = Percentage_reloc_less)) +
 #   geom_text(aes(label = Percentage_reloc_less)) +

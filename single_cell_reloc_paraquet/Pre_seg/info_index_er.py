@@ -1,5 +1,8 @@
+#%%
 import os
-import 
+import pandas as pd
+import time
+import single_cell_reloc_parquet.global_functions.global_variables as gv
 
 
 def info_index_er():
@@ -72,7 +75,8 @@ def info_index_er():
     return(info_index)
 
 
-
-
-if __name__ = "__main__":
-	singl
+if __name__ == "__main__":
+    Global_variables = gv.Global_variables()
+    os.chdir(Global_variables['microfluidics_results'])
+    info_index_er()
+# %%

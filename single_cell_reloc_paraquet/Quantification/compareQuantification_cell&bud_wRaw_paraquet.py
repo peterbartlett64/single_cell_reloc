@@ -82,20 +82,24 @@ def simp_mask_load(m):
 # instances = str(input("Specific positins? ('ALL' if not)"))
 # instances = instances + ", " # This is a fast way of getting the program to accept single instance
 
-# instances = ['d0214r1p010200', 'd0214r1p010300', 'd0214r1p030200', 'd0214r1p030300', 'd0214r1p040200', 'd0214r1p040300', 'd0214r1p050200', 'd0214r1p050300', 'd0214r1p070200', 'd0214r1p070300', 'd0214r1p080200', 'd0214r1p080300', 'd0214r1p090200', 'd0214r1p090300', 'd0214r1p110200', 'd0214r1p110300', 'd0214r1p120200', 'd0214r1p120300','d0214r1p130200', 'd0214r1p130300', 'd0214r1p150300', 'd0214r1p160200', 'd0214r2p150200', 'd0215r1p090200', 'd0215r1p160200', 'd0216r1p050200', 'd0216r1p090300', 'd0216r1p110200', 'd0216r1p120300', 'd0216r1p130200', 'd0216r1p130300', 'd0216r2p040300', 'd0216r2p080200', 'd0216r2p150300', 'd0217r2p1000200', 'd0217r2p1010200', 'd0217r2p1020300', 'd0217r2p1030200', 'd0217r2p140200', 'd0217r2p170300', 'd0217r2p200200', 'd0217r2p240200', 'd0217r2p270300', 'd0217r2p300200', 'd0217r2p340200', 'd0217r2p370300', 'd0217r2p400200', 'd0217r2p440200', 'd0217r2p470300', 'd0217r2p500200', 'd0217r2p540200', 'd0217r2p570300', 'd0217r2p600200', 'd0217r2p640200', 'd0217r2p670300', 'd0217r2p700200', 'd0217r2p740200', 'd0217r2p770300', 'd0217r2p800200', 'd0217r2p840200', 'd0217r2p870300', 'd0217r2p900200', 'd0217r2p940200', 'd0217r2p970300', 'd0219r1p1010200', 'd0219r1p1030200', 'd0220r2p1140200', 'd0220r2p1170300', 'd0220r2p1200200', 'd0221r1p040200', 'd0221r1p070300', 'd0221r1p1000200', 'd0221r1p100200', 'd0221r1p1040200', 'd0221r1p1070300', 'd0221r1p1100200', 'd0221r1p1140200', 'd0221r1p1170300', 'd0221r1p1200200', 'd0221r1p140200', 'd0221r1p170300', 'd0221r1p200200', 'd0221r1p240200', 'd0221r1p270300', 'd0221r1p300200', 'd0221r1p340200', 'd0221r1p370300', 'd0221r1p400200', 'd0221r1p440200', 'd0221r1p470300', 'd0221r1p540200', 'd0221r1p570300', 'd0221r1p600200', 'd0221r1p640200', 'd0221r1p670300', 'd0221r1p700200', 'd0221r1p740200', 'd0221r1p770300', 'd0221r1p800200', 'd0221r1p840200', 'd0221r1p870300', 'd0221r1p900200', 'd0221r1p940200', 'd0221r1p970300', 'd0222r1p040200']
+instances = ["d0222r2p340200"]
 
 # Set global variables here, but in future will be set in a parent function
-# os.chdir(microfluidics_results)
 os.chdir(microfluidics_results)
 
 
 #, Files which are stored under the "microfluidics_results"
 #<Indices derived from the analysis folder?
-imgIndex = pd.read_parquet('imgIndex.parquet') #Index of all images to be loaded in
+# imgIndex = pd.read_parquet('imgIndex.parquet') #Index of all images to be loaded in
+imgIndex = pd.read_csv('imgIndex.csv') #Index of all images to be loaded in
 #<Indices derived from segmentaion folder>
-Allmasks = pd.read_parquet('Allmasks.parquet') # Index of masks which show the cell space for internal fluorescence
-Allmasks_exp = pd.read_parquet('Allmasks_exp.parquet') #Index of masks which show the expanded cell space for budneck fluorescence
-info_index = pd.read_parquet("info_index.parquet", error_bad_lines=False, warn_bad_lines= True).set_index("Pos")
+# Allmasks = pd.read_parquet('Allmasks.parquet') # Index of masks which show the cell space for internal fluorescence
+Allmasks = pd.read_csv('Allmasks.csv') # Index of masks which show the cell space for internal fluorescence
+
+# Allmasks_exp = pd.read_parquet('Allmasks_exp.parquet') #Index of masks which show the expanded cell space for budneck fluorescence
+Allmasks_exp = pd.read_csv('Allmasks_exp.csv') #Index of masks which show the expanded cell space for budneck fluorescence
+# info_index = pd.read_parquet("info_index.parquet") #. I don't think that
+info_index = pd.read_csv("info_index.csv", on_bad_lines = 'warn').set_index("Pos")
 
 # Info_all = pd.read_parquet('info_simple.parquet', error_bad_lines=False, warn_bad_lines= True)
 
@@ -137,12 +141,9 @@ def Quant_frame(i):
 		unique_pos =  i[:i.find("f")]
 		objMeas_DF = pd.DataFrame([])
 		date = i[i.find("d"):(i.find("r"))]
-		try:
-			GFP_path = imgIndex_TP.loc[(i, "GFP"), ["Path"]].values[0]
-		except KeyError:
-			GFP_path = imgIndex_TP.loc[(i, "gre"), ["Path"]].values[0]
-		mKO_path = imgIndex_TP.loc[(i, "mKO"), ["Path"]].values[0]
-		mKate_path = imgIndex_TP.loc[(i, "mKa"), ["Path"]].values[0]
+		GFP_path = imgIndex_TP.loc[(i, "GFPden"), ["Path"]].values[0]
+		mKO_path = imgIndex_TP.loc[(i, "mKODen"), ["Path"]].values[0]
+		mKate_path = imgIndex_TP.loc[(i, "mKaDen"), ["Path"]].values[0]
 
 		raw_GFP = np.array(Image.open(GFP_path))
 		raw_mKO = np.array(Image.open(mKO_path))
@@ -173,7 +174,8 @@ def Quant_frame(i):
 
 		def pos_info_read(unique_pos):
 			path =  info_index.loc[unique_pos, "Path"]
-			Info_all = pd.read_parquet(path, sep = "\t", usecols = ['cell_frame', 'cell_index', 'cell_majoraxis', 'cell_minoraxis', 'cell_area', 'cell_volume', 'cell_perimeter', 'cell_eccentricity', 'cell_fractionOfGoodMembranePixels', 'cell_mem_area', 'cell_mem_volume', 'cell_nuc_radius', 'cell_nuc_area', 'cell_pole1_age', 'cell_pole2_age', 'cell_timepoint', 'track_index', 'track_fingerprint_real_distance', 'track_age', 'track_parent', 'track_parent_frame', 'track_parent_prob', 'track_parent_score', 'track_generation', 'track_lineage_tree', 'track_cell_cycle_phase', 'track_assignment_fraction', 'track_start_frame', 'track_end_frame', 'track_index_corrected', 'track_has_bud', 'track_budneck_total'])
+			#! The below must be left as read_csv because it is taking in tabular data generated by tracking
+			Info_all = pd.read_csv(path, sep = "\t", usecols = ['cell_frame', 'cell_index', 'cell_majoraxis', 'cell_minoraxis', 'cell_area', 'cell_volume', 'cell_perimeter', 'cell_eccentricity', 'cell_fractionOfGoodMembranePixels', 'cell_mem_area', 'cell_mem_volume', 'cell_nuc_radius', 'cell_nuc_area', 'cell_pole1_age', 'cell_pole2_age', 'cell_timepoint', 'track_index', 'track_fingerprint_real_distance', 'track_age', 'track_parent', 'track_parent_frame', 'track_parent_prob', 'track_parent_score', 'track_generation', 'track_lineage_tree', 'track_cell_cycle_phase', 'track_assignment_fraction', 'track_start_frame', 'track_end_frame', 'track_index_corrected', 'track_has_bud', 'track_budneck_total'])
 
 			Info_all['Unique_pos'] = unique_pos
 
@@ -679,17 +681,21 @@ from joblib import Parallel, delayed
 # Allmasks = Allmasks.iloc[763:]
 #%%
 
-# try:
-# 	path = os.path.join(microfluidics_results, str(today))
-# 	os.mkdir(path)
-# except FileExistsError:
-# 	path = os.path.join(microfluidics_results, str(today))
-# 	pass
+try:
+	path = os.path.join(microfluidics_results, str(today))
+	os.mkdir(path)
+except FileExistsError:
+	path = os.path.join(microfluidics_results, str(today))
+	pass
 
 # path = "D:/Microfluidics/Missing_RESULTS2/2022-06-15"
 
 ### THis is to dertermine the files that have already been completed. Could make recursive to test for all dates, but at this stage do not want to because there have been several tests within the "RESULTS" root
-path = "D:/Microfluidics/Missing_RESULTS/2022-08-08"
+
+
+# path = "D:/Microfluidics/Missing_RESULTS/2022-08-08" #TODO Fix this in other file
+
+
 # os.chdir("D:/Microfluidics/RESULTS/2022-03-09")5360
 os.chdir(path)
 

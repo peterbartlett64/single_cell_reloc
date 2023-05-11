@@ -2,7 +2,7 @@
 import pandas as pd
 import os
 import single_cell_reloc.global_functions.global_variables as glv
-glv.slash_switch
+
 # def instances():
 # 	global subdat
 # 	if Experimental_info["data_subset"] == True:
@@ -13,7 +13,8 @@ glv.slash_switch
 # 	else:
 # 		pass
 
-def imgIndex_er(image_path, microfluidics_results):
+def imgIndex_er(image_path, microfluidics_results, skip_den = True):
+
 	os.chdir(image_path)
 
 	def f_lazer(z):
@@ -63,6 +64,10 @@ def imgIndex_er(image_path, microfluidics_results):
 				pass
 
 	imgIndex = pd.DataFrame(imgIndex)
+
+	if skip_den == True:
+		imgIndex = imgIndex[imgIndex["Path"].str.contains("den") == False]
+
 	# imgIndex["Path"] = pd.Series(imgIndex.iloc[:,0]).apply(f_non_den)
 	imgIndex['Date'] = pd.Series(imgIndex.iloc[:,0]).apply(f_expdate)
 	imgIndex['PositionID'] = pd.Series(imgIndex.iloc[:,0]).apply(f_Position_ID)
@@ -134,12 +139,18 @@ def imgIndex_er(image_path, microfluidics_results):
 	#         posit.write(f'{p} ')
 	# posit.close()
 	imgIndex.to_csv("imgIndex.csv")
-	# imgIndex.to_paraquet("imgIndex.paraquet")
+	# imgIndex.to_parquet("imgIndex.parquet") #. Currently the microscope comp does not have pyarrow
 	return(imgIndex)
 
 if __name__ == "__main__":
-	analyze = glv.slash_switch(input("Where is anlyze/are the images stored?"))
-	microfluidics_results = glv.slash_switch(input("Where is the data output?"))
-	imgIndex_er(analyze, microfluidics_results)
+	# analyze = glv.slash_switch(input("Where is anlyze/are the images stored?"))
+	# microfluidics_results = glv.slash_switch(input("Where is the data output?"))
+
+	skp_den_state = input("Do you want to skip denoising? (y/n)")
+	if skp_den_state == "y" or skp_den_state == "Y" or skp_den_state == "yes" or skp_den_state == "Yes" or skp_den_state == "YES":
+		skip_den = True
+	else:
+		skip_den = False
+	imgIndex = imgIndex_er(analyze, microfluidics_results, skip_den = skip_den)
 
 # %%

@@ -9,9 +9,9 @@ def Exclude():
 	exclude = input("What runs to exclude?")
 	exclude = str.split(exclude, ", ")
 
-	df = pd.read_paraquet(f"{name}.paraquet")
+	df = pd.read_parquet(f"{name}.parquet")
 	df_subset = df.loc[~(df[excl_type].isin(exclude))]
-	subset_df = df.to_paraquet(f"{name}_subset.paraquet")
+	subset_df = df.to_parquet(f"{name}_subset.parquet")
 	return("Subset complete!")
 
 if __name__ == "__main__":

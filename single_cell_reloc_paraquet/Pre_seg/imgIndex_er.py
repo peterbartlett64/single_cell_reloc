@@ -1,4 +1,5 @@
 ##Layer : Creating a file matrix with component information and matching to condition table by function
+
 os.chdir(image_path)
 
 def f_lazer(z):
@@ -110,4 +111,4 @@ with open('Positions.txt', 'a+') as posit:
 		posit.write(f'{p} ')
 posit.close()
 
-imgIndex.to_paraquet("imgIndex.paraquet")
+imgIndex.to_parquet("imgIndex.parquet")

@@ -3,7 +3,7 @@ import pandas as pd
 from PIL import Image
 from scipy.io import loadmat
 
-lookup_table = pd.read_paraquet("test.paraquet", index = True)
+lookup_table = pd.read_parquet("test.parquet", index = True)
 def Quant_addon(pos):
 	pos_look = lookup_table.loc[pos].set_index("Frame")
 	for m in frames:

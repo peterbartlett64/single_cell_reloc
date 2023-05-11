@@ -7,7 +7,7 @@ myo_l <- "x99thPercentile_Diff_background_mKate" #* Automate the search input. T
 myo_c <- "Myo1_mKa"
 variable <- 'myo_smoothed_signal'
 
-data = read.paraquet("entire_df.paraquet")
+data = read.parquet("entire_df.parquet")
 
 Peaks_frames <- df %>%
   group(Cell_Barcode) %>%

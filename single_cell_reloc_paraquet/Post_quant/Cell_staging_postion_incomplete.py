@@ -95,10 +95,10 @@ def info_from_frame(cell, frame, info, div) ->int: #* This is a modification of 
 
 def cell_stage_assocation(position_barcode):
 	try:
-		cell_cycle_df = pd.read_paraquet(f"{position_barcode}/", usecols=["track", "parent", "daughter", "tree", "generation", "age", "g2_st", "g2_e", "g2_dur", "div", "seg_st_track", "seg_st_daughter"]) #* Removed columns which do not have information based on input to TracX
+		cell_cycle_df = pd.read_parquet(f"{position_barcode}/", usecols=["track", "parent", "daughter", "tree", "generation", "age", "g2_st", "g2_e", "g2_dur", "div", "seg_st_track", "seg_st_daughter"]) #* Removed columns which do not have information based on input to TracX
 		cell_cycle_df["Cell_Barcode"] = position_barcode + pd.Series("track").apply(lambda x: str(x).zfill(4)) #*Create the cell barcodes based on the tracks and the the positional position_barcode from function
 		cell_cycle_df.set_index("Cell_Barcode", inplace= True) #* Set the table to be a lookup table to avoid having to the do a complex merge which would results in repetition
-		localization_df = pd.read_paraquet(f"Movement_treat_course_{position_barcode}.paraquet", usecols= ["Cell_Barcode", "Relocalized", "Frame_x"]) #! Decide if this is the correct input
+		localization_df = pd.read_parquet(f"Movement_treat_course_{position_barcode}.parquet", usecols= ["Cell_Barcode", "Relocalized", "Frame_x"]) #! Decide if this is the correct input
 		localization_df["Cell_stage"] = localization_df.apply(lambda x: stage_from_frame(x["Cell_Barcode"], x["Frame_x"])) #* This is done like a lookup table
 
 	except Exception as e:

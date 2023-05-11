@@ -1,14 +1,23 @@
+install.packages(pacman)
 require(pacman)
 pacman:: p_load(ggdist,dplyr, GGally, ggplot2, ggthemes, ggvis, httr, lubridate, plotly, rio, rmarkdown, shiny, stringr, tidyr, ggpmisc)
-pacman:: p_load(httpgd)
+
+#, Change the figure display
+# pacman:: p_load(httpgd)
 # here() #Set the working directory to the current folder
-hgd()
+# hgd()
 # hgd_browse()
 
-setwd("D:/Microfluidics/RESULTS_ALL/Most_final_collected/Combined_by_perc/Col_with_Abund") #!This is temporary
+#!This is temporary and will be set based on input from pipeline
+setwd("C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Code") #* Test with a single file
 
-file = read.paraquet("EXO1_test.paraquet")
+
+#, Read in the file for testing/run
+file = read.csv("ACE2.csv", sep = ',')
+# file = read.parquet("EXO1_test.par")
+
 head(file)
+describe(file)
 
 # penetrance <- ggplot(data = file, mapping = aes(x = Protein, y = Percentage_reloc, fill = Percentage_reloc_less)) +
 #   geom_text(aes(label = Percentage_reloc_less)) +
@@ -16,7 +25,7 @@ head(file)
 #   xlab(label = "Protein") +
 #   ylab(label = "Selected Series")
 # penetrance
-
+file$Reloc_yet = 0
 file$Reloc_yet = file$Reloc_yet + 1
 
 df = data.frame(
@@ -55,4 +64,5 @@ df3 %>%
   scale_color_brewer(palette = "Dark2")+
   theme_clean()
 
+class(df3$value)
 # hgd_browse()
