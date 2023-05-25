@@ -1,0 +1,38 @@
+Variable_Windows(Snakemake code) ::
+
+conda activate pycellxworkflow
+cd C:\Users\%USERNAME%\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files
+
+snakemake --config fileseries="C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\run_files\file_series.xml" calibration="C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\run_files\Param_01_Sep_21.xml" cellx="C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe" --cores 6 --latency-wait 60 --keep-going
+
+snakemake --config fileseries="C:\Users\pcnba\OneDrive\Desktop\Test\run_files\file_series.xml" calibration="C:\Users\pcnba\OneDrive\Desktop\Test\run_files\Param_01_Sep_21.xml" cellx="C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe" --cores 6 --latency-wait 60 --keep-going
+
+
+snakemake --config fileseries="C:\Users\Nikon\Desktop\mini_runSeg\run_files\file_series.xml" calibration="C:\Users\Nikon\Desktop\mini_runSeg\run_files\Param_01_Sep_21.xml" cellx="C:\Users\Nikon\Desktop\mini_runSeg\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe" --cores 6 --latency-wait 60 --keep-going
+
+
+
+
+
+
+Most recent:
+
+snakemake --config fileseries="C:\Users\Nikon\Desktop\Current_Both\RUN_SegProgLib\Target_2022-05-12remainder.xml" calibration="C:\Users\Nikon\Desktop\Current_Both\RUN_SegProgLib\Param_01_Sep_21.xml" cellx=C:\Users\Nikon\Desktop\Current_Both\RUN_SegProgLib\CellX_Win_g2.12_c2.12\CellX_c2.12\batchCellXWin.exe --cores 6 --latency-wait 60 --keep-going
+
+
+Single File
+snakemake --config fileseries="C:\Users\Nikon\Desktop\Current_Both\SegProgLib\Target_short.xml" calibration="C:\Users\Nikon\Desktop\Current_Both\SegProgLib\Param_01_Sep_21.xml" cellx=C:\Users\Nikon\Desktop\Current_Both\SegProgLib_RUN\CellX_Win_g2.12_c2.12\CellX_c2.12\batchCellXWin.exe --cores all
+
+d0216r2p010300/GFP_mKO_mKa/cells_00001.mat
+
+HARD CODED SINGLE RUN (CellX code)
+cd C:\Users\Nikon\Desktop\Current_Both\RUN_segProgLib
+C:\Users\Nikon\Desktop\Current_Both\RUN_SegProgLib\CellX_Win_g2.12_c2.12\CellX_c2.12\batchCellXWin.exe Param_01_Sep_21.xml -s Target_small.xml
+
+Most recent (manual)
+C:\Users\Nikon\Desktop\Current_Both\RUN_SegProgLib\CellX_Win_g2.12_c2.12\CellX_c2.12\batchCellXWin.exe Param_01_Sep_21.xml -s Target_2022-05-12custom_merge.xml
+
+snakemake --config fileseries="C:\Users\Nikon\Desktop\Current_Both\RUN_SegProgLib\Target_small.xml" calibration="C:\Users\Nikon\Desktop\RUN_SegProgLib\Param_01_Sep_21.xml" cellx=C:\Users\Nikon\Desktop\Current_Both\RUN_SegProgLib\CellX_Win_g2.12_c2.12\CellX_c2.12\batchCellXWin.exe --cores all
+
+To Dropbox (Old)
+snakemake -s Snakefile_pycellxworkflow  --config fileseries="C:\Users\Peter\Dropbox (Grant Brown's Lab)\Peter Bartlett Data\Code\SegProgLib\Target_short.xml" calibration="C:\Users\Peter\Dropbox (Grant Brown's Lab)\Peter Bartlett Data\Code\SegProgLib\Param_01_Sep_21.xml" cellx=C:\Users\Nikon\Desktop\SegProgLib\CellX_Win_g2.12_c2.12\CellX_c2.12\batchCellXWin.exe --cores all

@@ -1,5 +1,5 @@
 ##Layer : Creating a file matrix with component information and matching to condition table by function
-
+import os
 os.chdir(image_path)
 
 def f_lazer(z):

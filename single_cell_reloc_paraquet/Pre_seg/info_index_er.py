@@ -2,7 +2,7 @@
 import os
 import pandas as pd
 import time
-import single_cell_reloc_parquet.global_functions.global_variables as gv
+import single_cell_reloc_paraquet.global_functions.global_variables as gv
 
 
 def info_index_er():
@@ -72,11 +72,12 @@ def info_index_er():
     # info_index.to_hdf('MASTER.h5', key= 'info_index', mode='r+')
 
     info_index.to_csv('info_index.csv', index = False)
+    info_index.to_parquet('info_index.parquet')
     return(info_index)
 
 
 if __name__ == "__main__":
-    Global_variables = gv.Global_variables()
-    os.chdir(Global_variables['microfluidics_results'])
+    # Global_variables = gv.Global_variables()
+    # os.chdir(Global_variables['microfluidics_results'])
     info_index_er()
-# %%
+    

@@ -1,0 +1,284 @@
+Config file config.json is extended by additional config specified via the command line.
+Building DAG of jobs...
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Job stats:
+job      count    min threads    max threads
+-----  -------  -------------  -------------
+CellX       83              1              1
+all          1              1              1
+total       84              1              1
+
+Select jobs to execute...
+
+[Sat May 20 18:31:54 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00040.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00040.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00040.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00040.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00040.png
+    jobid: 40
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00040.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00040.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00040.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00040.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00040.mat
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00040
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmpg8chsh1j.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDQwLm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+
+[Sat May 20 18:31:54 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00068.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00068.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00068.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00068.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00068.png
+    jobid: 68
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00068.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00068.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00068.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00068.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00068.png
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00068
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmpl76lm2a4.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDY4Lm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+
+[Sat May 20 18:31:54 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00042.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00042.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00042.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00042.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00042.png
+    jobid: 42
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00042.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00042.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00042.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00042.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00042.mat
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00042
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmpgi7368vd.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDQyLm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+
+[Sat May 20 18:31:54 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00070.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00070.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00070.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00070.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00070.png
+    jobid: 70
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00070.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00070.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00070.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00070.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00070.png
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00070
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmp7mn340gv.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDcwLm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+
+[Sat May 20 18:31:54 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00041.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00041.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00041.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00041.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00041.png
+    jobid: 41
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00041.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00041.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00041.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00041.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00041.mat
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00041
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmprc80vec5.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDQxLm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+
+[Sat May 20 18:31:54 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00069.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00069.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00069.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00069.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00069.png
+    jobid: 69
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00069.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00069.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00069.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00069.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00069.mat
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00069
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmpguu5u2ps.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDY5Lm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+[Sat May 20 18:32:19 2023]
+Error in rule CellX:
+    jobid: 41
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00041.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00041.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00041.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00041.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00041.png
+
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 41' returned non-zero exit status 4294967295.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+Select jobs to execute...
+
+[Sat May 20 18:32:19 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00043.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00043.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00043.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00043.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00043.png
+    jobid: 43
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00043.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00043.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00043.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00043.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00043.txt
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00043
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmpq5ph38d8.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDQzLm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+[Sat May 20 18:32:19 2023]
+Error in rule CellX:
+    jobid: 42
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00042.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00042.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00042.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00042.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00042.png
+
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 42' returned non-zero exit status 4294967295.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+Select jobs to execute...
+
+[Sat May 20 18:32:19 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00047.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00047.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00047.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00047.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00047.png
+    jobid: 47
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00047.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00047.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00047.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00047.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00047.png
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00047
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmpdrm8035b.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDQ3Lm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+[Sat May 20 18:32:19 2023]
+Error in rule CellX:
+    jobid: 40
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00040.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00040.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00040.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00040.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00040.png
+
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 40' returned non-zero exit status 4294967295.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+Select jobs to execute...
+
+[Sat May 20 18:32:19 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00075.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00075.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00075.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00075.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00075.png
+    jobid: 75
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00075.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00075.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00075.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00075.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00075.txt
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00075
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmppy06998r.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDc1Lm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+[Sat May 20 18:32:19 2023]
+Error in rule CellX:
+    jobid: 70
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00070.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00070.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00070.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00070.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00070.png
+
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 70' returned non-zero exit status 4294967295.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+Select jobs to execute...
+
+[Sat May 20 18:32:19 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00005.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00005.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00005.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00005.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00005.png
+    jobid: 5
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00005.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00005.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00005.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00005.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00005.mat
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00005
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmpmjouyop7.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDA1Lm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+[Sat May 20 18:32:19 2023]
+Error in rule CellX:
+    jobid: 68
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00068.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00068.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00068.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00068.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00068.png
+
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 68' returned non-zero exit status 4294967295.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+Select jobs to execute...
+
+[Sat May 20 18:32:19 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00019.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00019.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00019.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00019.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00019.png
+    jobid: 19
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00019.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00019.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00019.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00019.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00019.mat
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00019
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmpygt7umwg.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDE5Lm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+[Sat May 20 18:32:19 2023]
+Error in rule CellX:
+    jobid: 69
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00069.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00069.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00069.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00069.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00069.png
+
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 69' returned non-zero exit status 4294967295.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+Select jobs to execute...
+
+[Sat May 20 18:32:19 2023]
+rule CellX:
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00061.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00061.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00061.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00061.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00061.png
+    jobid: 61
+    reason: Missing output files: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00061.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00061.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00061.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00061.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00061.png
+    wildcards: folder=C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa, padded_sj=00061
+    resources: tmpdir=C:\Users\pcnba\AppData\Local\Temp
+
+Failed to set marker file for job started ([WinError 3] The system cannot find the path specified: "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\tmpo9upm3__.QzovVXNl" -> "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\single_cell_reloc\\snakemake_files\\.snakemake\\incomplete\\QzovVXNlcnMvcGNuYmEvR3JhbnQgQnJvd24ncyBMYWIgRHJvcGJveC9QZXRlciBCYXJ0bGV0dC9QZXRlciBCYXJ0bGV0dCBEYXRhL1Rlc3Rpbmdfc2hpZnRfZml4L2QwMjE0cjFwMDEwMjAwL0dGUF9tS09fbUthL2NlbGxzXzAwMDYxLm1hdA=="). Snakemake will work, but cannot ensure that output files are complete in case of a kill signal or power loss. Please ensure write permissions for the directory C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\.snakemake
+[Sat May 20 18:32:24 2023]
+Error in rule CellX:
+    jobid: 43
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00043.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00043.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00043.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00043.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00043.png
+
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 43' returned non-zero exit status 3221225786.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+Terminating processes on user request, this might take some time.
+[Sat May 20 18:32:24 2023]
+[Sat May 20 18:32:24 2023]
+Error in rule CellX:
+    jobid: 47
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00047.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00047.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00047.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00047.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00047.png
+
+Error in rule CellX:
+    jobid: 61
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00061.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00061.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00061.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00061.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00061.png
+
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 47' returned non-zero exit status 3221225786.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 61' returned non-zero exit status 3221225786.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+[Sat May 20 18:32:24 2023]
+Error in rule CellX:
+    jobid: 19
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00019.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00019.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00019.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00019.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00019.png
+
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 19' returned non-zero exit status 3221225786.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+[Sat May 20 18:32:24 2023]
+Error in rule CellX:
+    jobid: 5
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00005.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00005.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00005.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00005.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00005.png
+
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 5' returned non-zero exit status 3221225786.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+[Sat May 20 18:32:24 2023]
+Error in rule CellX:
+    jobid: 75
+    input: C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml, C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml
+    output: C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00075.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/cells_00075.txt, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/control_00075.png, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/mask_00075.mat, C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p010200/GFP_mKO_mKa/seeding_00075.png
+
+RuleException:
+CalledProcessError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 51:
+Command 'cd C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12 && C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe  C:/Users/pcnba/OneDrive/Desktop/Test/run_files/Param_01_Sep_21.xml -m series -s C:/Users/pcnba/OneDrive/Desktop/Test/run_files/file_series.xml -si 1 -sj 75' returned non-zero exit status 3221225786.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 51, in __rule_CellX
+  File "C:\Users\pcnba\mambaforge\envs\pycellxworkflow\lib\concurrent\futures\thread.py", line 57, in run
+Complete log: .snakemake\log\2023-05-20T183154.152270.snakemake.log

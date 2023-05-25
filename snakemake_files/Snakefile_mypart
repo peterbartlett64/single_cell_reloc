@@ -1,0 +1,60 @@
+import pandas as pd
+import os
+
+####IMPORTANT
+#Fill in the fluorescent information
+Fluorescent = {'GFP': 'PROT', 'mKa': 'BHY175_Myo1', 'mKO': 'BHY131_Myo1'} 
+
+#Set the image path to the location of the raw image files (Largest directory)
+image_path = "F:/Microfluidics/Analyze" # This would normally be a folder containing all date folders with the images aquired at those days {[All]/[2018_x]/[images...]}
+
+#Set the Results directory. This is where the CellX will output to and where the Master hdf5 file will be stores
+microfluidics_results = "F:/Microfluidics/RESULTS" #This is a folder containing all image masks and other output from CellX. It should be of shape ALL/Date/[GFP],[RFP].../  AND the HDF5 file in my case
+
+# rule Target:
+# 	input:
+# 		lambda wildcards: pos_list.iloc[pos][wildcards.pos]
+
+# imgIndex_TP = pd.read_hdf("MASTER.h5", "imgIndex")
+# imgIndex_TP = pd.read_csv("imgIndex.csv")
+
+# Cell_index_TP= pd.read_hdf("MASTER.h5", "cell_index")
+Cell_index_TP= pd.read_csv("cell_index.csv")
+
+# segIndex_TP = pd.read_hdf("MASTER.h5", "Allmasks")
+segIndex_TP = pd.read_csv("Allmasks.csv")
+
+pos_list = pd.unique(imgIndex["Unique_pos"])
+
+def for_now(u):
+	return(u)
+
+rule all:
+	group: "all"
+	input:
+		[u.positions for u in pos_list]
+
+rule Quantification:
+	group: "all"
+	input:
+		Path("imgIndexALL/imgIndex_{u_pos}.csv")
+	params:
+		u_pos = lambda wildcards, output: for_now(u_pos)
+	output:
+		Path("Quant/quant_{u_pos}.csv")
+	conda:
+		"envs/microfluidics_PIPE.yaml"
+	script:
+		"scripts/Quantification.py"
+
+# rule Tracking:
+# 	input:
+# 		"quant/{pos}.csv"
+# 	params:
+# 		u_pos = {u_pos}
+# 	output:
+# 		Path("Tracking/track_{u_pos}.csv") ## double check the output file type
+# 	conda:
+# 		"envs/microfluidics_PIPE.yaml"
+# 	script:
+# 		"scripts/Tracking.py"

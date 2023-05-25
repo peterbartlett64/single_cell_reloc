@@ -1,0 +1,255 @@
+<?xml version="1.0" ?>
+<CellXFiles Creator="CellXGui" timestamp="2023-05-18 00:27:32.477622">
+	<CellXTimeSeries fluotypes="GFP_mKO_mKa" id="1" position="" tracking="1">
+		<CellXResultDir>C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Testing_shift_fix/d0214r1p090200</CellXResultDir>
+		<CellXFileSet frame="1">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0001.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="2">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0002.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="3">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0003.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="4">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0004.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="5">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0005.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="6">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0006.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="7">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0007.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="8">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0008.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="9">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0009.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="10">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0010.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="11">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0011.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="12">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0012.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="13">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0013.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="14">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0014.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="15">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0015.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="16">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0016.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="17">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0017.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="18">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0018.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="19">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0019.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="20">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0020.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="21">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0021.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="22">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0022.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="23">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0023.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="24">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0024.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="25">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0025.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="26">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0026.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="27">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0027.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="28">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0028.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="29">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0029.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="30">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0030.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="31">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0031.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="32">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0032.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="33">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0033.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="34">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0034.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="35">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0035.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="36">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0036.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="37">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0037.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="38">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0038.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="39">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0039.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="40">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0040.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="41">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0041.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="42">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0042.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="43">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0043.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="44">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0044.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="45">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0045.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="46">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0046.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="47">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0047.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="48">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0048.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="49">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0049.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="50">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0050.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="51">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0051.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="52">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0052.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="53">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0053.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="54">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0054.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="55">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0055.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="56">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0056.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="57">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0057.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="58">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0058.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="59">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0059.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="60">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0060.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="61">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0061.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="62">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0062.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="63">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0063.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="64">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0064.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="65">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0065.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="66">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0066.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="67">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0067.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="68">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0068.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="69">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0069.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="70">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0070.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="71">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0071.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="72">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0072.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="73">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0073.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="74">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0074.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="75">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0075.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="76">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0076.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="77">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0077.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="78">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0078.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="79">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0079.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="80">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0080.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="81">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0081.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="82">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0082.tif</oofImage>
+		</CellXFileSet>
+		<CellXFileSet frame="83">
+			<oofImage>C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Testing_shift_fix\Images\Sub_position090200_time0083.tif</oofImage>
+		</CellXFileSet>
+	</CellXTimeSeries>
+</CellXFiles>

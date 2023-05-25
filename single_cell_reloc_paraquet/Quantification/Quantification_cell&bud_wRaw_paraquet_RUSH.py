@@ -102,7 +102,7 @@ Allmasks = pd.read_csv('Allmasks.csv') # Index of masks which show the cell spac
 
 # Allmasks_exp = pd.read_parquet('Allmasks_exp.parquet') #Index of masks which show the expanded cell space for budneck fluorescence
 Allmasks_exp = pd.read_csv('Allmasks_exp.csv') #Index of masks which show the expanded cell space for budneck fluorescence
-# info_index = pd.read_parquet("info_index.parquet") #. I don't think that
+# info_index = pd.read_parquet("info_index.parquet")
 info_index = pd.read_csv("info_index.csv", on_bad_lines = 'warn').set_index("Pos")
 
 # Info_all = pd.read_parquet('info_simple.parquet', error_bad_lines=False, warn_bad_lines= True)
@@ -118,7 +118,6 @@ segIndex_TP = Allmasks.set_index(["Unique_frame"], drop = True)
 segIndex_TP.sort_index(inplace=True)
 bud_segIndex_TP = Allmasks_exp.set_index(["Unique_frame"])
 bud_segIndex_TP.sort_index(inplace=True)
-# Cell_index_TP = pd.read_hdf('MASTER.h5', 'Cell_index')
 
 #. Also read in missing files to make sure not wasting time on incomplete tracks
 Missing_files = pd.read_csv("Files_missing_df.csv", index_col= 0)

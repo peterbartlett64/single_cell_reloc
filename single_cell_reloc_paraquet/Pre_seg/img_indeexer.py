@@ -139,12 +139,12 @@ def imgIndex_er(image_path, microfluidics_results, skip_den = True):
 	#         posit.write(f'{p} ')
 	# posit.close()
 	imgIndex.to_csv("imgIndex.csv")
-	# imgIndex.to_parquet("imgIndex.parquet") #. Currently the microscope comp does not have pyarrow
+	imgIndex.to_parquet("imgIndex.parquet") #. Currently the microscope comp does not have pyarrow
 	return(imgIndex)
 
 if __name__ == "__main__":
-	# analyze = glv.slash_switch(input("Where is anlyze/are the images stored?"))
-	# microfluidics_results = glv.slash_switch(input("Where is the data output?"))
+	analyze = glv.slash_switch(input("Where is anlyze/are the images stored?"))
+	microfluidics_results = glv.slash_switch(input("Where is the data output?"))
 
 	skp_den_state = input("Do you want to skip denoising? (y/n)")
 	if skp_den_state == "y" or skp_den_state == "Y" or skp_den_state == "yes" or skp_den_state == "Yes" or skp_den_state == "YES":

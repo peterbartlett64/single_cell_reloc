@@ -82,32 +82,50 @@ def simp_mask_load(m):
 # instances = str(input("Specific positins? ('ALL' if not)"))
 # instances = instances + ", " # This is a fast way of getting the program to accept single instance
 
-# instances = ['d0214r1p010200', 'd0214r1p010300', 'd0214r1p030200', 'd0214r1p030300', 'd0214r1p040200', 'd0214r1p040300', 'd0214r1p050200', 'd0214r1p050300', 'd0214r1p070200', 'd0214r1p070300', 'd0214r1p080200', 'd0214r1p080300', 'd0214r1p090200', 'd0214r1p090300', 'd0214r1p110200', 'd0214r1p110300', 'd0214r1p120200', 'd0214r1p120300','d0214r1p130200', 'd0214r1p130300', 'd0214r1p150300', 'd0214r1p160200', 'd0214r2p150200', 'd0215r1p090200', 'd0215r1p160200', 'd0216r1p050200', 'd0216r1p090300', 'd0216r1p110200', 'd0216r1p120300', 'd0216r1p130200', 'd0216r1p130300', 'd0216r2p040300', 'd0216r2p080200', 'd0216r2p150300', 'd0217r2p1000200', 'd0217r2p1010200', 'd0217r2p1020300', 'd0217r2p1030200', 'd0217r2p140200', 'd0217r2p170300', 'd0217r2p200200', 'd0217r2p240200', 'd0217r2p270300', 'd0217r2p300200', 'd0217r2p340200', 'd0217r2p370300', 'd0217r2p400200', 'd0217r2p440200', 'd0217r2p470300', 'd0217r2p500200', 'd0217r2p540200', 'd0217r2p570300', 'd0217r2p600200', 'd0217r2p640200', 'd0217r2p670300', 'd0217r2p700200', 'd0217r2p740200', 'd0217r2p770300', 'd0217r2p800200', 'd0217r2p840200', 'd0217r2p870300', 'd0217r2p900200', 'd0217r2p940200', 'd0217r2p970300', 'd0219r1p1010200', 'd0219r1p1030200', 'd0220r2p1140200', 'd0220r2p1170300', 'd0220r2p1200200', 'd0221r1p040200', 'd0221r1p070300', 'd0221r1p1000200', 'd0221r1p100200', 'd0221r1p1040200', 'd0221r1p1070300', 'd0221r1p1100200', 'd0221r1p1140200', 'd0221r1p1170300', 'd0221r1p1200200', 'd0221r1p140200', 'd0221r1p170300', 'd0221r1p200200', 'd0221r1p240200', 'd0221r1p270300', 'd0221r1p300200', 'd0221r1p340200', 'd0221r1p370300', 'd0221r1p400200', 'd0221r1p440200', 'd0221r1p470300', 'd0221r1p540200', 'd0221r1p570300', 'd0221r1p600200', 'd0221r1p640200', 'd0221r1p670300', 'd0221r1p700200', 'd0221r1p740200', 'd0221r1p770300', 'd0221r1p800200', 'd0221r1p840200', 'd0221r1p870300', 'd0221r1p900200', 'd0221r1p940200', 'd0221r1p970300', 'd0222r1p040200']
+
+instances = "ALL"
 
 # Set global variables here, but in future will be set in a parent function
-# os.chdir(microfluidics_results)
 os.chdir(microfluidics_results)
 
 
 #, Files which are stored under the "microfluidics_results"
 #<Indices derived from the analysis folder?
 imgIndex = pd.read_parquet('imgIndex.parquet') #Index of all images to be loaded in
+# imgIndex = pd.read_csv('imgIndex.csv') #Index of all images to be loaded in
 #<Indices derived from segmentaion folder>
 Allmasks = pd.read_parquet('Allmasks.parquet') # Index of masks which show the cell space for internal fluorescence
-Allmasks_exp = pd.read_parquet('Allmasks_exp.parquet') #Index of masks which show the expanded cell space for budneck fluorescence
-info_index = pd.read_parquet("info_index.parquet", error_bad_lines=False, warn_bad_lines= True).set_index("Pos")
+# Allmasks = pd.read_csv('Allmasks.csv') # Index of masks which show the cell space for internal fluorescence
 
+# Allmasks_exp = pd.read_parquet('Allmasks_exp.parquet') #Index of masks which show the expanded cell space for budneck fluorescence
+Allmasks_exp = pd.read_csv('Allmasks_exp.csv') #Index of masks which show the expanded cell space for budneck fluorescence
+# info_index = pd.read_parquet("info_index.parquet")
+info_index = pd.read_csv("info_index.csv", on_bad_lines = 'warn').set_index("Pos")
 # Info_all = pd.read_parquet('info_simple.parquet', error_bad_lines=False, warn_bad_lines= True)
 
 # pos_list = imgIndex["Unique_pos"].unique()
 # trackDataIndex= pd.read_hdf("MASTER.h5", "trackIndex")
+#%%
 
-imgIndex_TP = imgIndex.reset_index(drop = True)
-imgIndex_TP.set_index(["Unique_frame", "Channel"], inplace = True, drop = False)
+imgIndex_TP = imgIndex.reset_index(drop = False)
+imgIndex_TP.set_index(["Unique_frame", "Channel"], inplace = True, drop = True)
+imgIndex_TP.sort_index(inplace=True)
 # imgIndex_TP.reset_index(inplace = True)
-segIndex_TP = Allmasks.set_index(["Unique_frame"], drop = True)
-bud_segIndex_TP = Allmasks_exp.set_index(["Unique_frame"])
-# Cell_index_TP = pd.read_hdf('MASTER.h5', 'Cell_index')
+
+try:
+	segIndex_TP = Allmasks.set_index(["Unique_frame"], drop = True)
+except:
+	segIndex_TP = Allmasks
+segIndex_TP.sort_index(inplace=True)
+
+try:
+	bud_segIndex_TP = Allmasks_exp.set_index(["Unique_frame"])
+except:
+	bud_segIndex_TP = Allmasks_exp
+bud_segIndex_TP.sort_index(inplace=True)
+
+#. Also read in missing files to make sure not wasting time on incomplete tracks
+# Missing_files = pd.read_csv("Files_missing_df.csv", index_col= 0)
 #%%
 #segIndex_TP.reset_index(inplace = True)
 
@@ -173,7 +191,8 @@ def Quant_frame(i):
 
 		def pos_info_read(unique_pos):
 			path =  info_index.loc[unique_pos, "Path"]
-			Info_all = pd.read_parquet(path, sep = "\t", usecols = ['cell_frame', 'cell_index', 'cell_majoraxis', 'cell_minoraxis', 'cell_area', 'cell_volume', 'cell_perimeter', 'cell_eccentricity', 'cell_fractionOfGoodMembranePixels', 'cell_mem_area', 'cell_mem_volume', 'cell_nuc_radius', 'cell_nuc_area', 'cell_pole1_age', 'cell_pole2_age', 'cell_timepoint', 'track_index', 'track_fingerprint_real_distance', 'track_age', 'track_parent', 'track_parent_frame', 'track_parent_prob', 'track_parent_score', 'track_generation', 'track_lineage_tree', 'track_cell_cycle_phase', 'track_assignment_fraction', 'track_start_frame', 'track_end_frame', 'track_index_corrected', 'track_has_bud', 'track_budneck_total'])
+			#! The below must be left as read_csv because it is taking in tabular data generated by tracking
+			Info_all = pd.read_csv(path, sep = "\t", usecols = ['cell_frame', 'cell_index', 'cell_majoraxis', 'cell_minoraxis', 'cell_area', 'cell_volume', 'cell_perimeter', 'cell_eccentricity', 'cell_fractionOfGoodMembranePixels', 'cell_mem_area', 'cell_mem_volume', 'cell_nuc_radius', 'cell_nuc_area', 'cell_pole1_age', 'cell_pole2_age', 'cell_timepoint', 'track_index', 'track_fingerprint_real_distance', 'track_age', 'track_parent', 'track_parent_frame', 'track_parent_prob', 'track_parent_score', 'track_generation', 'track_lineage_tree', 'track_cell_cycle_phase', 'track_assignment_fraction', 'track_start_frame', 'track_end_frame', 'track_index_corrected', 'track_has_bud', 'track_budneck_total'])
 
 			Info_all['Unique_pos'] = unique_pos
 
@@ -615,8 +634,9 @@ def Quant_frame(i):
 
 		# os.chdir(microfluidics_results)
 		# # objMeas_DF.to_hdf('MASTER.h5', key = i, mode='r+')
-		# objMeas_DF.to_parquet(f"Quantification_{i}_{today}.parquet")
 		objMeas_DF.to_parquet(f"Quantification_{i}_{today}.parquet")
+		# objMeas_DF.to_csv(f"Quantification_{i}_{today}.csv")
+		# objMeas_DF.to_parquet(f"Quantification_{i}_{today}.parquet")
 
 		done = f"{i} completed"
 		return (done)
@@ -679,22 +699,83 @@ from joblib import Parallel, delayed
 # Allmasks = Allmasks.iloc[763:]
 #%%
 
-# try:
-# 	path = os.path.join(microfluidics_results, str(today))
-# 	os.mkdir(path)
-# except FileExistsError:
-# 	path = os.path.join(microfluidics_results, str(today))
-# 	pass
+try:
+	path = os.path.join(microfluidics_results, str(today))
+	os.mkdir(path)
+	print("Creating folder")
+except FileExistsError:
+	path = os.path.join(microfluidics_results, str(today))
+	print("Folder already exists")
+	pass
 
 # path = "D:/Microfluidics/Missing_RESULTS2/2022-06-15"
 
 ### THis is to dertermine the files that have already been completed. Could make recursive to test for all dates, but at this stage do not want to because there have been several tests within the "RESULTS" root
-path = "D:/Microfluidics/Missing_RESULTS/2022-08-08"
 # os.chdir("D:/Microfluidics/RESULTS/2022-03-09")5360
+
+#< os.chdir('F:/Microfluidics/ALL_RESULTS/Most_final_collected/Raw_quant')
+#< Quantification_index = []
+
+#< count = 0
+#< for root, dirs, files, in os.walk(os.getcwd()):
+#< 	for name in files:
+#< 		if name.endswith(".parquet") and name.startswith("Quantification_d"): # fix naming
+#< 			Quantification_index.append({'Path': os.path.join(root, name)})
+#< 			count = count + 1
+#< 			print(count, end="\r")
+#< 		elif name.endswith(".csv") and name.startswith("Quantification_d"): # fix naming
+#< 			Quantification_index.append({'Path': os.path.join(root, name)})
+#< 			count = count + 1
+#< 			print(count, end="\r")
+#< 		else:
+#< 			pass
+#< 	# break #.This makes the program run non-recursively and not decend into daughter folders
+#< Quantification_index = pd.DataFrame(Quantification_index)
+
+#< year = str(datetime.datetime.now().year)
+#< decade = year[:3] # This assumes that the analysis is done within the same decade as starting
+#< del year
+
+#< def f_Position_ID(z):
+#< 	start = z.find('tion_')+5 #Note: The shift forward is dependant upon how you write out position
+#< 	end = z.find("_"+ decade)-5   #Assume that this pipeline will only be used this century! Make sure that the 'n' is present in the array to confirm no place 0 has been lost
+#< 	return(z[start:end])
+
+#< def f_Frame(z):
+#< 	start = z.find('tion_')+5
+#< 	end = z.find('_' + "20")
+#< 	return(z[start:end])
+
+#< def f_expdate(x):
+#< 	dend = x.find('r')
+#< 	expdate = x[0:dend]
+#< 	return(expdate)
+
+#< try:
+#< 	Quantification_index["PositionID"] = pd.Series(Quantification_index.iloc[:,0]).apply(f_Position_ID)
+#< 	Quantification_index["Date"] = pd.Series(Quantification_index["PositionID"]).apply(f_expdate)
+#< 	Quantification_index["Frame"] = pd.Series(Quantification_index.iloc[:,0]).apply(f_Frame)
+#< 	# Quantification_index["Mix" ] =
+#< 	# Quantification_index = Quantifica tion_index[Quantification_index["PositionID"] != "ind"] # This works for now
+#< 	Quantification_index.to_parquet("Quantification_index.parquet")
+#< 	Completed_quant_index = Quantification_index["Frame"]
+#< except:
+#< 	print("Failure feature one of extraction functionss")
+
+
+#< 	# Completed_quant_index = pd.Series([]) #* This was to accept if there are not completed series.
+#< 	#.This is a MAJOR issue if one of the above functions jsut fails
+
+Allmasks_exp_sub = Allmasks_exp
+# Allmasks_exp_sub = Allmasks_exp_sub.loc[~(Allmasks_exp_sub["Unique_frame"].isin(Completed_quant_index))]
+
+
 os.chdir(path)
+# del Quantification_index
+# del Completed_quant_index
+# del count
 
 Quantification_index = []
-
 count = 0
 for root, dirs, files, in os.walk(os.getcwd()):
 	for name in files:
@@ -702,9 +783,17 @@ for root, dirs, files, in os.walk(os.getcwd()):
 			Quantification_index.append({'Path': os.path.join(root, name)})
 			count = count + 1
 			print(count, end="\r")
+		elif name.endswith(".csv") and name.startswith("Quantification_d"): # fix naming
+			Quantification_index.append({'Path': os.path.join(root, name)})
+			count = count + 1
+			print(count, end="\r")
 		else:
 			pass
-	break #This makes the program run non-recursively and not decend into daughter folders
+	# break #.This makes the program run non-recursively and not decend into daughter folders
+
+if len(Quantification_index) == 0: #* This is a the newer version which should be a lot safer.
+	Completed_quant_index = pd.Series([])
+
 Quantification_index = pd.DataFrame(Quantification_index)
 
 year = str(datetime.datetime.now().year)
@@ -726,7 +815,6 @@ def f_expdate(x):
 	expdate = x[0:dend]
 	return(expdate)
 
-# Quantification_index["Pad"] =
 try:
 	Quantification_index["PositionID"] = pd.Series(Quantification_index.iloc[:,0]).apply(f_Position_ID)
 	Quantification_index["Date"] = pd.Series(Quantification_index["PositionID"]).apply(f_expdate)
@@ -736,15 +824,15 @@ try:
 	Quantification_index.to_parquet("Quantification_index.parquet")
 	Completed_quant_index = Quantification_index["Frame"]
 except:
-	Completed_quant_index = pd.Series([])
+	print("Failure feature one of extraction functionss")
 
-
-os.chdir(path)
-
-
-Allmasks_exp_sub = Allmasks_exp
 Allmasks_exp_sub = Allmasks_exp_sub.loc[~(Allmasks_exp_sub["Unique_frame"].isin(Completed_quant_index))]
 
+
+#* Check that also not included in missing_files
+
+#< Allmasks_exp_sub = Allmasks_exp_sub.loc[~(Allmasks_exp_sub["Unique_pos"].isin(Missing_files["Unique_pos"]))]
+#< Allmasks_exp_sub = Allmasks_exp_sub.loc[~(Allmasks_exp_sub["Date"].isin(skip_date))]
 
 if instances == "ALL":
 	pass

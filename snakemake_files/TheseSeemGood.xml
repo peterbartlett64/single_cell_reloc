@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CellXConfiguration creator="CellXGui" timestamp="2021_04_13__22_51_24">
+    <CellXParam name="membraneIntensityProfile">
+        <ArrayElement value="-0.1267002459735447"/>
+        <ArrayElement value="-0.1432388175303754"/>
+        <ArrayElement value="-0.07528055127210971"/>
+        <ArrayElement value="0.07650641204905091"/>
+        <ArrayElement value="0.13818206729677457"/>
+        <ArrayElement value="0.10874629128260997"/>
+        <ArrayElement value="0.049001980396718006"/>
+        <ArrayElement value="-0.0066666719007466395"/>
+        <ArrayElement value="-0.020550464348377005"/>
+    </CellXParam>
+    <CellXParam name="membraneLocation" value="2"/>
+    <CellXParam name="membraneWidth" value="2"/>
+    <CellXParam name="maximumCellLength" value="79"/>
+    <CellXParam name="seedRadiusLimit">
+        <ArrayElement value="4"/>
+        <ArrayElement value="24"/>
+    </CellXParam>
+    <CellXParam name="isHoughTransformOnCLAHE" value="0"/>
+    <CellXParam name="seedSensitivity" value="0.15"/>
+    <CellXParam name="isGraphCutOnCLAHE" value="0"/>
+    <CellXParam name="claheClipLimit" value="0.01"/>
+    <CellXParam name="claheBlockSize" value="100"/>
+    <CellXParam name="useWienerFilter" value="1"/>
+    <CellXParam name="wiener2params">
+        <ArrayElement value="3"/>
+        <ArrayElement value="3"/>
+    </CellXParam>
+    <CellXParam name="isNonConvexRegionDetectionEnabled" value="0"/>
+    <CellXParam name="maximumMinorAxisLengthHoughRadiusRatio" value="1.7"/>
+    <CellXParam name="requiredFractionOfAcceptedMembranePixels" value="0.8"/>
+    <CellXParam name="overlapMergeThreshold" value="0.8"/>
+    <CellXParam name="overlapResolveThreshold" value="0.2"/>
+    <CellXParam name="nuclearVolumeFraction" value="0.07"/>
+    <CellXParam name="intensityBrightAreaPercentage" value="0.3"/>
+    <CellXParam name="spatialMotionFactor" value="50"/>
+    <CellXParam name="maxGapConnectionDistance" value="3"/>
+    <CellXParam name="fluoQuantiles">
+        <ArrayElement value="25.0"/>
+        <ArrayElement value="50.0"/>
+        <ArrayElement value="75.0"/>
+    </CellXParam>
+    <CellXParam name="intensityClassesCount">
+        <ArrayElement value="4"/>
+    </CellXParam>
+    <CellXParam name="fluoAlignPixelMove" value="1"/>
+</CellXConfiguration>

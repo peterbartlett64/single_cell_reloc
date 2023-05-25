@@ -10,15 +10,17 @@ import numpy as np
 import datetime
 import warnings
 from pandas.core.indexing import IndexingError
-
-
+#%%
+subset_by = 'Position'
+subset = ['d0214r1p130200', 'd0214r1p130300', 'd0214r1p150200', 'd0214r1p150300', 'd0214r1p160200', 'd0214r1p160300']
 # %%
 # The following generates the basis of the XML structure
 # which will be populated with the metadata from the image
 # file name
-os.chdir(microfluidics_results)
+# os.chdir(microfluidics_results)
 imgIndex = pd.read_parquet('imgIndex.parquet')
-
+#%%
+microfluidics_results = 'D:/Microfluidics/RES_N_ULTS'
 #%%
 # THIS SHOULD ALREADY BE DONE IN THE PREVIOUS PIPELINE
 print(f"Placing results in {os.getcwd()}")
@@ -30,11 +32,11 @@ del uPos_list
 #%%
 
 now = datetime.datetime.now()
-
-if Experimental_info["data_subset"] == True:
-    imgIndex = imgIndex[imgIndex["Unique_pos"].isin(instances)]
-else:
-    pass
+date_today = datetime.date.today()
+# if Experimental_info["data_subset"] == True:
+#     imgIndex = imgIndex[imgIndex["Unique_pos"].isin(instances)]
+# else:
+#     pass
 
 positions = imgIndex.reset_index()
 imgIndex_T = imgIndex.reset_index()[
@@ -121,20 +123,20 @@ for p in positions:
 
         channels = ['GFP','mKO', 'mKa']
 
-        for j in channels:
-            try: channelImagePath = timeSubset[timeSubset['Channel'] == j].iloc[0,0]
-            except IndexError:
-                continue
+        # for j in channels:
+        #     try: channelImagePath = timeSubset[timeSubset['Channel'] == j].iloc[0,0]
+        #     except IndexError:
+        #         continue
 
-            fluorophoreSet = root.createElement('fluoSet')
-            fluorophoreSet.setAttribute('type', j)
-            fileSet.appendChild(fluorophoreSet)
+        #     fluorophoreSet = root.createElement('fluoSet')
+        #     fluorophoreSet.setAttribute('type', j)
+        #     fileSet.appendChild(fluorophoreSet)
 
 
-            fluorophoreImage = root.createElement('fluoImage')
-            fluorophoreText = root.createTextNode(channelImagePath)
-            fluorophoreImage.appendChild(fluorophoreText)
-            fluorophoreSet.appendChild(fluorophoreImage)
+        #     fluorophoreImage = root.createElement('fluoImage')
+        #     fluorophoreText = root.createTextNode(channelImagePath)
+        #     fluorophoreImage.appendChild(fluorophoreText)
+        #     fluorophoreSet.appendChild(fluorophoreImage)
 
 xml_str = root.toprettyxml()
 save_path_file = "Target_" + str(date_today) + ".xml"

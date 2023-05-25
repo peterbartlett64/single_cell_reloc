@@ -1,0 +1,51 @@
+import os
+from pathlib import Path
+
+from parse_cellx_fileseries import parse_cellx_fileseries, find_si_sj, find_cellxpath
+
+configfile: "config.json"
+
+for el in ["fileseries", "calibration"]:
+    if config[el] is None:
+        raise ValueError(f"'--config {el}' is missing")
+
+MCRROOT = Path(config["MCRROOT"]).resolve() if config["MCRROOT"] else ""
+FILESERIES = Path(config["fileseries"]).resolve()
+CALIBRATION = Path(config["calibration"]).resolve()
+LOGPATH = Path(config["logpath"]).resolve() if config["logpath"] else FILESERIES.parent
+
+if not LOGPATH.exists():
+    LOGPATH.mkdir()
+if not LOGPATH.is_dir():
+    raise ValueError(f"{str(LOGPATH)} is not a directory")
+
+res = parse_cellx_fileseries(FILESERIES)
+
+## This rule defines all files that are needed to be done
+rule all:
+    group: "all"
+    input:
+        [el.filepaths for el in res]
+
+rule CellX:
+    group: "all"
+    input: 
+        calibration=CALIBRATION, series=FILESERIES
+    params: 
+        si = lambda wildcards, output: find_si_sj(res, output)["si"],
+        sj = lambda wildcards, output: find_si_sj(res, output)["sj"],
+        logpath = LOGPATH
+    output:
+        Path("{folder}", "cells_{padded_sj}.mat"),
+        Path("{folder}", "cells_{padded_sj}.txt"),
+        Path("{folder}", "control_{padded_sj}.png"),
+        Path("{folder}", "mask_{padded_sj}.mat"),
+        Path("{folder}", "seeding_{padded_sj}.png")
+    # log: params.logpath.joinpath("log").joinpath(f"si_{si}_sj_{padded_sj}.log")
+    run:
+
+        cellxpath = find_cellxpath(config["cellx"])
+
+        command_to_run = f"cd {str(cellxpath.parent)} && {str(cellxpath)} {str(MCRROOT)} {input.calibration} -m series -s {input.series} -si {params.si} -sj {params.sj}"
+
+        shell(command_to_run)

@@ -1,0 +1,3 @@
+WorkflowError in file C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile, line 6:
+Workflow defines configfile config.json but it is not present or accessible.
+  File "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\snakemake_files\Snakefile", line 6, in <module>
