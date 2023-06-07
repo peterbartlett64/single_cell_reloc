@@ -1,3 +1,5 @@
+#%%
+#%%
 from dataclasses import dataclass
 import json
 import os
@@ -106,7 +108,7 @@ def parse_cellx_fileseries(filepath: Path) -> List[CellX]:
 def find_si_sj(res: List[CellX], filepaths: List[Path]):
     """
     Find si and sj from knowing the output filepaths.
-    
+
     """
     idx = ([el.filepaths for el in res]).index([Path(el) for el in filepaths])
     return {"si": res[idx].si, "sj": res[idx].sj}
@@ -115,7 +117,7 @@ def find_si_sj(res: List[CellX], filepaths: List[Path]):
 def find_cellxpath(cellx_from_config: Optional[str]) -> Path:
     """
     Find the path of CellX.
-    
+
     One can use os.name or sys.platform to find more about the running OS.
     """
     if cellx_from_config is None:
@@ -134,3 +136,5 @@ def test_parse_cellx_fileseries():
 
 def test_parse_cellx_fileseries_0():
     assert len(parse_cellx_fileseries(Path(".") / "test" / "fileseries_0.xml")) == 5
+
+# %%

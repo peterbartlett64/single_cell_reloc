@@ -1,9 +1,10 @@
+#%%
 import os
 import pandas as pd
 import time
-import single_cell_reloc_parquet.global_functions.global_variables as gv
-
-os.chdir(microfluidics_results)
+import 
+single_cell_reloc_paraquet.global_functions.global_variables as gv
+#%%
 
 def orgAllmask_er():
 	orgmaskpaths = []
@@ -69,8 +70,12 @@ def orgAllmask_er():
 
 	orgAllmasks.dropna(inplace=True) # temp drop because there are some extra segmentations
 	orgAllmasks.reset_index(inplace=True, drop = True)
+	orgAllmasks.to_csv('orgAllmasks.csv')
+	orgAllmasks.to_parquet('orgAllmasks.parquet')
 	return(orgAllmasks)
 
 if __name__ == "__main__":
-	Global_variables  = gv.global_variables()
-	orgAllmasks = orgAllmasker()
+	# Global_variables  = gv.global_variables()
+	microfluidics_results = "D:/Microfluidics/RESULTS"
+	os.chdir(microfluidics_results)
+	orgAllmasks = orgAllmask_er()

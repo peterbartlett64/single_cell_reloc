@@ -29,19 +29,20 @@ rule all:
 
 rule CellX:
     group: "all"
-    input: 
+    input:
         calibration=CALIBRATION, series=FILESERIES
-    params: 
+    params:
         si = lambda wildcards, output: find_si_sj(res, output)["si"],
         sj = lambda wildcards, output: find_si_sj(res, output)["sj"],
         logpath = LOGPATH
     output:
+        #, It seems that the output "sj" must be padded, because of the requirments of CellX
         Path("{folder}", "cells_{padded_sj}.mat"),
         Path("{folder}", "cells_{padded_sj}.txt"),
         Path("{folder}", "control_{padded_sj}.png"),
         Path("{folder}", "mask_{padded_sj}.mat"),
         Path("{folder}", "seeding_{padded_sj}.png")
-    # log: params.logpath.joinpath("log").joinpath(f"si_{si}_sj_{padded_sj}.log")
+    log: params.logpath.joinpath("log").joinpath(f"si_{si}_sj_{padded_sj}.log")
     run:
 
         cellxpath = find_cellxpath(config["cellx"])

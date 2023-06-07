@@ -1,5 +1,6 @@
-%%
+
 function t = TrackALL(pos, date, posFingerprint, length, path_seg, path_raw, par, quant)
+
 %Convert to the right class types
 %format_projN = "%s_%s";
 %posFingerprint = char(posFingerprint);
@@ -50,22 +51,18 @@ Tracker.saveTrackingProject(); % Saves the tracking project.
 
 % Saves the tracking results as one column seperated table for further analysis. This is dependent on if the Quantification was captured for
 % segmentation
-%%
-Tracker.saveTrackerResultsAsTable();
-Tracker.saveTrackerProjectControlImages('isParallel', false, 'maxWorkers', 1);
-
-%if quant
- %   Tracker.saveTrackerResultsAsTable();
-%else
- %   Tracker.saveTrackerResultsAsTable_nQ();
-%end 
+if quant
+    Tracker.saveTrackerResultsAsTable();
+else
+    Tracker.saveTrackerResultsAsTable_nQ();
+end 
 
 %Save the control images
-%if par
- %   Tracker.saveTrackerProjectControlImages('isParallel', false, 'maxWorkers', 1);
-%else
- %   Tracker.saveTrackerProjectControlImages('isParallel', true, 'maxWorkers', 4); % This is the number of logical 
-%end
+if par
+    Tracker.saveTrackerProjectControlImages('isParallel', false, 'maxWorkers', 1);
+else
+    Tracker.saveTrackerProjectControlImages('isParallel', true, 'maxWorkers', 4); % This is the number of logical 
+end
 
 %Tracker.data.QuantificationData = []
 %rmfield(Tracker.data, QuantificationData)

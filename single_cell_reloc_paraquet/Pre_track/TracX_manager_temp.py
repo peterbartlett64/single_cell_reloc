@@ -14,20 +14,19 @@ def switch_slash(path):
 	return (new)
 
 #TODO: Modify this so that it can be used in the global variables calls
-#! The below does not work properly!
-def locate_tracking_file(name = __name__, file = __file__): #* This should work regardless of where the function is called from to find the "MATLAB" folder
-	if name == '__main__':
-		parent_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(file))))
-		relative_path = "MATLAB/test.m"
-		matlab_file = os.path.join(parent_dir, relative_path)
-		test = os.path.exists(matlab_file)
-		return(matlab_file, test)
-	elif name != '__main__': #* This is for when the function is being called from the master file, so it should only go up two levels instead of 3.
-		parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(file)))
-		relative_path = "MATLAB/test.m"
-		matlab_file = os.path.join(parent_dir, relative_path)
-		test = os.path.exists(matlab_file)
-		return(matlab_file, test)
+# def locate_tracking_file(name = __name__, file = __file__): #* This should work regardless of where the function is called from to find the "MATLAB" folder
+# 	if name == '__main__':
+# 		parent_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(file))))
+# 		relative_path = "MATLAB/test.m"
+# 		matlab_file = os.path.join(parent_dir, relative_path)
+# 		test = os.path.exists(matlab_file)
+# 		return(matlab_file, test)
+# 	elif name != '__main__': #* This is for when the function is being called from the master file, so it should only go up two levels instead of 3.
+# 		parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(file)))
+# 		relative_path = "MATLAB/test.m"
+# 		matlab_file = os.path.join(parent_dir, relative_path)
+# 		test = os.path.exists(matlab_file)
+# 		return(matlab_file, test)
 
 def pre_Tracking(subset = False, subset_by = '', subset_collection = ''): #* Prepare trracking information
 	# os.chdir(Global_variables['microfluidics_results'])
@@ -41,11 +40,11 @@ def pre_Tracking(subset = False, subset_by = '', subset_collection = ''): #* Pre
 	Pos_frame_list = imgIndex[["Unique_pos", "Unique_frame",
 							"Date"]].drop_duplicates().set_index(["Unique_pos"])
 
-	try:
-		orgAllmasks = pd.read_parquet("orgAllmasks.parquet").reset_index(drop = False)
-	except FileNotFoundError:
-		import single_cell_reloc_paraquet.Pre_seg.orgAllmask_er as org_er
-		org_er()
+	# try:
+	# 	orgAllmasks = pd.read_parquet("orgAllmasks.parquet").reset_index(drop = False)
+	# except FileNotFoundError:
+	# 	import single_cell_reloc_paraquet.Pre_seg.orgAllmask_er as org_er
+	# 	org_er()
 
 	seg_dirDF = orgAllmasks[["Unique_pos", "Path", "Date"]].set_index(["Unique_pos"])
 

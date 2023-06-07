@@ -6,8 +6,12 @@ from joblib import Parallel, delayed
 import cv2
 from matplotlib import pyplot as plt
 import pandas as pd
-import single_cell_reloc_paraquet.global_functions.global_variables as gv
+# import single_cell_reloc_paraquet.global_functions.global_variables as gv
 from PIL import Image
+
+def slash_switch(path): ## This function is currently unused but could be usefull in the future for the cwd setting
+	new = path.replace(os.sep, '/')
+	return (new)
 
 #%%
 ###############################< Code modified from Medium Aricle: "Image Shifting using NumPy from Scratch" by Sameer
@@ -148,18 +152,19 @@ def miniImgIndex():
 
 #%%
 
-i = "D:/Microfluidics/Ref_shift_images/d0215r1/Sub_position110200_time0031Copy.tif"
-vector_temp = [-455, -14]
-translate_this(image_file=i, at =vector_temp, with_plot=True)
+# i = "D:/Microfluidics/References/Reference Shifts/d0215r1/Sub_position070300_time0031 - Copy.tif"
+# vector_temp = [-455, -4]
+# translate_this(image_file=i, at =vector_temp, with_plot=True)
 #%%
 if __name__ == "__main__":
 	folder = input("Where is the directory to be done?")
 	# vector = input('What are the vector aspects {x, y}').split(sep= ", ")
 	# vector[0] = int(vector[0]) * -1
 	# vector[1] = int(vector[1]) * -1
-	vector = vector_temp
+	# vector = vector_temp
+	vector = [-183, -17]
 	stop = int(input("What is the max frame to be shift"))
-	folder = gv.slash_switch(folder)
+	folder = slash_switch(folder)
 	os.chdir(folder)
 	try:
 		# past_folder
@@ -177,13 +182,13 @@ if __name__ == "__main__":
 		parallel_state = False
 	use_cores_len = os.cpu_count()
 	mini_imgIndex = miniImgIndex() #* Run search in current folder
-	mini_imgIndex_subset = mini_imgIndex.loc[mini_imgIndex['Frame']<= stop]
+	mini_imgIndex_subset = mini_imgIndex.loc[mini_imgIndex['Frame'] == stop]
 
 	if parallel_state:
 		Parallel(n_jobs=use_cores_len, verbose = 100, prefer='threads')(delayed(translate_this)(image_file = i, at = vector, with_plot=False, gray_scale=True) for i in mini_imgIndex_subset['File_name']) #* This should prefer threads as it largely IO limited.
 	else:
 		for i in mini_imgIndex_subset['File_name']:
 			translate_this(image_file= i, at = vector, with_plot=False, gray_scale=True )
-	already_shifted = pd.DataFrame([])
+	already_shifted = pd.Series(vector)
 	already_shifted.to_csv("already_shifted.txt")#* this will save stuipid mistakes if the folder has already been run
 	# # past_folder = folder

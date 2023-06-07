@@ -1,3 +1,3 @@
-function x = test_value()
+function x = Test()
 	x = 2;
 end

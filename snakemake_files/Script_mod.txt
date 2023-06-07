@@ -8,7 +8,7 @@ snakemake --config fileseries="C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Ba
 snakemake --config fileseries="C:\Users\pcnba\OneDrive\Desktop\Test\run_files\file_series.xml" calibration="C:\Users\pcnba\OneDrive\Desktop\Test\run_files\Param_01_Sep_21.xml" cellx="C:\Users\pcnba\OneDrive\Desktop\Test\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe" --cores 6 --latency-wait 60 --keep-going
 
 
-snakemake --config fileseries="C:\Users\Nikon\Desktop\mini_runSeg\run_files\file_series.xml" calibration="C:\Users\Nikon\Desktop\mini_runSeg\run_files\Param_01_Sep_21.xml" cellx="C:\Users\Nikon\Desktop\mini_runSeg\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe" --cores 6 --latency-wait 60 --keep-going
+snakemake --config fileseries="C:\Users\Nikon\Desktop\mini_runSeg\run_files\file_series.xml" calibration="C:\Users\Nikon\Desktop\mini_runSeg\run_files\Param_01_Sep_21.xml" cellx="C:\Users\Nikon\Desktop\mini_runSeg\CellX_Win_g2_12_c2.12\CellX_c2.12\batchCellXWin.exe" --cores 8 --latency-wait 60 --keep-going
 
 
 

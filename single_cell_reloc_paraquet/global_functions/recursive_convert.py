@@ -1,9 +1,12 @@
+#%%
 from glob import glob
 import pandas as pd
-import single_cell_reloc_parquet.global_functions.global_variables as gv
+import os
+import single_cell_reloc_paraquet.global_functions.global_variables as gv
 
 #, Function to recursively convert csv files to parquet files
-def recursive(root):
+def recursive_convert(root):
+	os.chdir(root)
 	for path in glob(root + '**', recursive=True):
 		if path.endswith('.csv'):
 			df = pd.read_csv(path)
@@ -11,9 +14,11 @@ def recursive(root):
 			print(path)
 
 if __name__ == '__main__':
-	Global_variables = gv.global_manager()
-	print(f'Converting csv files to parquet files recursively within {Global_variables.microfluidics_results}')
-	recursive(Global_variables.microfluidics_results)
+	# Global_variables = gv.global_manager()
+	# microfluidics_results = Global_variables.microfluidics_results
+	microfluidics_results = gv.slash_switch(input("Where is microfludics_results?"))
+	print(f'Converting csv files to parquet files recursively within {microfluidics_results}')
+	recursive_convert(microfluidics_results)
 else:
-	recursive(Global_variables.microfluics_results)
+	recursive_convert(Global_variables.microfluics_results)
 	print(f'Converting csv files to parquet files recursively within {Global_variables.microfluidics_results}')

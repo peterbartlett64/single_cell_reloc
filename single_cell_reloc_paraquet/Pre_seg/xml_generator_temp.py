@@ -7,15 +7,15 @@ from xml.dom import minidom
 import os
 import pandas as pd
 import numpy as np
-import datetime
+# import datetime
 import warnings
 from pandas.core.indexing import IndexingError
 #%%
-subset_by = 'Position'
-subset_first = ['d0214r1p130200', 'd0214r1p130300', 'd0214r1p150200', 'd0214r1p150300', 'd0214r1p160200', 'd0214r1p160300']
-subset_second = ['d0214r2p150300', 'd0214r2p160200', 'd0214r2p160300']
+# subset_by = 'Position'
+# subset_first = ['d0214r1p110300']
+# # subset_second = ['d0214r2p150300', 'd0214r2p160200', 'd0214r2p160300']
 #%%
-microfluidics_results = 'D:/Microfluidics/RES_N_ULTS'
+microfluidics_results = 'D:/Microfluidics/RESULTS'
 # microfluidics_results = 'F:/Microfluidics/RESULTS'
 os.chdir(microfluidics_results)
 
@@ -26,8 +26,10 @@ os.chdir(microfluidics_results)
 # os.chdir(microfluidics_results)
 imgIndex = pd.read_parquet('imgIndex.parquet')
 #// Subset for filling May23
-imgIndex = imgIndex.astype({'Frame':'int'})
-imgIndex = imgIndex.loc[((imgIndex['Unique_pos'].isin(subset_first)) & (imgIndex['Frame'] <= 44)) | (imgIndex['Unique_pos'].isin(subset_second))] #* Fill specific frames for specific positions for d0214r1 and fill all frames for specific pos d0214r2
+imgIndex = imgIndex.astype({'Frame':'int', 'Run': 'int'})
+# imgIndex = imgIndex.loc[(imgIndex['Date'] == 'd0214') & (imgIndex['Run'] == 1) & (imgIndex['Frame'] <= 45) & (imgIndex['Unique_pos'].isin(subset_first))] #* Fill specific frames for specific positions for d0214r1 and fill all frames for specific pos d0214r2
+# imgIndex = imgIndex.loc[(imgIndex['Unique_pos'].isin(subset_first))] #* Fill specific frames for specific positions for d0214r1 and fill all frames for specific pos d0214r2
+
 
 #%%
 # THIS SHOULD ALREADY BE DONE IN THE PREVIOUS PIPELINE
@@ -52,8 +54,8 @@ imgIndex_T = imgIndex.reset_index()[
 positions = positions["Unique_pos"]
 positions = positions.drop_duplicates()
 
-positions
-imgIndex_T
+# positions
+# imgIndex_T
 
 warnings.filterwarnings('ignore')
 id = 1

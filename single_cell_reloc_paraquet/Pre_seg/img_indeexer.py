@@ -141,7 +141,7 @@ def imgIndex_er(image_path, microfluidics_results, skip_den = True):
 	imgIndex.to_csv("imgIndex.csv")
 	imgIndex.to_parquet("imgIndex.parquet") #. Currently the microscope comp does not have pyarrow
 	return(imgIndex)
-
+#%%
 if __name__ == "__main__":
 	analyze = glv.slash_switch(input("Where is anlyze/are the images stored?"))
 	microfluidics_results = glv.slash_switch(input("Where is the data output?"))
