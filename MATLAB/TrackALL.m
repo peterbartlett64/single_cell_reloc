@@ -1,25 +1,26 @@
 %%
 function t = TrackALL(pos, date, posFingerprint, length, path_seg, path_raw, par, quant)
 %Convert to the right class types
-%format_projN = "%s_%s";
-%posFingerprint = char(posFingerprint);
-%length = double(length);
-%path_seg = char(path_seg);
-%path_raw  = char(path_raw);
+format_projN = "%s_%s";
+posFingerprint = char(posFingerprint);
+length = double(length);
+path_seg = char(path_seg);
+path_raw  = char(path_raw);
 
-posFingerprint = char('position110300');
-length = double(83);
-path_seg = char('D:\Microfluidics\RESULTS\d0214r1p110300\GFP_mKO_mKa');
-path_raw  = char('D:\Microfluidics\Analyze\20180214_hr1116_MMS\2018-02-14_12-27-47');
-projectName = char('testing_stuff');
-par = false;
-quant = false;
+%posFingerprint = char('position030200');
+%length = double(83);
+%path_seg = char('D:\Microfluidics\RESULTS\d0214r1p030200\GFP_mKO_mKa');
+%path_raw  = char('D:\Microfluidics\Analyze\20180214_hr1116_MMS\2018-02-14_12-27-47');
+%projectName = char('testing_stuff');
+%par = false;
+%quant = false;
 
 %Add path to the tracX
 addpath(genpath("C:\Users\pcnba\OneDrive\Desktop\Test\tracx\src\"));
+%addpath(genpath("C:\Users\Nikon\Desktop\tracx\src\"));
 
 %Set the TracX variables from input
-%projectName = char(sprintf(format_projN, pos, date)); %char(sprintf(format_projN, pos, date));
+projectName = char(sprintf(format_projN, pos, date)); %char(sprintf(format_projN, pos, date));
 fileIdentifierFingerprintImages = 'Sub'; % Image idenfier for Brigthfield images;
 fileIdentifierWellPositionFingerprint = char(posFingerprint); % Well position identifier if multiwell experiment.
 fileIdentifierCellLineage = []; % Image identifier for the Cell Lineage reconstruction (i.e bud neck marker).
