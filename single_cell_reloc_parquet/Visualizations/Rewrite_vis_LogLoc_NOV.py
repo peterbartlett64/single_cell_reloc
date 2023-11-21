@@ -22,6 +22,55 @@ print(plotly.__version__, kaleido.__version__)
 
 # sns.set(rc = {'figure.figsize':(15,8)}) #* Set the figure size to be larger
 # sns.set(rc = {'figure.figsize':(40,30)}) #* Set the figure size to be the shape of a powerpoint slide
+#%%
+def reloc_yet_all(full_data, post_path, output_file):
+	#<NOV23' ADD
+	df_all_rem = full_data[full_data["Frames_post_treatment"] < 0]
+	#>
+
+	full_data = full_data[full_data["Frames_post_treatment"] >= 0]
+
+	# def complex_yet(x):
+	# 	ind = x["Relocalized"].idxmax()
+	# 	does = x.loc[ind]
+	# 	x["yet"] = 0
+	# 	x.loc[:ind, "yet"] = 0
+	# 	x.loc[ind:, "yet"] = does
+	# 	return
+
+	def reloc_yet(x):
+		ind = x.idxmax() #* Get the first occurrence of max value. This is 1 when relocalised, so the first time in the 'Relocalized' series where true
+		does = x.loc[ind] #* Get the value of max value. ie. If max value is 0, then it never relocalizes, whereas if 1 then it does at some point
+		x.loc[:ind] = 0 #* Set all values less than the max value as 0
+		x.loc[ind:] = does #* Set all values after the max value as 1
+		return(x)
+
+	def workaround(ind):
+		return(full_data.loc[ind, "ImageID"])
+	def does_workaround(ind):
+		return(full_data.loc[ind,"Relocalized"])
+
+	full_data["Yet"] = full_data.groupby(by = "Cell_Barcode")["Relocalized"].transform(reloc_yet) # This repesents wether there has been relocaliztion yet
+	full_data["ind"] = full_data.groupby(by = "Cell_Barcode")["Relocalized"].transform('idxmax')
+	full_data["Does"] = pd.Series(full_data["ind"]).apply(does_workaround) #this will work for now but should make it come out of one of the other functions
+	full_data["When"] = pd.Series(full_data["ind"]).apply(workaround)
+	full_data.drop(columns='ind', inplace = True)
+
+	#< Added NOV23
+	df_all_rem["Yet"] = 0
+	df_all_rem["Does"] = 0
+	df_all_rem["When"] = 0
+
+	df_all_rem["Does"] = df_all_rem.groupby(by = "Cell_Barcode")["Does"].transform('max')
+	df_all_rem["When"] = df_all_rem.groupby(by = "Cell_Barcode")["When"].transform('max')
+
+	full_data = df_all_rem.append(full_data)#. , ignore_index = True)
+
+	full_data.to_parquet(os.path.join(post_path, output_file))
+	return(full_data)
+	#>
+
+
 
 #%%
 def load_location_info(info_path = "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\Data_copies\\Tcak_protein_localization.xls"):
@@ -138,9 +187,6 @@ def graph_pearson_all_t(i, full_data, max_agg_Loc_score):
 	fig.savefig(f"Pearson_allt_{z_Loc_Abun_r}--{prot}_{f}.pdf")
 	print(f"{prot} is done pearson'n")
 	return(prot, z_Loc_Abun_r)
-%>%
-
-
 
 def graph_pearson_plus_minus(i, full_data, max_agg_Loc_score):
 	try:
@@ -168,7 +214,7 @@ if __name__ == "__main__":
 	# Global_Variables = gv.global_manager()
 	Global_variables = {'analyze': 'E:/Microfluidics/Analyze',
 	'microfluidics_results': 'E:/Microfluidics/RESULTS',
-	'post_path': 'D:/TRY AGAIN_missingd0214,15 corrections', #. gv.slash_switch(input("Post quant path?")) , #Todo: This needs to be changed to a input call
+	'post_path': 'D:/ALL_FINAL', #. gv.slash_switch(input("Post quant path?")) , #Todo: This needs to be changed to a input call
 	'subset': False,
 	'subset_by': '',
 	'subset_collection': '',
@@ -219,19 +265,24 @@ if __name__ == "__main__":
 		output_file = os.path.join(post_path, output_file)
 
 		# Write the merged data to a single Parquet file
-		merged_data.to_parquet(output_file)
+		full_data = merged_data
+		full_data = reloc_yet_all(full_data = full_data, post_path= post_path, output_file= output_file)
+		full_data.to_parquet(output_file)
 
 		print(f'Merged data saved to {output_file}')
-		full_data = merged_data
 	except:
 		print('Could not find full_data file in post_quant dir. Exiting...')
 		exit()
+
+
 
 	localization_simple = load_location_info() #? This does take in a variable info path, but for right now just using the default Tkach verison
 	full_data_wLocal = pd.merge(full_data, localization_simple, left_on= 'Protein', right_index=True, how = 'outer')
 	full_data_wLocal = full_data_wLocal.dropna(subset='Date')
 	full_data['Run'] = pd.Series(full_data['Unique_Frame']).apply(lambda x: x[:7])
-	full_data = full_data.loc[~(full_data["Run"] == 'd0212r1')]
+
+
+	full_data = full_data.loc[~(full_data["Run"] == 'd0212r1')] #* Remove the day which was bad
 
 	os.chdir(post_path) #* It likely already is this directory but no harm doing it anyway
 	full_data_wLocal.to_parquet('Final_wAbundLocal.parquet')
@@ -239,7 +290,8 @@ if __name__ == "__main__":
 	input("pause")
 	# Abundance_df = full_data_wLocal.reset_index(inplace = True, drop = True)
 
-	max_agg_Loc_score, full_data_wLocal = gen_pearson_r(full_data_wLocal)
+	max_agg_Loc_score, full_data_wLocal = gen_pearson_r(full_data_wLocal) #*Made better facet plots in R.
+
 	#* This requires the pearson corr to alread by attached/performed
 
 	os.chdir(figures)

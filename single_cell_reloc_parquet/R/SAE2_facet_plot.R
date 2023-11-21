@@ -8,22 +8,82 @@ library(dplyr)
 library(ggstatsplot)
 library(corrplot)
 library(smplot2)
+library(corrplot)
 
 setwd("C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Code/single_cell_reloc/single_cell_reloc_parquet/R")
 
-df = read_parquet("D:/ALL_FINAL/Combined_by_perc/SAE2_selected.parquet")
+df = read_parquet("D:/ALL_FINAL/Combined_by_perc/MODSAE2_selected.parquet")
 #df_filter = filter(df, Frames_post_treatment == 20)
+numeric_columns <- df %>% select_if(is.numeric)
+numeric_columns <- df %>% select(z_score_logLoc, z_score_logAbund, z_score_Loc, z_score_Abund)
+
 
 # Simple Facet 
-ggplot(df, aes(z_score_logLoc, z_score_logAbund)) +
+
+gg_temp <-ggplot(df, aes(z_score_logLoc, z_score_logAbund)) +
   #geom_pointdensity() +
   geom_point() +
   sm_statCorr() + 
   #geom_pointdensity(x = 'z_score_logLoc', y = 'z_score_logAbund')+
-  geom_xsidedensity(aes(y = after_stat(density)), position = "stack") +
-  geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
-  facet_wrap(vars(Frames_post_treatment))
+  # geom_xsidedensity(aes(y = after_stat(density)), position = "stack") +
+  # geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+  facet_wrap(vars(Frames_post_treatment))+
+  ggtitle("Corr_facet_logAbund-logLoc_Pearson_facet")
+ggsave("Corr_facet_logAbund-logLoc_Pearson_facet.png", gg_temp, width = 30, height = 18)
 
+gg_temp <-ggplot(df, aes(z_score_Loc, z_score_logAbund)) +
+  #geom_pointdensity() +
+  geom_point() +
+  sm_statCorr() + 
+  #geom_pointdensity(x = 'z_score_logLoc', y = 'z_score_logAbund')+
+  # geom_xsidedensity(aes(y = after_stat(density)), position = "stack") +
+  # geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+  facet_wrap(vars(Frames_post_treatment))+
+  ggtitle("Corr_facet_logAbund-regLoc_Pearson_facet")
+ggsave("Corr_facet_logAbund-regLoc_Pearson_facet.png", gg_temp, width = 30, height = 18)
+
+gg_temp <-ggplot(df, aes(z_score_logLoc, z_score_Abund)) +
+  #geom_pointdensity() +
+  geom_point() +
+  sm_statCorr() + 
+  #geom_pointdensity(x = 'z_score_logLoc', y = 'z_score_logAbund')+
+  # geom_xsidedensity(aes(y = after_stat(density)), position = "stack") +
+  # geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+  facet_wrap(vars(Frames_post_treatment))+
+  ggtitle("Corr_facet_regAbund-logLoc_Pearson_facet")
+ggsave("Corr_facet_regAbund-logLoc_Pearson_facet.png", gg_temp, width = 30, height = 18)
+
+gg_temp <-ggplot(df, aes(z_score_Loc, z_score_Abund)) +
+  #geom_pointdensity() +
+  geom_point() +
+  sm_statCorr() + 
+  #geom_pointdensity(x = 'z_score_logLoc', y = 'z_score_logAbund')+
+  # geom_xsidedensity(aes(y = after_stat(density)), position = "stack") +
+  # geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+  facet_wrap(vars(Frames_post_treatment))+
+  ggtitle("Corr_facet_regAbund-regLoc_Pearson_facet")
+ggsave("Corr_facet_regAbund-regLoc_Pearson_facet.png", gg_temp, width = 30, height = 18)
+
+
+
+# M = cor(numeric_columns)
+# corrplot(M, method = 'number')
+# corrplot.mixed(M, order = 'alphabet')
+# corrplot(M, addCoef.col = 'black', tl.pos = 'd',
+#          cl.pos = 'n', col = COL2('PiYG'))
+
+
+list_frames <- unique(df[["Frame"]])
+
+for (c in list_frames){
+  df_frame <- filter(df, Frame == c)
+  numeric_columns <- df_frame %>% select(z_score_logLoc, z_score_logAbund, z_score_Loc, z_score_Abund)
+  M = cor(numeric_columns)
+  png(file=sprintf("Corr_frame%s_SAE2.png", c), width=600, height=350)
+  corr_graph <- corrplot(M, order = 'AOE', addCoef.col = 'black', type = 'lower', diag = FALSE)
+  # ggsave(sprintf("Corr_frame%s_SAE2.png", c), plot = corr_graph)
+  dev.off()
+}
 
 
 #The below if for making a facet plot for all the proteins

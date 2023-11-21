@@ -28,8 +28,8 @@ if __name__ == '__main__':
 	percentage_combined_path = os.path.join(post_quant, "Combined_by_perc")
 	os.chdir(post_quant)
 
-	All_protein_files = sorted(glob('*.parquet'))
-	All_proteins_df = pd.concat((pd.read_parquet(file) for file in All_protein_files), ignore_index= True)
+	# All_protein_files = sorted(glob('*.parquet'))
+	# All_proteins_df = pd.concat((pd.read_parquet(file) for file in All_protein_files), ignore_index= True)
 
 #%%
 #, NEW version of Abundance genration.
@@ -38,7 +38,9 @@ if __name__ == '__main__':
 
 def Abundance_log_manager(local_prot_df:pd.DataFrame): #* The abundacne could be incorporated in the post-quant function, but it could slow down. It also makes the process less modular and therefore makes timing of computer location a restraint
 	#, Calculate the abundance for every cell at every timepoint. This is done with such density so that associations can be made to the current abundance and the Loc_scores
+	local_prot_df["Abundance"] = local_prot_df['factor_median_OBJ_GFP']
 	local_prot_df["log_Abundance"] = pd.Series(local_prot_df["factor_median_OBJ_GFP"]).apply(lambda x: math.log(x)) #* Log transform absorbance values in a rough metric of molecules per cell. Not true measure because cannot related to baselenine dataset so it is still an arbitraty unit value
+
 	local_prot_df['log_Loc_score'] = pd.Series(local_prot_df["Loc_score"]).apply(lambda x: math.log(x))
 	group_prot_frame = local_prot_df.groupby(["Protein", "Frame"])
 
@@ -47,9 +49,24 @@ def Abundance_log_manager(local_prot_df:pd.DataFrame): #* The abundacne could be
 	local_prot_df["z_score_logAbund"] = group_prot_frame["log_Abundance"].transform(stats.zscore)
 
 	#* Added these lines below for comparison to the original values
+	local_prot_df["log_Abundance"] = local_prot_df['factor_median_OBJ_GFP']
 	local_prot_df["z_score_Loc"] = group_prot_frame["Loc_score"].transform(stats.zscore)
 	local_prot_df["z_score_Abund"] = group_prot_frame["Abundance"].transform(stats.zscore)
 	return(local_prot_df)
+
+c = 1
+for filename in os.listdir(percentage_combined_path):
+	c += 1
+	if filename.endswith('.parquet'):
+		# Load the Parquet file into a DataFrame
+		file_path = os.path.join(percentage_combined_path, filename)
+		df = pd.read_parquet(file_path).reset_index(drop = False)
+		df = Abundance_log_manager(df)
+		df.to_parquet(file_path)
+
+		# Append the data to the merged_data DataFrame
+		# merged_data = pd.concat([merged_data, df], ignore_index=True)
+		print(c)
 
 
 # #. The below function is just for getting back the regular values/= This is not required as the factor is already stored under a different name and Loc is in the df
