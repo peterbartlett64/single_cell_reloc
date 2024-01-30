@@ -13,22 +13,23 @@ import single_cell_reloc_parquet.global_functions.global_variables as gv
 import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly
+import plotnine
 plotly.io.kaleido.scope.mathjax = None #* This is an important line for timely svg output. This is to stop a call to the internet for prettier looking math
 import kaleido
-sns.set(rc={'figure.figsize':(11.7,8.27)})
-sns.set_context('paper')
+sns.set(rc={'figure.figsize':(11.7,8.27)}) #* Set size to a piece of A4
+sns.set_context('paper') #* Set quality level
 
 print(plotly.__version__, kaleido.__version__)
-
-# sns.set(rc = {'figure.figsize':(15,8)}) #* Set the figure size to be larger
 # sns.set(rc = {'figure.figsize':(40,30)}) #* Set the figure size to be the shape of a powerpoint slide
-#%%
-def reloc_yet_all(full_data, post_path, output_file):
-	#<NOV23' ADD
-	df_all_rem = full_data[full_data["Frames_post_treatment"] < 0]
-	#>
 
-	full_data = full_data[full_data["Frames_post_treatment"] >= 0]
+#%%
+def reloc_yet_all(full_data):#, post_path, output_file):
+	#<NOV23' ADD
+	working = test.copy() #. full_data.copy()
+	working = working.sort_values(by = "ImageID")
+	df_all_rem = working.loc[working["Frames_post_treatment"] < 0]
+	#>
+	working = working.loc[working["Frames_post_treatment"] >= 0]
 
 	# def complex_yet(x):
 	# 	ind = x["Relocalized"].idxmax()
@@ -46,31 +47,35 @@ def reloc_yet_all(full_data, post_path, output_file):
 		return(x)
 
 	def workaround(ind):
-		return(full_data.loc[ind, "ImageID"])
-	def does_workaround(ind):
-		return(full_data.loc[ind,"Relocalized"])
+		return(working.loc[ind, "Unique_Frame"])
 
-	full_data["Yet"] = full_data.groupby(by = "Cell_Barcode")["Relocalized"].transform(reloc_yet) # This repesents wether there has been relocaliztion yet
-	full_data["ind"] = full_data.groupby(by = "Cell_Barcode")["Relocalized"].transform('idxmax')
-	full_data["Does"] = pd.Series(full_data["ind"]).apply(does_workaround) #this will work for now but should make it come out of one of the other functions
-	full_data["When"] = pd.Series(full_data["ind"]).apply(workaround)
-	full_data.drop(columns='ind', inplace = True)
+	def does_workaround(ind):
+		return(working.loc[ind,"Relocalized"])
+
+	working["Yet"] = working.groupby(by = "Cell_Barcode")["Relocalized"].transform(reloc_yet) # This repesents wether there has been relocaliztion yet
+	working["ind"] = working.groupby(by = "Cell_Barcode")["Relocalized"].transform('idxmax')
+	working["Does"] = pd.Series(working["ind"]).apply(does_workaround) #this will work for now but should make it come out of one of the other functions
+	working["When"] = pd.Series(working["ind"]).apply(workaround)
+	working.drop(columns='ind', inplace = True)
+
+	working["Yes_yet"] = working.groupby('Unique_Frame')['Yet'].apply(lambda x: x[x == 1].count())
+	working['No_yet'] = working.groupby('Unique_Frame')['Yet'].apply(lambda x: x[x == 0].count())
 
 	#< Added NOV23
-	df_all_rem["Yet"] = 0
-	df_all_rem["Does"] = 0
-	df_all_rem["When"] = 0
+	# df_all_rem["Yet"] = 0
+	# df_all_rem["Does"] = None
+	# df_all_rem["When"] = None
 
-	df_all_rem["Does"] = df_all_rem.groupby(by = "Cell_Barcode")["Does"].transform('max')
-	df_all_rem["When"] = df_all_rem.groupby(by = "Cell_Barcode")["When"].transform('max')
-
-	full_data = df_all_rem.append(full_data)#. , ignore_index = True)
-
-	full_data.to_parquet(os.path.join(post_path, output_file))
-	return(full_data)
+	# df_all_rem["Does"] = df_all_rem.groupby(by = "Cell_Barcode")["Does"].fillna(method = 'backfill')
+	# df_all_rem["When"] = df_all_rem.groupby(by = "Cell_Barcode")["When"].fillna(method = 'backfill')
 	#>
 
+	# working = df_all_rem.append(working)#. , ignore_index = True)
+	# for now have just values after treatment
 
+	# working.to_parquet(os.path.join(post_path, output_file))
+	return(working)
+	#>
 
 #%%
 def load_location_info(info_path = "C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\Data_copies\\Tcak_protein_localization.xls"):
@@ -243,7 +248,7 @@ if __name__ == "__main__":
 	#, Load in file if present, otherwise create. If fail exit
 	#* This is good when this script has already been run so it can save time, but also go auto if not.
 	try:
-		full_data = pd.read_parquet(output_file, columns = ['Cell_Barcode','Date', 'Frame', 'Unique_Frame', 'Protein', 'Is_treated', 'Frames_post_treatment', 'Unique_pos', 'Loc_score', 'Relocalized', 'CoV_spos','CoV_apos', 'Abundance', 'z_score_Loc', 'z_score_Abund']) #* This speeds it up a TON by not loding extra information
+		full_data = pd.read_parquet(output_file, columns = ['Cell_Barcode','Date', 'Frame', 'Unique_Frame', 'Protein', 'Is_treated', 'Frames_post_treatment', 'Unique_pos', 'Loc_score', 'Relocalized', 'CoV_spos','CoV_apos', 'Abundance', 'z_score_Loc', 'z_score_Abund', ]) #* This speeds it up a TON by not loding extra information
 	except FileNotFoundError:
 		# Create an empty DataFrame to store the merged data
 		merged_data = pd.DataFrame([])

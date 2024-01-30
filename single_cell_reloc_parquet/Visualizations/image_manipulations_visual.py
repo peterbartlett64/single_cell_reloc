@@ -8,9 +8,6 @@ from scipy.io import loadmat
 import math
 from icecream import ic
 from joblib import Parallel, delayed
-#%%
-
-
 
 #%%
 # Load an image using OpenCV
@@ -61,29 +58,26 @@ def read_and_modify_intensity(image_path:str, cell_mask_path:str, quantification
 		cell_bar = cells.iloc[i,:]['Cell_Barcode']
 		factor = (quant_file.loc[cell_bar, normalization_method])
 		factor_float = 1/factor
-		np.putmask(cell_factor, (cell_mask == cell_n) & (cell_factor<1.2), factor_float)
+		np.putmask(cell_factor,(cell_mask == cell_n) & (cell_factor<1.2), factor_float)
 
 	image_mod_arr = image * cell_factor# * 255 #* This is the multiplication of the file. This could be sped up by using a tensor in a future version
 	image_mod = Image.fromarray(image_mod_arr)
 	image_mod.save(filename)
 	# cv2.imwrite(filename, image_mod)
 
+	#, The below is an in progrss version using numba. Might be better to just write for the GPU
+	#< cell_factor = np.empty(cell_mask.shape).astype('float32')
 
-
-	cell_factor = np.empty(cell_mask.shape).astype('float32')
-
-	@numba.njit
-	def f(cell_factor, ref, factor, factor_float):
-		cell_factor = np.empty(ref.shape)
-		for i in range(ref.shape[0]):
-			for j in range(ref.shape[1]):
-				if ref[i, j] == factor:
-					cell_factor[i,j] = factor_float
-				else:
-					pass
-		return cell_factor
-
-
+	#< @numba.njit
+	#< def f(cell_factor, ref, factor, factor_float):
+	#< 	cell_factor = np.empty(ref.shape)
+	#< 	for i in range(ref.shape[0]):
+	#< 		for j in range(ref.shape[1]):
+	#< 			if ref[i, j] == factor:
+	#< 				cell_factor[i,j] = factor_float
+	#< 			else:
+	#< 				pass
+	#< 	return cell_factor
 
 	#. Need to save the new image
 	return(True)
@@ -104,7 +98,6 @@ def reloc_mask_gen(cell_mask_path: str, reloc_df_small, unique_frame:str):
 
 	#* make a new file name for saving
 	filename = os.path.splitext(os.path.basename(cell_mask_path))[0] + "_state.tif" #. Check that this line will not give '.tiff_cellNormalized.tiff'
-
 
 	#* Make a copy of the quant_file so that it does not get overwritten
 	reloc_copy = reloc_df_small.copy().reset_index(drop = False)
@@ -131,8 +124,8 @@ def reloc_mask_gen(cell_mask_path: str, reloc_df_small, unique_frame:str):
 	for i in range(len(cells)): #! This for generating the mask, but it does not do the multiplication yet
 		cell_n = cells.iloc[i,:]['N']
 		cell_bar = cells.iloc[i,:]['Cell_Barcode']
-		state = (reloc_df_small.loc[cell_bar, 'Relocalized']) + 1 #! The 1 is added so that the background is 0, the unlocalized in 1 =>100 and relocalized is 2 => 200
-		np.putmask(cell_states, (cell_mask == cell_n), state)
+		state = (reloc_df_small.loc[cell_bar, 'Relocalized']) + 1 #! The 1 is added so that the background is 0, the unlocalized is 1 =>100 and relocalized is 2 => 200
+		np.putmask(cell_states, (cell_mask == cell_n) &(cell_states<2), state) # Check that the pixels have not already be labeled as relocalized
 
 	image_mod_arr = cell_states * 100 #* This is the multiplication of the file. This could be sped up by using a tensor in a future version
 	image_mod = Image.fromarray(image_mod_arr)

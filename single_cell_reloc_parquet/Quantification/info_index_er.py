@@ -30,12 +30,6 @@ def info_index_er():
                 pass
     del count
 
-    def sync_rem(x):
-        if x.startswith(".sync"):
-            return(None)
-        else:
-            return(x)
-
     def Pos_label(t):
         pstart = t.find("RESULTS")+8 #9 # It is 9 here because "MissingRESULTS2"
         #8 # Must change if "RES_N_ULTS" and to +11
@@ -57,14 +51,13 @@ def info_index_er():
         else:
             return(p)
 
-
     info_index = pd.DataFrame(info_index)
     info_index["Path"] = pd.Series(info_index.iloc[:,0]).apply(f_non_sync)
     info_index.dropna(inplace= True)
 
     info_index["Pos"] = pd.Series(info_index.iloc[:,0]).apply(Pos_label)
     info_index["Mod_epoch_info"] = pd.Series(info_index.iloc[:,0]).apply(Mod_epoch_time)
-    info_index = info_index.loc[info_index.groupby("Pos")["Mod_epoch_info"].idxmax()]
+    info_index = info_index.loc[info_index.groupby("Pos")["Mod_epoch_info"].idxmax()] #* This is to subset to only the times with the greatest time value.
     info_index["Mod_date_info"] = pd.Series(info_index["Mod_epoch_info"]).apply(time.ctime)
 
     # info_index.to_hdf('MASTER.h5', key= 'info_index', mode='r+')
