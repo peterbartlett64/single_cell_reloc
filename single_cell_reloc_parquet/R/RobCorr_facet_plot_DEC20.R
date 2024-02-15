@@ -1,6 +1,7 @@
 #* This script is for creating a facet plot comparison of abundance and localization.
 #* Included below is a hard coded script for SAE2 along with variable for other proteins
 library(ggplot2)
+library(tidyverse)
 library(ggExtra)
 library(arrow)
 library(ggpointdensity)
@@ -14,6 +15,7 @@ library(ggsci)
 library(ggstatsplot)
 library(ggsci)
 
+
 # setwd("C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Code/single_cell_reloc/single_cell_reloc_parquet/R")
 setwd("D:/Second Mind/Academic/Project Stuff/Figures")
 date <- Sys.Date()
@@ -25,6 +27,97 @@ df = read_parquet("D:/ALL_FINAL/Combined_by_perc/MODSAE2_selected.parquet")
 #df_filter = filter(df, Frames_post_treatment == 20)
 numeric_columns <- df %>% select_if(is.numeric)
 numeric_columns <- df %>% select(z_score_logLoc, z_score_logAbund, z_score_Loc, z_score_Abund)
+
+
+
+##Corr plot
+high_frame <- df %>%
+  filter(Frames_post_treatment > 0) %>%
+  group_by(Protein) %>% 
+  filter(ProtFrameCorrs == max(ProtFrameCorrs)) %>% 
+  select(Protein, ProtFrameCorrs, MedianProtCorr, Frames_post_treatment) %>% 
+  distinct() %>%
+  filter(Protein == 'SAE2')
+
+low_frame <- df %>%
+  filter(Frames_post_treatment >= 0) %>%
+  group_by(Protein) %>% 
+  filter(ProtFrameCorrs == min(ProtFrameCorrs)) %>% 
+  select(Protein, ProtFrameCorrs, MedianProtCorr, Frames_post_treatment) %>% 
+  distinct() %>%
+  filter(Protein == 'SAE2')
+low_frame
+  
+
+SAE2_t0 <- ggscatterstats(filter(df, Protein == 'SAE2' & Frames_post_treatment == 0),
+                       x = 'z_score_logLoc',
+                       y = 'z_score_logAbund',
+                       type = 'np',
+                       title = 'SAE2_t0 (LOW)')
+
+ggsave(sprintf("%s_Corr_SAE2_LOW.png", date), SAE2_t0, width = 30, height = 18)
+
+
+SAE2_t41 <- ggscatterstats(filter(df, Protein == 'SAE2' & Frames_post_treatment == 41),
+                          x = 'z_score_logLoc',
+                          y = 'z_score_logAbund',
+                          type = 'np',
+                          title = 'SAE2_t41 (HIGH)')
+
+ggsave(sprintf("%s_Corr_SAE2_HIGH.png", date), SAE2_t41, width = 30, height = 18)
+
+
+SLX4_t0 <- ggscatterstats(filter(df, Protein == 'SLX4' & Frames_post_treatment == 0),
+                          x = 'z_score_logLoc',
+                          y = 'z_score_logAbund',
+                          type = 'np',
+                          title = 'SLX4_t3 (HIGH)')
+
+ggsave(sprintf("%s_Corr_SLX4_HIGH.png", date), SLX4_t0, width = 30, height = 18)
+
+
+SLX4_t29 <- ggscatterstats(filter(df, Protein == 'SLX4' & Frames_post_treatment == 29),
+                           x = 'z_score_logLoc',
+                           y = 'z_score_logAbund',
+                           type = 'np',
+                           title = 'SAE2_t41 (LOW)')
+
+ggsave(sprintf("%s_Corr_SLX4_LOW.png", date), SLX4_t29, width = 30, height = 18)
+
+
+gg_temp <-ggplot(filter(df, Protein == 'SLX4'), aes(x = z_score_logLoc, y = z_score_logAbund)) +
+  # geom_pointdensity(adjust = .025) +
+  geom_point(aes(color = Unique_pos)) +
+  # geom_density2d()+
+  sm_statCorr(corr_method = 'spearman', show_text = TRUE, color = 'black') +
+  #geom_pointdensity(x = 'z_score_logLoc', y = 'z_score_logAbund')+
+  # geom_xsidedensity(aes(y = after_stat(density)), position = "stack") +
+  # geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+  scale_color_npg()+
+  scale_fill_npg()+
+  facet_wrap(vars(Frames_post_treatment))+
+  theme_minimal()+
+  ggtitle("Corr_facet_logAbund-logLoc_Spearman_SLX4")
+ggsave(sprintf("%s_Corr_facet_logAbund-logLoc_Spearman_SLX4.png", date), gg_temp, width = 30, height = 18)
+
+
+gg_temp <-ggplot(filter(df, Protein == 'SAE2'), aes(x = z_score_logLoc, y = z_score_logAbund)) +
+  # geom_pointdensity(adjust = .025) +
+  geom_point(aes(color = Unique_pos)) +
+  # geom_density2d()+
+  sm_statCorr(corr_method = 'spearman', show_text = TRUE, color = 'black') +
+  #geom_pointdensity(x = 'z_score_logLoc', y = 'z_score_logAbund')+
+  # geom_xsidedensity(aes(y = after_stat(density)), position = "stack") +
+  # geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+  scale_color_npg()+
+  scale_fill_npg()+
+  facet_wrap(vars(Frames_post_treatment))+
+  theme_minimal()+
+  ggtitle("Corr_facet_logAbund-logLoc_Spearman_SAE2")
+ggsave(sprintf("%s_Corr_facet_logAbund-logLoc_Spearman_SAE2.png", date), gg_temp, width = 30, height = 18)
+
+
+
 
 
 # For a sample protein, decide which correletion method and between which factors will be used

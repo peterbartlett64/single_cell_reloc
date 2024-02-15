@@ -1,0 +1,198 @@
+---
+title: "Penetrance Lolli"
+author: "Peter Bartlett"
+date: "2023-12-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_knit$set(root.dir = "D:/Second Mind/Academic/Project Stuff/Figures")
+library(ggplot2)
+library(ggExtra)
+library(arrow)
+library(ggpointdensity)
+library(dplyr)
+library(ggstatsplot)
+library(ggsci)
+library(dplyr)
+library(hrbrthemes)
+library(wesanderson)
+library(ggsci)
+library(gridExtra)
+library(scales)
+library(stringr)
+library(cowplot)
+library(ggstatsplot)
+library(tidylog)
+# library(data.table)
+
+date <- Sys.Date()
+```
+
+```{r}
+df_noComp <- read_parquet("D:/ALL_FINAL/Final_combined_comparison.parquet") #* This is the read
+# df_ddc2 <- df_noComp[df_noComp$Protein %like% "DDC2", ]
+df_ddc2 <- df_noComp[str_detect(df_noComp$Protein, "DDC2"), ]
+df_ddc2 <- df_ddc2 %>% 
+  filter(Selected_ser == '99th') %>% 
+  filter(!Protein %in% c('DDC2d0214r2', 'DDC2d0218r2p60'))
+# df_ddc2 <- df_ddc2[order(df_ddc2$Percentage_reloc_less),]
+# df_ddc2$Protein <- factor(df_ddc2$Protein, levels = df_ddc2$Protein)
+df_ddc2 <- df_ddc2[order(df_ddc2$Protein),]
+df_ddc2$Protein <- factor(df_ddc2$Protein, levels = df_ddc2$Protein)
+df_ddc2
+```
+
+
+```{r}
+# merged_pens = read_parquet("C:\\Users\\pcnba\\Grant Brown's Lab Dropbox\\Peter Bartlett\\Peter Bartlett Data\\Code\\Data_copies\\Information_files\\Localization_merging\\merged_pens.parquet")
+merged_pens = read_parquet("D:/ALL_FINAL/Combined_by_perc/penetrance_updated.parquet")
+merged_pens$Percentage_reloc = as.integer(merged_pens$Percentage_reloc)
+merged_pens$Percentage_reloc_less = as.integer(merged_pens$Percentage_reloc_less)
+npg_clrs <-  pal_npg("nrc", alpha = 0.7)(4)
+```
+
+```{r}
+#Generate a comparison plot of my timecourse to Brandon's Frame
+corr_Ho_timecourse <- ggscatterstats(merged_pens,
+               y = Ho_max,
+               x = Percentage_reloc_less,
+               type = 'nonparametric',
+               point.args = list(colour= npg_clrs[1]),
+               # label.var = Protein,
+               # label.expression = Ho_max > 85 | Percentage_reloc > 85 | Protein == 'LSM7',
+               xsidehistogram.args = list(fill = npg_clrs[2]),
+               ysidehistogram.args = list(fill = npg_clrs[3]),
+               # smooth.line.args = list(fill = npg_clrs[4]),
+               xlab = 'Timecourse Penetrance',
+               ylab = 'Maximum Frame Pentrance Ho et al.')+
+              ggthemes::theme_clean()
+
+corr_Ho_timecourse
+ggsave(sprintf("HoVsReloc_less_%s.pdf", date), corr_Ho_timecourse, width = 15, height = 40)
+ggsave(sprintf("HoVsReloc_less_%s.png", date), corr_Ho_timecourse, width = 15, height = 40)
+## Read in the file of interest
+```
+
+```{r}
+#Generate a comparison plot of my timecourse to Brandon's Frame
+corr_Ho_frame <- ggscatterstats(merged_pens,
+               y = Ho_max,
+               x = Percentage_reloc,
+               type = 'nonparametric',
+               point.args = list(colour= npg_clrs[1]),
+               # label.var = Protein,
+               # label.expression = Ho_max > 85 | Percentage_reloc > 85 | Protein == 'LSM7',
+               xsidehistogram.args = list(fill = npg_clrs[2]),
+               ysidehistogram.args = list(fill = npg_clrs[3]),
+               # smooth.line.args = list(fill = npg_clrs[4]),
+                xlab = 'Maximum Frame Penetrance',
+               ylab = 'Maximum Frame Pentrance Ho et al.') +
+              ggthemes::theme_clean()
+corr_Ho_frame
+ggsave(sprintf("HoVsReloc_frame%s.pdf", date), corr_Ho_frame, width = 15, height = 40)
+ggsave(sprintf("HoVsReloc_frame%s.png", date), corr_Ho_frame, width = 15, height = 40)
+```
+
+
+```{r}
+df <- read_parquet("D:/ALL_FINAL/Combined_by_perc/penetrance_updated.parquet")
+
+# df_sorted <- df[order(df$Percentage_reloc_less),]
+# df$Protein <- factor(df$Protein, levels = df$Protein)
+df$Single_origin <-  factor(df$Single_origin)
+df$Single_destination <-  factor(df$Single_destination)
+df$Protein <- factor(df$Protein)
+
+df <- df %>% 
+  mutate(Protein = fct_reorder(Protein, Percentage_reloc_less, .desc = FALSE))
+
+npg_clrs <-  pal_npg("nrc", alpha = 0.7)(3)
+
+df_smaller <- df[str_detect(df$Protein, "DDC2"),]
+show_col(npg_clrs)
+```
+
+## Produce lolliplot
+
+```{r pressure, echo=FALSE}
+# sort the data frame by column A in ascending order
+(zis_colors <- wes_palette("Zissou1", type = "discrete"))
+
+
+lolliplot <- ggplot(filter(df, Protein %in% c("RFA1", "HTA2", "RDH54", "POL30", "NPL4", "CHK1", "MRC1", "MSH3", "MMS21", "RAD51", "RAD24", "RTT107", "RRD1", "SLD2", "DOA1", "ECO1", "RPN4", "SUB2", "RAD57", "DBF4", "PPH3", "RAD55", "CDC1", "RAD9", "XRS2", "LRS4", "SLD3", "INO80", "RAD54", "SAE2", "ZIP2", "ARP4", "DPB11", "SRS2", "CDC6", "RFC2", "SLX4", "TOP3", "NEJ1", "RAD33", "RAD52", "NAM7", "YKU80", "PSO2", "SGS1", "MRE11", "YKU70", "MGS1", "RAD50", "RFC3", "RFC4", "RTS1", "EXO1", "ULS1", "REV1", "RAD53", "DDC1", "RIM1")), aes(x = Protein)) +
+  geom_point(aes(y = Percentage_reloc_less), color=npg_clrs[1], size=2) +
+  geom_point(aes(y=Percentage_reloc), color= npg_clrs[3], size=2) +
+  geom_segment(aes(x=Protein, xend=Protein, y=Percentage_reloc, yend=Percentage_reloc_less), color="grey") +
+  coord_flip()+ # This is just to swtich the x with the y so that the plot is vertical
+  theme_minimal()+
+  theme(
+    legend.position = "none",
+    axis.text.x = element_text(angle = , vjust = 1, hjust=1)
+  ) +
+  # scale_fill_manual(values = wes_palette("Royal1"))+
+  xlab("Protein")+
+  ylab("Penetrance (Blue = per-frame; Orange = timecourse")
+  # gghighlight(Protien %in% c("RFA1", "HTA2", "RDH54", "POL30", "NPL4", "CHK1", "MRC1", "MSH3", "MMS21", "RAD51", "RAD24", "RTT107", "RRD1", "SLD2", "DOA1", "ECO1", "RPN4", "SUB2", "RAD57", "DBF4", "PPH3", "RAD55", "CDC1", "RAD9", "XRS2", "LRS4", "SLD3", "INO80", "RAD54", "SAE2", "ZIP2", "ARP4", "DPB11", "SRS2", "CDC6", "RFC2", "SLX4", "TOP3", "NEJ1", "RAD33", "RAD52", "NAM7", "YKU80", "PSO2", "SGS1", "MRE11", "YKU70", "MGS1", "RAD50", "RFC3", "RFC4", "RTS1", "EXO1", "ULS1", "REV1", "RAD53", "DDC1", "RIM1"), label_key = Protein)
+lolliplot
+
+
+setwd("D:/Second Mind/Academic/Project Stuff/Figures") #Save to folder in vault that will be copied to Dropbox
+ggsave(sprintf("lolliplot_GO_DNA%s.pdf", date), lolliplot, width = 20, height = 20)
+```
+
+```{r}
+lolliplot <- ggplot(filter(df, Double_destination %in% c('Cytoplasm', 'Cytoplasm and Cytoplasm foci', 'Nuclear Foci', 'Nucleus')), aes(x = Protein)) +
+  geom_point(aes(y = Percentage_reloc_less), color=npg_clrs[1], size=2) +
+  geom_point(aes(y=Percentage_reloc), color= npg_clrs[3], size=2) +
+  geom_segment(aes(x=Protein, xend=Protein, y=Percentage_reloc, yend=Percentage_reloc_less), color="grey") +
+  coord_flip()+ # This is just to swtich the x with the y so that the plot is vertical
+  theme(
+    legend.position = "none",
+  ) +
+  # scale_fill_manual(values = wes_palette("Royal1"))+
+  xlab("Protein")+
+  ylab("Penetrance (Blue = per-frame; Orange = timecourse")+
+  theme_minimal()+
+  theme(axis.text.x=element_blank())
+# lolliplot
+lolliplot <- lolliplot + facet_wrap(~factor(Double_destination, levels = c('Cytoplasm', 'Nucleus', 'Cytoplasm and Cytoplasm Foci', 'Nuclear Foci')), scales="free_y")
+setwd("D:/Second Mind/Academic/Project Stuff/Figures") #Save to folder in vault that will be copied to Dropbox
+ggsave(sprintf("lolliplot_GroupedCompartment_%s.pdf", date), lolliplot, width = 30, height = 40)
+```
+ 
+## DDC2 comparison
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+lolliplot_ddc <- ggplot(df_ddc2, aes(x = Protein)) + # This will be ordered by name
+  geom_point(aes(y = Percentage_reloc_less), color=npg_clrs[1], size=3) +
+  geom_point(aes(y=Percentage_reloc), color= npg_clrs[3], size=3) +
+  geom_segment(aes(x=reorder(Protein, Percentage_reloc_less), xend=reorder(Protein, Percentage_reloc_less), y=Percentage_reloc, yend=Percentage_reloc_less), color=npg_clrs[2]) +
+  coord_flip()+ # This is just to swtich the x with the y so that the plot is vertical
+  theme(
+    legend.position = "none",
+  )+
+  # scale_fill_manual(values = wes_palette("Royal1"))+
+  xlab("Protein")+
+  ylab("Penetrance (Blue = per-frame; Orange = timecourse")
+# lolliplot
+
+lolliplot_ddc_order <- ggplot(df_ddc2, aes(x = reorder(Protein,- Percentage_reloc_less))) +
+  geom_point(aes(y = Percentage_reloc_less), color=npg_clrs[1], size=3) +
+  geom_point(aes(y=Percentage_reloc), color= npg_clrs[3], size=3) +
+  geom_segment(aes(x=reorder(Protein, Percentage_reloc_less), xend=reorder(Protein, Percentage_reloc_less), y=Percentage_reloc, yend=Percentage_reloc_less), color=npg_clrs[2]) +
+  coord_flip()+ # This is just to swtich the x with the y so that the plot is vertical
+  theme(
+    legend.position = "none",
+    axis.text.x=element_blank()
+  ) +
+  # scale_fill_manual(values = wes_palette("Royal1"))+
+  ylab("Penetrance (Blue = per-frame; Orange = timecourse")
+# lolliplot
+
+ddc2_both <- plot_grid(lolliplot_ddc, lolliplot_ddc_order, labels = c('A', 'B'), label_size = 10)
+
+setwd("D:/Second Mind/Academic/Project Stuff/Figures") #Save to folder in vault that will be copied to Dropbox
+ggsave(sprintf("lolliplot_ddc2_%s.pdf", date), ddc2_both, width = 15, height = 20)
+```

@@ -4,6 +4,9 @@ import os
 import single_cell_reloc_parquet.global_functions.global_variables as glv
 from icecream import ic
 import numpy as np
+import pyarrow as pa
+import pyarrow.parquet as pq
+
 #%%
 #* Dictionaries for renaming reg results
 Tkach_dictionary = {'to cyto': ' -> cytoplasm',
@@ -11,17 +14,17 @@ Tkach_dictionary = {'to cyto': ' -> cytoplasm',
 	   'nucleus': ' -> nucleus',
 	   'nuc foci': ' -> nuclear foci',
 	   'cyto foci': ' -> cyto foci',
-	   'from budneck/tip': 'budneck ->',
-	   'from bud tip': 'budneck ->',
+	   'from budneck/tip': 'bud -> ',
+	   'from bud tip': 'bud -> ',
 	   'to pm': ' -> plasma membrane',
-	   'to bud neck': ' -> budneck',
+	   'to bud neck': ' -> bud neck',
 	   'to nuc/periphery': ' -> nucleus and nuclear periph',
 	   'to nuc (from nuc foci)': 'nuclear foci -> nucleus',
 	   'nuc foci': ' -> nuclear foci',
-	   'from bud neck': 'budneck -> ',
+	   'from bud neck': 'bud neck -> ',
 	   'to vac': ' -> vacuole',
-	   'to nuc, nuc foci, cyto foci' : ' -> nucleus and nuclear foci and cytoplasm', #* This one is hard to deal with. Almost decided to do a leveled assignment
-	   'no cells': np.nan,
+	   'to nuc, nuc foci, cyto foci' : ' -> nucleus and nuclear foci and cyto foci', #* This one is hard to deal with. Almost decided to do a leveled assignment
+	#    'no cells': np.nan,
 	   'to pm foci': ' -> pm foci',
 	   'to nucleolus, cyto foci' : ' -> nuceolus and cyto foci',
 	   'to vac (from pm)': 'plasma membrane -> vacuole',
@@ -31,30 +34,30 @@ Tkach_dictionary = {'to cyto': ' -> cytoplasm',
 	   'to cyto (from pm/endosome)': 'plasma membrane -> cytoplasm',
 	   'to nuc (from nucleolus)': 'nucleolus -> nucleus',
 	   'er foci': ' -> ER foci',
-	   'to vac (abund inc)': ' -> valuole',
-	   'to vac (focus)': ' -> valuole foci',
+	   'to vac (abund inc)': ' -> vacuole',
+	   'to vac (focus)': ' -> vacuole foci',
 	   'to cyto (from pm)': 'plasma membrane -> cytoplasm',
 	   'shorter microtubules': ' -> microtubules',
-	   'to nuc/nuc periph': ' -> nucleus and nuclear periph',
+	   'to nuc/nuc periph': ' -> nucleus and nuclear periphery',
 	   'to cyto (daughter)': ' -> cytoplasm (daughter)',
 	   'to diffuse nuc (really, more numerous less intense foci, from foci)': 'nuclear foci -> nucleus and nuclear foci',
 	   'to cyto (decreased abund)': 'cytoplasm -> cytoplasm',
-	   'from budneck/tip, to pm': 'budneck -> plasma membrane',
+	   'from budneck/tip, to pm': 'bud -> plasma membrane',
 	   'to pm foci (endosome)': ' -> pm foci',
 	   'to nuc (nucleolus)': ' -> nucleolus',
 	   'to nucleolus (weak)': ' -> nucleolus',
 	   'not the same strain': np.nan,
 	   'to er': ' -> ER',
-	   'from budneck': 'budneck -> ',
+	   'from budneck': 'bud neck -> ',
 	   'nuc periph' : ' -> nuclear periph',
 	   'to pm (foci)': ' -> pm foci',
 	   'to vac (from vac mb)': 'vacuole -> vacuole',
-	   'from bud neck (to pm)': 'budneck -> plamsa membrane',
+	   'from bud neck (to pm)': 'bud neck -> plamsa membrane',
 	   'to diffuse nuc (from foci)': 'nuclear foci -> nucleus',
 	   'to er foci (weak)': ' -> ER foci',
 	   'nuc periph foci': ' -> nuclear foci and nuclear periph',
 	   'to nuc (diffuse)': ' -> nucleus',
-	   'from bud  tip': 'budneck -> ',
+	   'from bud  tip': 'bud neck -> ',
 	   'to nuc (nucleolus?)': ' -> nucleus',
 	   'to cyto (from vac)': 'vacuole -> cytoplasm',
 	   'to er foci(?)': ' -> ER foci',
@@ -64,7 +67,7 @@ Tkach_dictionary = {'to cyto': ' -> cytoplasm',
 	   'to cyto (weak)': ' -> cytoplasm',
 	   'vacuole membrane (focus)' : ' -> vacuole foci',
 	   'to cyto (from vac, degradation?)': 'vacuole -> cytoplasm',
-	   'vac foci?': ' -> vacuole'}
+	   'vac foci?': ' -> vacuole foci'}
 
 
 
@@ -699,77 +702,147 @@ if __name__ == "__main__":
 	# micro_map = pd.merge(sgd, micro_map, left_index=True, right_index=True, how = 'left')
 	#. Decided that will just use the list of proteins from SGD to merge with the other datasets
 
-	tkach = tkach_f()
-	# denervaud = denervaud_f()
-	mazumder = Mazumder_f()
-	Den_ycd_map_df = denervaud_ycd_f()
-	Brandons_map = pd.read_excel("Brandons_Paper.xlsx", sheet_name="Sheet1").set_index('ORF')
-	Brandons_map = Brandons_map.drop(columns=['Protein']).rename(columns={'Subcellular Compartment Re-localization': 'Dest_Call'}).add_suffix('_Brandons')
-	Huh = Huh_f()
+	#< tkach = tkach_f()
+	#< # denervaud = denervaud_f()
+	#< mazumder = Mazumder_f()
+	#< Den_ycd_map_df = denervaud_ycd_f()
+	#< Brandons_map = pd.read_excel("Brandons_Paper.xlsx", sheet_name="Sheet1").set_index('ORF')
+	#< Brandons_map = Brandons_map.drop(columns=['Protein']).rename(columns={'Subcellular Compartment Re-localization': 'Dest_Call'}).add_suffix('_Brandons')
+	#< Huh = Huh_f()
 
-	# loqate = pd.read_excel('proteomesummarylamicro_mapversion.xlsx', sheet_name='Sheet1', usecols=['ORF', 'control Localization']).set_index('ORF').replace('below threshold', np.nan)
+	tkach = pd.read_excel("C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Code/Data_copies/Information_files/Localization_merging/Tkach_refined.xls", sheet_name='Localization scoring')
+	tkach = tkach.rename(columns={'MMS localization change class': 'MMS_localization_class', 'HU Localication change class': 'HU_localization_class'})
+	micro_map = sgd.merge(tkach, left_on = "Gene_Standard_Name", right_on = "Standard Name", how = 'left')
+	micro_map['MMS_HU_merged_class'] = micro_map['MMS_localization_class'].fillna(micro_map['HU_localization_class'])
 
 
 
+	#< loqate = pd.read_excel('proteomesummarylamicro_mapversion.xlsx', sheet_name='Sheet1', usecols=['ORF', 'control Localization']).set_index('ORF').replace('below threshold', np.nan)
 
-	micro_map = sgd.merge(Den_ycd_map_df, left_index= True, right_index= True, how = 'left')
-	micro_map = micro_map.merge(tkach, left_index=True, right_index = True, how= "left")
+	#< micro_map = sgd.merge(Den_ycd_map_df, left_index= True, right_index= True, how = 'left')
+	#< micro_map = micro_map.merge(tkach, left_index=True, right_index = True, how= "left")
 
-	#Either should work below
-	micro_map = micro_map.merge(mazumder, left_index = True, right_index = True, how = "left")
-	# micro_map = micro_map.merge(mazumder, left_on = 'Gene_Standard_Name', right_on = 'CommName_Mazumder', how = "left")
+	#< #Either should work below
+	#< micro_map = micro_map.merge(mazumder, left_index = True, right_index = True, how = "left")
+	#< # micro_map = micro_map.merge(mazumder, left_on = 'Gene_Standard_Name', right_on = 'CommName_Mazumder', how = "left")
 
-	micro_map = pd.merge(micro_map, Brandons_map, right_index=True, left_index=True, how= 'left')
-	#Artifact of removed micorfluidics map
-	# micro_map = micro_map.sort_values(by = ['Date', 'Run_Number', 'MapID_(Col_Range)'])
+	#< micro_map = pd.merge(micro_map, Brandons_map, right_index=True, left_index=True, how= 'left')
+	#< #Artifact of removed micorfluidics map
+	#< # micro_map = micro_map.sort_values(by = ['Date', 'Run_Number', 'MapID_(Col_Range)'])
 
-	micro_map = micro_map.merge(Huh, left_index=True, right_index=True, how='left')
-	# micro_map = micro_map.merge(loqate, left_index=True, right_index=True, how='left')
+	#< micro_map = micro_map.merge(Huh, left_index=True, right_index=True, how='left')
+	#< micro_map = micro_map.merge(loqate, left_index=True, right_index=True, how='left')
 
 #%%
 #. These are all the protiens which do not have matching localization information
 #Check the rows where Na for 'localization_change', 'initial_localization', 'end_localization', 'EndLOC_Rescreen_MMS_Tcak', 'EndLOC_Rescreen_HU_Tcak', Localization_Mazumder', 'Dest_Mazumder', 'Function_Mazumder'
-micro_map.loc[micro_map[['localization_change', 'initial_localization', 'end_localization','EndLOC_Rescreen_MMS_Tcak', 'EndLOC_Rescreen_HU_Tcak', 'Localization_Mazumder', 'Dest_Mazumder', 'Dest_Call_Brandons']].isna().all(axis = 1),['Gene_Standard_Name', 'localization_change', 'initial_localization', 'end_localization','EndLOC_Rescreen_MMS_Tcak', 'EndLOC_Rescreen_HU_Tcak', 'Localization_Mazumder', 'Dest_Mazumder']]
+
+# >micro_map.loc[micro_map[['localization_change', 'initial_localization', 'end_localization','EndLOC_Rescreen_MMS_Tcak', 'EndLOC_Rescreen_HU_Tcak', 'Localization_Mazumder', 'Dest_Mazumder', 'Dest_Call_Brandons']].isna().all(axis = 1),['Gene_Standard_Name', 'localization_change', 'initial_localization', 'end_localization','EndLOC_Rescreen_MMS_Tcak', 'EndLOC_Rescreen_HU_Tcak', 'Localization_Mazumder', 'Dest_Mazumder']]
 
 #%%
-micro_map[['StartLOC_Rescreen_MMS_Tcak', 'EndLOC_Rescreen_MMS_Tcak']] = micro_map['EndLOC_Rescreen_MMS_Tcak'].str.split(' -> ', expand=True).replace('', np.nan, regex=True)
-micro_map[['StartLOC_Rescreen_HU_Tcak', 'EndLOC_Rescreen_HU_Tcak']] = micro_map['EndLOC_Rescreen_HU_Tcak'].str.split(' -> ', expand=True).replace('', np.nan, regex=True)
+#< micro_map[['StartLOC_Rescreen_MMS_Tcak', 'EndLOC_Rescreen_MMS_Tcak']] = micro_map['EndLOC_Rescreen_MMS_Tcak'].str.split(' -> ', expand=True).replace('', np.nan, regex=True)
+#< micro_map[['StartLOC_Rescreen_HU_Tcak', 'EndLOC_Rescreen_HU_Tcak']] = micro_map['EndLOC_Rescreen_HU_Tcak'].str.split(' -> ', expand=True).replace('', np.nan, regex=True)
 
 #%%
-# micro_map['EndLOC_Rescreen_HU_Tcak'] = micro_map['EndLOC_Rescreen_HU_Tcak'].str.replace(' -> ', '').replace('', np.nan, regex=True)
-# micro_map['EndLOC_Rescreen_HU_Tcak'] = micro_map['EndLOC_Rescreen_HU_Tcak'].str.replace('-> ', '').replace('', np.nan, regex=True)
+#< micro_map['EndLOC_Rescreen_HU_Tcak'] = micro_map['EndLOC_Rescreen_HU_Tcak'].str.replace(' -> ', '').replace('', np.nan, regex=True)
+#< micro_map['EndLOC_Rescreen_HU_Tcak'] = micro_map['EndLOC_Rescreen_HU_Tcak'].str.replace('-> ', '').replace('', np.nan, regex=True)
 
 # micro_map['EndLOC_Rescreen_MMS_Tcak'] = micro_map['EndLOC_Rescreen_MMS_Tcak'].str.replace(' -> ', '').replace('', np.nan, regex=True)
 # micro_map['EndLOC_Rescreen_MMS_Tcak'] = micro_map['EndLOC_Rescreen_MMS_Tcak'].str.replace('-> ', '').replace('', np.nan, regex=True)
 
 #%%
-def simp_pref(*args):
-	for arg in args:
-		if pd.isna(arg):
-			continue
-		else:
-			return arg
-	return np.nan
+#< def simp_pref(*args):
+#< 	for arg in args:
+#< 		if pd.isna(arg):
+#< 			continue
+#< 		elif arg == 'unclassified':
+#< 			continue
+#< 		elif arg == 'nothing':
+#< 			continue
+#< 		else:
+#< 			return arg
+#< 	return np.nan
 
-micro_map['Combined_destination'] = micro_map.apply(lambda x: simp_pref(x['Dest_Call_Brandons'], x['end_localization'], x['EndLOC_Rescreen_MMS_Tcak'], x['EndLOC_Rescreen_HU_Tcak'], x['Dest_Mazumder']), axis=1)
-micro_map['Combined_origin'] = micro_map.apply(lambda x: simp_pref(x['StartLOC_Rescreen_MMS_Tcak'], x['StartLOC_Rescreen_HU_Tcak'], x['localization summary']), axis=1)
+#< micro_map['Combined_destination'] = micro_map.apply(lambda x: simp_pref(x['Dest_Call_Brandons'], x['end_localization'], x['EndLOC_Rescreen_MMS_Tcak'], x['EndLOC_Rescreen_HU_Tcak'], x['Dest_Mazumder']), axis=1)
 
-micro_map['Combined_destination'] = micro_map['Combined_destination'].fillna('unclassified').str.replace(',', ' and ').str.title().str.strip()
-micro_map['Combined_origin'] = micro_map['Combined_origin'].fillna('unclassified').str.replace(',', ' and ').str.title().str.strip()
+#< micro_map['Combined_origin'] = micro_map.apply(lambda x: simp_pref(x['StartLOC_Rescreen_MMS_Tcak'], x['StartLOC_Rescreen_HU_Tcak'], x['localization summary']), axis=1)
+
+#< micro_map['Combined_destination'] = micro_map['Combined_destination'].fillna('unclassified').str.replace(',', ' and ').str.title().str.strip()
+#< micro_map['Combined_origin'] = micro_map['Combined_origin'].fillna('unclassified').str.replace(',', ' and ').str.title().str.strip()
+
 #%%
-micro_map[['Single_origin', 'Double_origin', 'Triple_origin', 'Quad_origin']] = micro_map['Combined_origin'].str.split(' And ', expand=True)
-micro_map['Double_origin'] = micro_map['Single_origin'] + " and" + micro_map['Double_origin']
-micro_map['Triple_origin'] = micro_map['Single_origin'] + " and" + micro_map['Double_origin'] + " and" + micro_map['Triple_origin']
-micro_map['Quad_origin'] = micro_map['Single_origin'] + " and" + micro_map['Double_origin'] + " and" + micro_map['Triple_origin'] + " and" + micro_map['Quad_origin']
+#* Split the combined origins and destinations into their respective levels of granularity
+#< micro_map[['Single_origin', 'Double_origin', 'Triple_origin', 'Quad_origin']] = micro_map['Combined_origin'].str.split(' And ', expand=True)
+#< micro_map[['Single_destination', 'Double_destination', 'Triple_destination', 'Quad_destination']] = micro_map['Combined_destination'].str.split(' And ', expand=True)
 
-micro_map[['Single_destination', 'Double_destination', 'Triple_destination', 'Quad_destination']] = micro_map['Combined_destination'].str.split(' And ', expand=True)
-micro_map['Double_destination'] = micro_map['Single_destination'] + " and" + micro_map['Double_destination']
-micro_map['Triple_destination'] = micro_map['Single_destination'] + " and" + micro_map['Double_destination'] + " and" + micro_map['Triple_destination']
-micro_map['Quad_destination'] = micro_map['Single_destination'] + " and" + micro_map['Double_destination'] + " and" + micro_map['Triple_destination'] + " and" + micro_map['Quad_destination']
+# micro_map = micro_map.fillna(value=np.nan)
+#%%
+#* Define a dictionary to rename the origin and destination to a more general term
+#< ori_dest_dict = {
+# 	'Nucleolus Irregular': 'Nucleolus',
+# 	'Cytoplasmic Foci': 'Cytoplasm',
+# 	'Cytoplasm Irreg.': 'Cytoplasm',
+# 	'Punctate': 'Cytoplasm foci',
+# 	'Nuclear Periphery': 'Nucleus',
+# 	'Cyto Foci': 'Cytoplasm foci',
+# 	'Cell Periphery': 'Cytoplasm',
+# 	'Plasma Membrane': 'Cytoplasm',
+# 	'Nucleus P': 'Nucleus',
+# 	'Er Foci': 'ER',
+#     'Microtubules': 'Cytoplasm',
+# 	'Vacuole Foci' : 'Vacuole',
+# 	'Bud': 'Bud',
+# 	'Er': 'ER',
+# 	'Nothing': 'Unclassified',
+#     'Valuole Foci': 'Vacuole',
+# 	'Mitochondrion': 'Mitochondria',
+# 	'Pm (Punctate)': 'Plasma Membrane',
+# 	'Nuclear / Cyto Foci': 'Nuclear and Cyto Foci',
+# 	'Bud Neck': 'Bud Neck'}
 
+#< #* Rename each origin level
+#< micro_map['Single_origin'] = micro_map['Single_origin'].map(ori_dest_dict).fillna(micro_map['Single_origin'])
+#< micro_map['Double_origin'] = micro_map['Double_origin'].map(ori_dest_dict).fillna(micro_map['Double_origin'])
+#< micro_map['Triple_origin'] = micro_map['Triple_origin'].map(ori_dest_dict).fillna(micro_map['Triple_origin'])
+#< micro_map['Quad_origin'] = micro_map['Quad_origin'].map(ori_dest_dict).fillna(micro_map['Quad_origin'])
+#%%
+#* Recombined the levels to have layered granularity instead of indivual terms
+#< micro_map['Double_origin'] = micro_map['Single_origin'] + " and " + micro_map['Double_origin']
+#< micro_map['Double_origin'] = micro_map['Double_origin'].fillna(micro_map['Single_origin'])
+#%%
+#< micro_map['Triple_origin'] = micro_map['Double_origin'] + " and " + micro_map['Triple_origin']
+#< micro_map['Triple_origin'] = micro_map['Triple_origin'].fillna(micro_map['Double_origin'])
+#%%
+#< micro_map['Quad_origin'] = micro_map['Triple_origin'] + " and " + micro_map['Quad_origin']
+#< micro_map['Quad_origin'] = micro_map['Quad_origin'].fillna(micro_map['Triple_origin'])
 
-# reference a pandas column and split into required columns by delimiter
+#%%
+#* Rename each destination level
+#< micro_map['Single_destination'] = micro_map['Single_destination'].map(ori_dest_dict).fillna(micro_map['Single_destination'])
+#< micro_map['Double_destination'] = micro_map['Double_destination'].map(ori_dest_dict).fillna(micro_map['Double_destination'])
+#< micro_map['Triple_destination'] = micro_map['Triple_destination'].map(ori_dest_dict).fillna(micro_map['Triple_destination'])
+#< micro_map['Quad_destination'] = micro_map['Quad_destination'].map(ori_dest_dict).fillna(micro_map['Quad_destination'])
 
+#* Recombined the destination levels to have layered granularity instead of indivual terms
+#< micro_map['Double_destination'] = micro_map['Single_destination'] + " and " + micro_map['Double_destination']
+#< micro_map['Double_destination'] = micro_map['Double_destination'].fillna(micro_map['Single_destination'])
+
+#< micro_map['Triple_destination'] = micro_map['Double_destination'] + " and " + micro_map['Triple_destination']
+#< micro_map['Triple_destination'] = micro_map['Triple_destination'].fillna(micro_map['Double_destination'])
+
+#< micro_map['Quad_destination'] = micro_map['Triple_destination'] + " and " + micro_map['Quad_destination']
+#< micro_map['Quad_destination'] = micro_map['Quad_destination'].fillna(micro_map['Triple_destination'])
+
+#%%%
+# micro_map['Single_origin'] = micro_map['Single_origin'].map(ori_dest_dict).fillna(micro_map['Single_origin'])
+# micro_map['Double_origin'] = micro_map['Double_origin'].map(ori_dest_dict).fillna(micro_map['Double_origin'])
+# micro_map['Triple_origin'] = micro_map['Triple_origin'].map(ori_dest_dict).fillna(micro_map['Triple_origin'])
+# micro_map['Quad_origin'] = micro_map['Quad_origin'].map(ori_dest_dict).fillna(micro_map['Quad_origin'])
+# # reference a pandas column and split into required columns by delimiter
+# micro_map['Single_destination'] = micro_map['Single_destination'].map(ori_dest_dict).fillna(micro_map['Single_destination'])
+# micro_map['Double_destination'] = micro_map['Double_destination'].map(ori_dest_dict).fillna(micro_map['Double_destination'])
+# micro_map['Triple_destination'] = micro_map['Triple_destination'].map(ori_dest_dict).fillna(micro_map['Triple_destination'])
+# micro_map['Quad_destination'] = micro_map['Quad_destination'].map(ori_dest_dict).fillna(micro_map['Quad_destination'])
 
 
 # micro_map[['Primary']] = micro_map['Combined_origin'].str.split(' And ', expand=True).replace('', np.nan, regex=True)
@@ -780,8 +853,11 @@ micro_map.to_parquet('protein_origin_dest.parquet')
 #%%
 # Read in the percentages and merge with the micro_map
 penetrances = pd.read_parquet("D:\ALL_FINAL\Final_combined_comparison.parquet")
+#%%
 penetrances = penetrances.merge(micro_map, left_on = 'Protein', right_on='Gene_Standard_Name', how='left')
+#%%
 yet_percentiles = pd.read_parquet("D:/ALL_FINAL/Combined_by_perc/new_percs.parquet")
+#%%
 updated_yet_perc = yet_percentiles.groupby('Protein').Yet_perc.agg('max').rename('updated_yet_perc')
 
 penetrances = penetrances.merge(updated_yet_perc, left_on = 'Protein', right_on='Protein', how='left') #* This has extra information that is not needed
@@ -794,7 +870,87 @@ merged_frame_pens = penetrances.merge(Ho_agg, left_on = 'Protein', right_index =
 merged_frame_pens.to_parquet('D:/ALL_FINAL/Combined_by_perc/penetrance_updated.parquet')
 
 #%%
+#* Reading in this file is a time limiting step
+Loc_data = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\merged_data_final.parquet", columns=["Cell_Barcode", "Date", "Frame", "Unique_Frame", "Protein", "Is_treated", "Frames_post_treatment", "Unique_pos", "Loc_score", "Relocalized", "Abundance", "log_Abundance", "log_Loc_score", "z_score_Loc", "z_score_Abund", "z_score_logLoc", "z_score_logAbund", "ImageID", "Progen_bud", "Yet", "Does", "When", "Yes_yet", "No_yet", "pres_end", "c_count_end_nl", "c_count_end_p5"])
+#%%
+Loc_data_merged = micro_map.merge(Loc_data, left_on = 'Gene_Standard_Name', right_on = 'Protein', how = 'right')
+#%%
 
+
+Loc_data_merged["LogAbundance"] = pd.Series(Loc_data_merged["Abundance"]).apply(lambda x: np.log2(x))
+def gen_pearson_r(Loc_data):
+	grouped_correlations = Loc_data.groupby(["Protein", "Frame"])[['Loc_score', 'LogAbundance']].corr(method = 'spearman')
+	ProtFrameCorr_df = grouped_correlations.unstack().iloc[:,1].rename('ProtFrameCorrs').to_frame().reset_index(drop = False)
+	med_corr =  ProtFrameCorr_df.copy().reset_index(drop = False).groupby("Protein")['ProtFrameCorrs'].agg('median').rename('MedianProtCorr').to_frame().reset_index(drop = False)
+	med_corr.sort_values(by = ['MedianProtCorr'], inplace = True)
+	return(ProtFrameCorr_df, med_corr)
+
+Loc_data = Loc_data_merged
+ProtFrameCorr_df, med_corr = gen_pearson_r(Loc_data)
+Loc_data = Loc_data.merge(ProtFrameCorr_df, right_on=['Protein','Frame'], left_on=['Protein', 'Frame'], how = 'left')
+Loc_data = Loc_data.merge(med_corr, right_on="Protein", left_on= "Protein", how = 'left')
+#%%
+
+# cols = ['Gene_Standard_Name', 'Combined_destination', 'Combined_origin',
+#        'Single_origin', 'Double_origin', 'Triple_origin', 'Quad_origin',
+#        'Single_destination', 'Double_destination', 'Triple_destination',
+#        'Quad_destination', 'Cell_Barcode', 'Date', 'Unique_Frame', 'Protein', 'Unique_pos', 'ImageID', 'When']
+# Loc_data[cols] = Loc_data[cols].astype('category')
+table = pa.Table.from_pandas(Loc_data)
+pq.write_table(table, 'D:\ALL_FINAL\Combined_by_perc\Loc_data_comp_merged_Tkach.parquet')
+
+#%%
+#Requested addions
+Loc_data = pd.read_parquet('D:\ALL_FINAL\Combined_by_perc\Loc_data_comp_merged_Tkach.parquet')
+#%%
+Reloc_count = Loc_data.groupby(['Protein', 'Frames_post_treatment', 'Relocalized']).Cell_Barcode.agg('count')
+Reloc_count = Reloc_count.rename('Reloc_state_count').unstack().rename(columns={0: 'CurrNot', 1: 'CurrYes'}).reset_index(drop = False)
+Reloc_count.sort_values(by = ['Protein', 'Frames_post_treatment'], inplace = True)
+Reloc_count['currProportion'] = Reloc_count['CurrYes']/(Reloc_count['CurrYes'] + Reloc_count['CurrNot'])
+Reloc_count['RelocVelocity'] = Reloc_count.groupby(['Protein'])['currProportion'].diff() #* This is is just to see if there is a variable rate of relocalization because if cells are being relocalized at a constant rate or not at all
+Reloc_count['RelocAcceleration'] = Reloc_count.groupby(['Protein'])['RelocVelocity'].diff() #* This is is just to see if there is a time where cells are relocalizing faster
+
+#%%
+Yet_count = Loc_data.groupby(['Protein', 'Frames_post_treatment', 'Yet']).Cell_Barcode.agg('count')
+Yet_count = Yet_count.rename('Yet_state_count').unstack().rename(columns={0: 'CurrNotYet', 1: 'CurrYet'}).reset_index(drop = False)
+Yet_count['currYetProportion'] = Yet_count['CurrYet']/(Yet_count['CurrNotYet'] + Yet_count['CurrYet'])
+
+Yet_count['YetVelocity'] = Yet_count.groupby(['Protein'])['currYetProportion'].diff() #* This is is just to see if there is a variable rate of relocalization because if cells are being relocalized at a constant rate or not at all
+Yet_count['YetAcceleration'] = Yet_count.groupby(['Protein'])['YetVelocity'].diff() #* This is is just to see if there is a time where cells are relocalizing faster
+
+
+#%%
+
+Does_count = Loc_data.groupby(['Protein', 'Frames_post_treatment', 'Does']).Cell_Barcode.agg('count')
+Does_count = Does_count.rename('Does_state_count').unstack().rename(columns={0: 'countDoesNot', 1: 'countDoes'}).reset_index(drop = False)
+Does_count.sort_values(by = ['Protein', 'Frames_post_treatment'], inplace = True)
+Does_count['DoesProportion'] = Does_count['countDoes']/(Does_count['countDoesNot'] + Does_count['countDoes'])
+Does_count['DoesVelocity'] = Does_count.groupby(['Protein'])['DoesProportion'].diff() #* This is is just to see if there is a variable rate of cell loss because if cells are being lost at a constant rate or not at all
+#%%
+def get_range(s):
+ return s.max() - s.min()
+
+Does_count['Does_FinDiff'] = Does_count.groupby(['Protein'])['countDoes'].transform(get_range) #* This is to see if there is a net loss of cells
+#%%
+Loc_data = Loc_data.merge(Reloc_count, left_on = ['Protein', 'Frames_post_treatment'], right_on = ['Protein', 'Frames_post_treatment'], how = 'left')
+Loc_data = Loc_data.merge(Yet_count, left_on = ['Protein', 'Frames_post_treatment'], right_on = ['Protein', 'Frames_post_treatment'], how = 'left')
+Loc_data = Loc_data.merge(Does_count, left_on = ['Protein', 'Frames_post_treatment'], right_on = ['Protein', 'Frames_post_treatment'], how = 'left')
+#%%
+
+table = pa.Table.from_pandas(Loc_data)
+pq.write_table(table, 'D:\ALL_FINAL\Combined_by_perc\Loc_data_comp_merged_everything.parquet')
+
+#%%
+
+
+
+
+# Loc_data_merged = Loc_data_merged.loc[:,["Gene_Standard_Name", "Combined_destination", "Combined_origin", "Single_origin", "Double_origin", "Triple_origin", "Quad_origin", "Single_destination", "Double_destination", "Triple_destination", "Quad_destination", "Cell_Barcode", "Date", "Frame", "Unique_Frame", "Protein", "Is_treated", "Frames_post_treatment", "Unique_pos", "Loc_score", "Relocalized", "Abundance", "log_Abundance", "log_Loc_score", "z_score_Loc", "z_score_Abund", "z_score_logLoc", "z_score_logAbund", "ImageID", "Progen_bud", "Yet", "Does", "When", "Yes_yet", "No_yet", "pres_end", "c_count_end_nl", "c_count_end_p5", "LogAbundance"]]
+# table = pa.Table.from_pandas(Loc_data_merged)
+# pq.write_table(table, 'D:\ALL_FINAL\Combined_by_perc\Loc_data_comp_merged.parquet')
+#%%
+# Real_mols = pd.read_excel("Abundance_TableS8_MOD.xlsx", sheet_name="Table S8")
+# Real_foldChange = pd.read_excel("foldAbundanceTableS9_MOD.xlsx", sheet_name="Table S9")
 
 
 #%%
@@ -861,12 +1017,12 @@ merged_frame_pens.to_parquet('D:/ALL_FINAL/Combined_by_perc/penetrance_updated.p
 	# return ''.join(str(i) for i in s if not pd.isna(i))
 
 # %%
-#> This is to match the DDC2 to FLR1 in library
-#* The search and join for control should be done last once all the merging has been performed
-search = input("What is the name of the control protein? [Esc to skip]")
-if search == '':
-	pass
-else:
-	micro_map.reset_index(inplace=True, drop= False)
-	micro_map['Protein'] = pd.Series(micro_map['Protein']).apply(lambda x: control_replace(x = x, search = search))
-	micro_map.set_index('Protien')
+# #> This is to match the DDC2 to FLR1 in library
+# #* The search and join for control should be done last once all the merging has been performed
+# search = input("What is the name of the control protein? [Esc to skip]")
+# if search == '':
+# 	pass
+# else:
+# 	micro_map.reset_index(inplace=True, drop= False)
+# 	micro_map['Protein'] = pd.Series(micro_map['Protein']).apply(lambda x: control_replace(x = x, search = search))
+# 	micro_map.set_index('Protien')

@@ -250,7 +250,7 @@ if __name__ == '__main__':
 	'percentiles': [95, 99],
 	'multiplex': True,
 	'figures_root': 'D:/Figures_root',
-	'image_mod_folder': 'D:\RAD51'#'D:/Manipulated'
+	'image_mod_folder': 'D:/EXO1'#'D:\RAD51'#'D:/Manipulated'
 	}
 	#Todo: Update the global variables call to have a key for image_mod_folder
 
@@ -299,17 +299,17 @@ if __name__ == '__main__':
 	merged_indices = merged_indices.loc[merged_indices[image_subset_by].isin(Global_variables['subset_collection'])]# | (merged_indices['Unique_pos_image'] == "d0222r2p300200")] #. These are barcodes for FLR1. Don't forget to change if looking for a different protien
 
 	#* The parallel version is acting stupid
-	# Parallel(n_jobs=Global_variables['cpu_se'], verbose= 100)(delayed(correction_manager)(p_i = p_i, normalization_method= normalization_method) for p_i in range(len(merged_indices)))
+	Parallel(n_jobs=Global_variables['cpu_se'], verbose= 100)(delayed(correction_manager)(p_i = p_i, normalization_method= normalization_method) for p_i in range(len(merged_indices)))
 
 	# for p_i in range(len(merged_indices)):
-	# 	ic(correction_manager(p_i = p_i, normalization_method= normalization_method))
+		# ic(correction_manager(p_i = p_i, normalization_method= normalization_method))
 
 	#. Right now this is not subsetted at all. This would be a quick fix
-	Parallel(n_jobs=6, verbose= 100)(delayed(move_mask_manager)(frame = f) for f in frames.unique())
+	# Parallel(n_jobs=6, verbose= 100)(delayed(move_mask_manager)(frame = f) for f in frames.unique())
 	# for f in frames.unique():
 	# 	ic(move_mask_manager(frame = f))
 
-	Parallel(n_jobs=6, verbose= 100)(delayed(myo_mask_manager)(frame = f) for f in frames.unique())
+	# Parallel(n_jobs=6, verbose= 100)(delayed(myo_mask_manager)(frame = f) for f in frames.unique())
 	# for f in frames.unique():
 	# 	ic(myo_mask_manager(frame = f))
 # %%

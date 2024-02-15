@@ -25,6 +25,7 @@ library(stringr)
 library(cowplot)
 library(ggstatsplot)
 library(tidylog)
+library(smplot2)
 # library(data.table)
 
 date <- Sys.Date()
@@ -34,7 +35,10 @@ npg_clrs <-  pal_npg("nrc", alpha = 0.7)(4)
 
 ```{r}
 #Read in the dataframe with the updated penetrances
-penetrances_updated <- read_parquet("D:/ALL_FINAL/Combined_by_perc/penetrance_updated.parquet") #* This is the 
+penetrances_updated <- read_parquet("D:/ALL_FINAL/Combined_by_perc/penetrance_updated.parquet", col_select = c("Protein", "Percentage_reloc", "updated_yet_perc", "MMS_localization_class")) %>%
+  na.omit()
+
+
 penetrances_updated$Percentage_reloc = as.integer(penetrances_updated$Percentage_reloc)
 penetrances_updated$Percentage_reloc_less = as.integer(penetrances_updated$Percentage_reloc_less)
 penetrances_updated$Ho_max = as.integer(penetrances_updated$Ho_max)
@@ -44,9 +48,9 @@ df_ddc2 <- penetrances_updated[str_detect(penetrances_updated$Protein, "DDC2"), 
 penetrances_updated = penetrances_updated[!str_detect(penetrances_updated$Protein, "DDC2"), ]
 
 
-# df_ddc2 <- df_ddc2[order(df_ddc2$Percentage_reloc_less),]
-# df_ddc2$Protein <- factor(df_ddc2$Protein, levels = df_ddc2$Protein)
-# df_ddc2
+df_ddc2 <- df_ddc2[order(df_ddc2$Percentage_reloc_less),]
+df_ddc2$Protein <- factor(df_ddc2$Protein, levels = df_ddc2$Protein)
+df_ddc2
 ```
 
 ```{r}
@@ -94,7 +98,6 @@ show_col(npg_clrs)
 # sort the data frame by column A in ascending order
 # (zis_colors <- wes_palette("Zissou1", type = "discrete"))
 
-
 lolliplot <- ggplot(penetrances_updated, aes(x = reorder(Protein, updated_yet_perc, desc = T))) +
   geom_point(aes(y = Percentage_reloc_less), size=3, color=npg_clrs[2]) +
   geom_point(aes(y=Percentage_reloc), size=3, color= npg_clrs[1]) +
@@ -112,25 +115,69 @@ ggsave(sprintf("lolliplot_%s.pdf", date), lolliplot, width = 15, height = 40)
 ```
 
 ```{r}
-# lolliplot_grouped <- ggplot(df, aes(x = reorder(Protein, Percentage_reloc_less))) +
-#   geom_point(aes(y = Percentage_reloc_less), color=zis_colors[3], size=3) +
-#   geom_point(aes(y=Percentage_reloc), color= zis_colors[1], size=3) +
-#   geom_segment(aes(x=reorder(Protein, Percentage_reloc_less), xend=reorder(Protein, Percentage_reloc_less), y=Percentage_reloc, yend=Percentage_reloc_less), color="grey") +
-#   coord_flip()+ # This is just to swtich the x with the y so that the plot is vertical
-#   theme(
-#     legend.position = "none",
-#   ) +
-#   # scale_fill_manual(values = wes_palette("Royal1"))+
-#   xlab("") +
-#   ylab("Value of Y")
-# # lolliplot
-lolliplot_grouped_origin <- lolliplot + facet_wrap(~Combined_origin, scales="free_y")
-setwd("D:/Second Mind/Academic/Project Stuff/Figures") #Save to folder in vault that will be copied to Dropbox
-ggsave(sprintf("lolliplot_grouped_orig_%s.pdf", date), lolliplot_grouped_origin, width = 15, height = 40)
 
-lolliplot_grouped_dest <- lolliplot + facet_wrap(~Combined_destination, scales="free_y")
+compartmental_comparison <-  ggplot(filter(penetrances_updated, !MMS_localization_class %in% c("ER foci", "nuc periph", "nucleolus")), aes (x = Percentage_reloc, y = updated_yet_perc, color = MMS_localization_class))+
+  geom_point()+
+  stat_ellipse() +
+  facet_grid(~MMS_localization_class)+
+  theme(legend.position = "none")
+  
+compartmental_comparison
+```
+
+```{r, knittr.echo = FALSE}
+penetrances_w_HUfill<- read_parquet("D:/ALL_FINAL/Combined_by_perc/penetrance_updated.parquet", col_select = c("Protein", "Percentage_reloc", "updated_yet_perc", "MMS_HU_merged_class"))%>%
+  drop_na() %>%
+  group_by(MMS_HU_merged_class) %>%
+  mutate(level = paste0(MMS_HU_merged_class, " (n = ", n(), ")"))
+
+penetrances_w_HU_g <- ggplot(filter(penetrances_w_HUfill, !MMS_HU_merged_class %in% c("cyto; nucleus", "ER foci")), aes (x = Percentage_reloc, y = updated_yet_perc, color = MMS_HU_merged_class))+
+  geom_point()+
+  stat_ellipse(type = "t")+
+  sm_statCorr(corr_method = 'spearman', show_text = TRUE, color = 'black')+
+  facet_grid(~level)+
+  # theme(x.text = element_text(angle = 90)
+  theme(legend.position = "none")
+
+penetrances_w_HU_g
+```
+
+
+```{r}
+
+# names(penetrances_updated)[names(penetrances_updated) == "MMS localization change class"] <- "MMS_localization_class"
+# penetrances_updated <- penetrances_updated %>% 
+#   select(updated_yet_perc, Percentage_reloc, MMS_localization_class, Protein) %>% 
+#   drop_na()
+
+lolliplot_grouped <- ggplot(penetrances_updated, aes(x = reorder(Protein, updated_yet_perc), color = MMS_localization_class ,desc = T))) +
+  geom_point(aes(y = updated_yet_perc), size=2) +
+  geom_point(aes(y=Percentage_reloc), size=2) +
+  geom_segment(aes(x=reorder(Protein, updated_yet_perc), xend=reorder(Protein, updated_yet_perc), y=Percentage_reloc, yend=updated_yet_perc), color="grey") +
+  # coord_flip()+ # This is just to swtich the x with the y so that the plot is vertical
+  # theme_ipsum(base_family = "") +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank()
+  ) +
+  xlab("Protein") +
+  ylab("Penetrance (blue = byFrame and organge = bySeries)")
+
+lolliplot_grouped
 setwd("D:/Second Mind/Academic/Project Stuff/Figures") #Save to folder in vault that will be copied to Dropbox
-ggsave(sprintf("lolliplot_grouped_dest_%s.pdf", date), lolliplot_grouped_dest, width = 15, height = 40)
+ggsave(sprintf("lolliplot_grouped_change_%s.pdf", date), lolliplot_grouped, width = 15, height = 40)
+
+```
+
+```{r}
+ggscatterstats()
+
+
+
+# lolliplot_grouped_dest <- lolliplot + facet_wrap(~Combined_destination, scales="free_y")
+# setwd("D:/Second Mind/Academic/Project Stuff/Figures") #Save to folder in vault that will be copied to Dropbox
+# ggsave(sprintf("lolliplot_grouped_dest_%s.pdf", date), lolliplot_grouped_dest, width = 15, height = 40)
 ```
  
 ## DDC2 comparison
