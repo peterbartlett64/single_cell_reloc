@@ -207,8 +207,12 @@ def correction_manager(p_i: int, normalization_method:str): #* This is the manag
 		p_i: index of pad to be loaded
 		normalization_method (str): column designating what was used as denominator in brightest pixel value normalization. Pixel values for idividual cells will be scaled by the associated factor for the cell-time
 	"""
-	z = read_and_modify_intensity(image_path = merged_indices.iloc[p_i,:]["Path_image"], cell_mask_path = merged_indices.iloc[p_i, :]["Path_mask"], quantification_path= merged_indices.iloc[p_i,:]['Path_quant'], unique_frame = merged_indices.iloc[p_i,:]['Unique_frame'],  normalization_method = normalization_method)
-	ic(z)
+	try:
+		z = read_and_modify_intensity(image_path = merged_indices.iloc[p_i,:]["Path_image"], cell_mask_path = merged_indices.iloc[p_i, :]["Path_mask"], quantification_path= merged_indices.iloc[p_i,:]['Path_quant'], unique_frame = merged_indices.iloc[p_i,:]['Unique_frame'],  normalization_method = normalization_method)
+		ic(z)
+	except: #* This is a catch all for the errors
+		ic("Error in correction_manager")
+		return("Error in correction_manager at index " + str(p_i))
 	return(z)
 
 def move_mask_manager(frame:str): #* This is the manager to call the paths for use
@@ -250,7 +254,10 @@ if __name__ == '__main__':
 	'percentiles': [95, 99],
 	'multiplex': True,
 	'figures_root': 'D:/Figures_root',
-	'image_mod_folder': 'D:/EXO1'#'D:\RAD51'#'D:/Manipulated'
+	'image_mod_folder': 'D:/Manipulated/Testing', #Todo: Update this to be a input call
+	# 'D:/EXO1'
+	#'D:/RAD51'
+	#'D:/Manipulated'
 	}
 	#Todo: Update the global variables call to have a key for image_mod_folder
 
@@ -270,12 +277,14 @@ if __name__ == '__main__':
 	# mask_index = pd.read_csv("E:\Microfluidics\RESULTS\Allmasks_exp.csv").reset_index(drop = False)
 
 
+	# quant_index = pd.read_parquet("D:\ALL_FINAL\Quantification_index.parquet")[['Path', 'Frame']].rename(columns={'Path':'Path_quant'}).sort_values(by = "Frame") #* Read in the quant_index and keep only the relevant columns
 	quant_index = pd.read_parquet("D:\ALL_FINAL\Quantification_index.parquet")[['Path', 'Frame']].rename(columns={'Path':'Path_quant'}).sort_values(by = "Frame") #* Read in the quant_index and keep only the relevant columns
 
 	#. The below is to use the temporary file. Should check the type of the version before
 	# results_final = pd.read_parquet("D:/Sandbox/subset_end.parquet", columns=['Cell_Barcode', 'ImageID', 'Relocalized', 'Loc_score', 'track_start_frame', 'track_end_frame', 'track_length', 'Myo1Identity']).reset_index(drop = False) #* This will take a milwhile since it is a 4G file
 
-	results_final = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\merged_data_final.parquet", columns=['Cell_Barcode', 'ImageID', 'Relocalized', 'Loc_score', 'track_start_frame', 'track_end_frame', 'track_length'])
+	# results_final = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\merged_data_final.parquet", columns=['Cell_Barcode', 'ImageID', 'Relocalized', 'Loc_score', 'track_start_frame', 'track_end_frame', 'track_length'])
+	results_final = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\Quant_ALL.parquet", columns=['Cell_Barcode', 'ImageID', 'Relocalized', 'Loc_score', 'Myo1Identity'])
 	# results_final = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\ZIP2_selected.parquet", columns=['Cell_Barcode', 'ImageID', 'Relocalized', 'Loc_score', 'track_start_frame', 'track_end_frame', 'track_length', 'Myo1Identity'])
 	# results_final = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\Final_wAbund.parquet", columns=['Cell_Barcode', 'ImageID', 'Relocalized', 'Loc_score', 'track_start_frame', 'track_end_frame', 'track_length', 'Myo1Identity'])
 
@@ -299,7 +308,7 @@ if __name__ == '__main__':
 	merged_indices = merged_indices.loc[merged_indices[image_subset_by].isin(Global_variables['subset_collection'])]# | (merged_indices['Unique_pos_image'] == "d0222r2p300200")] #. These are barcodes for FLR1. Don't forget to change if looking for a different protien
 
 	#* The parallel version is acting stupid
-	Parallel(n_jobs=Global_variables['cpu_se'], verbose= 100)(delayed(correction_manager)(p_i = p_i, normalization_method= normalization_method) for p_i in range(len(merged_indices)))
+	# Parallel(n_jobs=Global_variables['cpu_se'], verbose= 100)(delayed(correction_manager)(p_i = p_i, normalization_method= normalization_method) for p_i in range(len(merged_indices)))
 
 	# for p_i in range(len(merged_indices)):
 		# ic(correction_manager(p_i = p_i, normalization_method= normalization_method))
@@ -309,7 +318,7 @@ if __name__ == '__main__':
 	# for f in frames.unique():
 	# 	ic(move_mask_manager(frame = f))
 
-	# Parallel(n_jobs=6, verbose= 100)(delayed(myo_mask_manager)(frame = f) for f in frames.unique())
-	# for f in frames.unique():
-	# 	ic(myo_mask_manager(frame = f))
+	Parallel(n_jobs=6, verbose= 100)(delayed(myo_mask_manager)(frame = f) for f in frames.unique())
+	for f in frames.unique():
+		ic(myo_mask_manager(frame = f))
 # %%

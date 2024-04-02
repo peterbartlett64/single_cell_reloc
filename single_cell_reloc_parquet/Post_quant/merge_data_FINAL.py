@@ -857,6 +857,12 @@ penetrances = pd.read_parquet("D:\ALL_FINAL\Final_combined_comparison.parquet")
 penetrances = penetrances.merge(micro_map, left_on = 'Protein', right_on='Gene_Standard_Name', how='left')
 #%%
 yet_percentiles = pd.read_parquet("D:/ALL_FINAL/Combined_by_perc/new_percs.parquet")
+
+#ADD the trimming to make sure that proteins are less than 32 frames (4 hours)
+yet_percentiles = yet_percentiles.loc[yet_percentiles['Frames_post_treatment'] <= 32]
+
+
+
 #%%
 updated_yet_perc = yet_percentiles.groupby('Protein').Yet_perc.agg('max').rename('updated_yet_perc')
 
@@ -867,7 +873,7 @@ Ho = Ho_loc_pen_f()
 Ho_agg = Ho.agg('max', axis= 1)*100 #*Convert the decimal to a percentage
 Ho_agg = Ho_agg.rename('Ho_max').to_frame()
 merged_frame_pens = penetrances.merge(Ho_agg, left_on = 'Protein', right_index = True, how = 'left')
-merged_frame_pens.to_parquet('D:/ALL_FINAL/Combined_by_perc/penetrance_updated.parquet')
+merged_frame_pens.to_parquet('D:/ALL_FINAL/Combined_by_perc/penetrance_updated_trimmed.parquet')
 
 #%%
 #* Reading in this file is a time limiting step
@@ -875,8 +881,41 @@ Loc_data = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\merged_data_final.parq
 #%%
 Loc_data_merged = micro_map.merge(Loc_data, left_on = 'Gene_Standard_Name', right_on = 'Protein', how = 'right')
 #%%
+Loc_data["LogAbundance"] = pd.Series(Loc_data["Abundance"]).apply(lambda x: np.log2(x))
+
+import scipy.stats as stats
+grouped_pearson = Loc_data.groupby(["Protein", "Frame"]).apply(lambda x:pd.Series(stats.pearsonr(x.z_score_Loc, x.z_score_logAbund), index=["corr", "pval"]))
+	medians_pearson = grouped_pearson.groupby(level=0).agg('median')
+	medians_pearson.to_csv('median_pearson.csv')
+
+	grouped_spearman = Loc_data.groupby(["Protein", "Frame"]).apply(lambda x:pd.Series(stats.spearmanr(x.z_score_Loc, x.z_score_logAbund), index=["corr", "pval"]))
+	medians_spearmans = grouped_spearman.groupby(level=0).agg('median')
+	medians_spearmans.to_csv('median_spearman.csv')
+
+	grouped_kendall = Loc_data.groupby(["Protein", "Frame"]).apply(lambda x:pd.Series(stats.kendalltau(x.z_score_Loc, x.z_score_logAbund), index=["corr", "pval"]))
+	medians_kendlall = grouped_kendall.groupby(level=0).agg('median')
+	medians_kendlall.to_csv('median_kendall.csv')
 
 
+
+def gen_pearson_r_w_p(Loc_data):
+
+
+
+
+
+	ProtFrameCorr_df = grouped_correlations.unstack().iloc[:,1].rename('ProtFrameCorrs').to_frame().reset_index(drop = False)
+	med_corr =  ProtFrameCorr_df.copy().reset_index(drop = False).groupby("Protein")['ProtFrameCorrs'].agg('median').rename('MedianProtCorr').to_frame().reset_index(drop = False)
+
+	med_corr.sort_values(by = ['MedianProtCorr'], inplace = True)
+	return(ProtFrameCorr_df, med_corr)
+
+Loc_data = Loc_data
+ProtFrameCorr_df, med_corr = gen_pearson_r(Loc_data)
+Loc_data = Loc_data.merge(ProtFrameCorr_df, right_on=['Protein','Frame'], left_on=['Protein', 'Frame'], how = 'left')
+Loc_data = Loc_data.merge(med_corr, right_on="Protein", left_on= "Protein", how = 'left')
+
+#%%
 Loc_data_merged["LogAbundance"] = pd.Series(Loc_data_merged["Abundance"]).apply(lambda x: np.log2(x))
 def gen_pearson_r(Loc_data):
 	grouped_correlations = Loc_data.groupby(["Protein", "Frame"])[['Loc_score', 'LogAbundance']].corr(method = 'spearman')

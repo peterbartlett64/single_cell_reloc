@@ -10,8 +10,11 @@
 % This assumes that MIJI is already setup correctly. To do so, refer to "MIJ: Running ImageJ and Fiji within Matlab"
 % http://bigwww.epfl.ch/sage/soft/mij/ or <https://www.mathworks.com/matlabcentral/fileexchange/47545-mij-running-imagej-and-fiji-within-matlab>
 %%
-cd 'D:\Manipulated\MATLAB_output\'
+cd ('D:\Manipulated\MATLAB_output\');
 pos = "d0218r2p570300";
+dir_n = sprintf('%s', pos);
+mkdir(dir_n)
+cd (dir_n);
 path_seg = sprintf("E:/Microfluidics/RESULTS/%s/GFP_mKO_mKa", pos);
 save_path_format= "%s_%s_%s.tiff";
 save_path_temp = "temp_%s_%s_%s_%s.tiff";
