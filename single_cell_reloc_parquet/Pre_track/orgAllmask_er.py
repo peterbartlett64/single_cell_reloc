@@ -84,13 +84,17 @@ def orgAllmask_er(microfluidics_results, pre = False):
 	return(orgAllmasks)
 
 if __name__ == "__main__":
-	# Global_variables  = gv.global_variables()
+	#* Legacy code for personal machines
 	# microfluidics_results = "D:/Microfluidics/RESULTS"
-	user_name, prefix, microfluidics_results = gv.initiate_run()
+	# user_name, prefix, microfluidics_results = gv.initiate_run()
+
+	Global_variables  = gv.global_manager()
+	microfluidics_results = Global_variables['microfluidics_results']
 
 	try:
 		os.chdir(microfluidics_results)
 	except:
-		microfluidics_results = gv.slash_switch(input("microfluidics_results?"))
+		microfluidics_results = gv.slash_switch(input("Where is microfluidics_results? The previously provided path was not found."))
 		os.chdir(microfluidics_results)
+
 	orgAllmasks = orgAllmask_er()

@@ -11,18 +11,20 @@ from datetime import datetime
 
 #%%
 
-def initiate_run():
-	global user_name
-	user_name = os.getlogin()
-	if user_name == 'Nikon':
-		prefix = 'F:'
-	elif user_name == 'pcnba':
-		prefix = 'D:'
-	path_temp = os.path.join(prefix, 'Microfluidics', 'RESULTS')
-	# path_temp = f'{prefix}\\Microfluidics\\RESULTS'
-	try:os.mkdir(path_temp)
-	except FileExistsError: pass
-	return(user_name, prefix, path_temp)
+#* This is Legacy code that is no longer used. It was for automatic global variable setting and is now replaced by the global_manager function.
+#* Was used on personal and labratory computer to set the global paths
+# def initiate_run():
+# 	global user_name
+# 	user_name = os.getlogin()
+# 	if user_name == 'Nikon':
+# 		prefix = 'F:'
+# 	elif user_name == 'pcnba':
+# 		prefix = 'D:'
+# 	path_temp = os.path.join(prefix, 'Microfluidics', 'RESULTS')
+# 	# path_temp = f'{prefix}\\Microfluidics\\RESULTS'
+# 	try:os.mkdir(path_temp)
+# 	except FileExistsError: pass
+# 	return(user_name, prefix, path_temp)
 
 def setup_logging(logger_name, microfluidics_results): #* Setup a logger for each call
 
@@ -315,11 +317,65 @@ def global_vars():
 		multiplex = input("Does this experiment have muliplexed samples? [y/n]")
 		if multiplex.lower() == 'yes' or multiplex.lower() == 'y':
 			multiplex = True
-			mult = 1
+			mult = 1 #* Exit while loop
 		elif multiplex.lower() == 'no' or multiplex.lower() == 'n':
 			multiplex = False
-			mult = 1 #* This will exit
+			mult = 1
 
+		loop += 1
+
+	#* Added the fluors_move and myo_fuors to the global variables
+	loop = 1
+	flcs = 0
+	while flcs == 0:
+		if loop >= 3:
+			try_again = input("There have been 3 failed atempts to input channels for fluorescent movement. Would you like to try again? [y/n]")
+			if try_again.lower() == 'y' or try_again.lower() == 'yes':
+				pass
+			else:
+				return('Failed to input all global variables. Fluorescent channels not set')
+
+		movement_chans = input("What are the channels that will be used to test movement? [Comma deliminated list]")
+		movement_chans = movement_chans.split(", ")
+
+		if len(movement_chans) >= 1:
+			pass
+		else:
+			continue
+
+		response = input(f"{movement_chans} minutes? [y/n]")
+		if response.lower() == "yes" or response.lower() == "y":
+			flcs = 1
+			pass
+		else:
+			pass
+		loop += 1
+
+	#* Myo_fuors is/are the channel(s) that will be used to test myosin dynamics
+	loop = 1
+	flcs_myo = 0
+	while flcs_myo == 0:
+		if loop >= 3:
+			try_again = input("There have been 3 failed atempts to input channels for fluorescent movement. Would you like to try again? [y/n]")
+			if try_again.lower() == 'y' or try_again.lower() == 'yes':
+				pass
+			else:
+				return('Failed to input all global variables. Fluorescent channels not set')
+
+		myo_chans = input("What are the channels that will be used to test movement? [Comma deliminated list]")
+		myo_chans = myo_chans.split(", ")
+
+		if len(myo_chans) >= 1:
+			pass
+		else:
+			continue
+
+		response = input(f"{myo_chans} minutes? [y/n]")
+		if response.lower() == "yes" or response.lower() == "y":
+			flcs_myo = 1
+			pass
+		else:
+			pass
 		loop += 1
 
 	global Global_variables
@@ -333,6 +389,11 @@ def global_vars():
 						"cpu_se": cpu_se,
 						"timepoint_gap": timepoint_gap,
 						"percentiles": percentiles,
+						"fluorescent_seg": False, #Todo: Allow for fluorescent segmentation in the future automation
+						"fluors_move": movement_chans, #* Currently only GFP is used. Channels that will be used to test movement
+						"myo_fuors": myo_chans, #* Channels that will be used to test myosin movement
+						# "fluors_move": ["GFP"], #* Currently only GFP is used. Channels that will be used to test movement
+						# "myo_fuors": ["mKO", "mKa"], #* Channels that will be used to test myosin movement
 						"multiplex": multiplex}
 
 	os.chdir(microfluidics_results)
@@ -350,16 +411,18 @@ def global_continue(Global_variables): #* Confirm that the paths given are corre
 		mult_a = "ARE"
 	else:
 		mult_a = "ARE NOT"
+	cont = 0
 
 	if Global_variables["subset"] == True:
 		wording = 'WILL'
 
-		print(f"Analyze at {Global_variables['analyze']};\nmicrofluidics_results at {Global_variables['microfluidics_results']};\npost_path at {Global_variables['post_path']}; \nThere {wording} be subsetting by{Global_variables['subset_by']} and will include {Global_variables['subset_collection']}\nRunning with {'cpu_se'} cpu cores out of {Global_variables['cpu_se']};\nThere are {Global_variables['timepoint_gap']} minutes between frames\npercentiles are {Global_variables['percentiles']};\nSamples {mult_a} multiplexed")
+		print(f"Analyze at {Global_variables['analyze']};\nmicrofluidics_results at {Global_variables['microfluidics_results']};\npost_path at {Global_variables['post_path']}; \nThere {wording} be subsetting by{Global_variables['subset_by']} and will include {Global_variables['subset_collection']}\nRunning with {'cpu_se'} cpu cores out of {Global_variables['cpu_se']};\nThere are {Global_variables['timepoint_gap']} minutes between frames\npercentiles are {Global_variables['percentiles']};\nMovement channels are {Global_variables['fluors_move']};\nMyosin channels are {Global_variables['myo_fuors']};\nSamples {mult_a} multiplexed")
 
 	else:
 		wording = 'WILL NOT'
 
-		print(f"Analyze at {Global_variables['analyze']};\nmicrofluidics_results at {Global_variables['microfluidics_results']};\npost_path at {Global_variables['post_path']}; \nThere {wording} be subsetting by{Global_variables['subset_by']} and will include {Global_variables['subset_collection']};\nRunning with {'cpu_se'} cpu cores out of {Global_variables['cpu_se']};There are {Global_variables['timepoint_gap']} minutes between frames;\npercentiles are {Global_variables['percentiles']};\nSamples {mult_a} multiplexed")
+		print(f"Analyze at {Global_variables['analyze']};\nmicrofluidics_results at {Global_variables['microfluidics_results']};\npost_path at {Global_variables['post_path']}; \nThere {wording} be subsetting by{Global_variables['subset_by']} and will include {Global_variables['subset_collection']};\nRunning with {'cpu_se'} cpu cores out of {Global_variables['cpu_se']};There are {Global_variables['timepoint_gap']} minutes between frames;\npercentiles are {Global_variables['percentiles']};\nMovement channels are {Global_variables['fluors_move']};\nMyosin channels are {Global_variables['myo_fuors']};\nSamples {mult_a} multiplexed")
+
 	cont_resp = input("Are all these values correct? [y/n]")
 	if cont_resp.lower() == "yes" or cont_resp.lower() == "y":
 		cont = 1
@@ -438,7 +501,7 @@ def col_convert_with_larger_dict(df, dictionary_convert = convert_dict):
 #? There is a version that makes global varaibles and there is a version that stores the globals in a dictionary
 
 if __name__ == "__main__": #* Allow the program to be run individually to change the global variables
-	global_manager()
+	global_manager() #* Run the global manager to set the global variables
 	print(Global_variables)
 	# cont = 0
 	# while cont != 1:

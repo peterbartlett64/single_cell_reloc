@@ -1,11 +1,11 @@
 #%%
-#%%
+#! The original version of this file was written by Andreas Cluny
+
 from dataclasses import dataclass
 import json
 import os
 from pathlib import Path
 from typing import List, Optional
-
 import xmltodict
 import yaml
 
@@ -136,5 +136,3 @@ def test_parse_cellx_fileseries():
 
 def test_parse_cellx_fileseries_0():
     assert len(parse_cellx_fileseries(Path(".") / "test" / "fileseries_0.xml")) == 5
-
-# %%
