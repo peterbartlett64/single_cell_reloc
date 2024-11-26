@@ -22,7 +22,6 @@ library(hrbrthemes)
 library(wesanderson)
 library(ggsci)
 library(gridExtra)
-library(scales)
 library(stringr)
 library(cowplot)
 library(ggstatsplot)
@@ -84,6 +83,66 @@ corr_Ho_me
 
 
 ```{r}
+penetrances_updated <- penetrances_updated %>% 
+  filter(!(Protein %in% c("LCD1", "RAD5", 'DDC2d0224r1', 'Contam.'))) %>%
+  filter(!(Protein %like% 'DDC2')) %>%
+  filter(!(Protein %like% 'd0210')) %>%
+  filter(!(Protein %like% 'LSM3')) %>%
+  filter(!(Protein %like% 'LSM3')) %>%
+  filter(!(Protein %like% 'MSN2')) %>%
+  filter(!(Protein %like% 'RNR1')) %>%
+  filter(!(Protein %like% 'RRP17')) %>%
+  filter(!(Protein %like% 'RTR2')) %>%
+  filter(!(Protein %in% c("SLX4", "MSB3", "SIP5", "FGV2", "ZPR1", "HOS2", "RAD53", "CTR86", "MKT1", "SRP68", "BMH2", "EXO70")))
+```
+
+
+```{r}
+tc_den <- ggplot(data = penetrances_updated, mapping = aes(x = Percentage_reloc_less))+
+  geom_density(fill = npg_clrs[1], alpha = 0.3)+
+  geom_histogram(aes(y=..density..), colour=npg_clrs[2], fill=npg_clrs[1], alpha = 0.6, binwidth = 5, boundary = 0)+
+  geom_vline(xintercept = 95)+
+  scale_x_continuous(#breaks = round(seq(min(0), max(100), by = 10),1
+                      breaks = scales::breaks_extended(10),
+                      labels = scales::label_number())+
+  scale_y_continuous(breaks = scales::breaks_extended(6),
+                     labels = scales::label_number_auto())+
+  geom_vline(aes(xintercept=mean(Percentage_reloc_less, na.rm = T)),
+             linetype="dashed", color = 'blue')+
+  geom_vline(aes(xintercept=median(Percentage_reloc_less, na.rm = T)),
+             linetype="solid", color = 'green')+
+  theme_classic()
+
+tc_den
+ggsave("Timecourse_density.png", tc_den, width = 12, height = 9, device = cairo_pdf)
+ggsave("Timecourse_density.eps", tc_den, width = 12, height = 9, device = cairo_pdf)
+ggsave("Timecourse_density.pdf", tc_den, width = 12, height = 9, device = cairo_pdf)
+```
+
+
+```{r}
+pf_den <- ggplot(data = penetrances_updated, mapping = aes(x = Percentage_reloc))+
+  geom_density(fill = npg_clrs[4], alpha = 0.3)+
+  geom_histogram(aes(y=..density..), colour=npg_clrs[2], fill=npg_clrs[4], alpha = 0.6, binwidth = 5, boundary = 0)+
+  scale_x_continuous(#breaks = round(seq(min(0), max(100), by = 10),1
+                      breaks = scales::breaks_extended(10),
+                      labels = scales::label_number())+
+  geom_vline(aes(xintercept=mean(Percentage_reloc)),
+             linetype="dashed", color = 'blue')+
+  geom_vline(aes(xintercept=median(Percentage_reloc)),
+             linetype="solid", color = 'green')+
+  scale_y_continuous(breaks = scales::breaks_extended(6),
+                     labels = scales::label_number_auto())+
+  theme_classic()
+
+pf_den
+ggsave("per-frame_density.png", pf_den, width = 12, height = 9, device = cairo_pdf)
+ggsave("per-frame_density.eps", pf_den, width = 12, height = 9, device = cairo_pdf)
+ggsave("per-frame_density.pdf", pf_den, width = 12, height = 9, device = cairo_pdf)
+```
+
+
+```{r}
 pen_compare <- ggscatterstats(
               data = penetrances_updated,
                y = Percentage_reloc_less,
@@ -100,13 +159,13 @@ pen_compare <- ggscatterstats(
                theme_ipsum(base_family = "")
               # ggthemes::theme_clean()
 pen_compare
-ggsave("Comparison_of_Penetrances.png", pen_compare)
-ggsave("Comparison_of_Penetrances.eps", pen_compare)
-ggsave("Comparison_of_Penetrances.pdf", pen_compare)
+ggsave("Comparison_of_Penetrances.png", pen_compare, width = 14, height = 9, device = cairo_pdf)
+ggsave("Comparison_of_Penetrances.eps", pen_compare, width = 14, height = 9, device = cairo_pdf)
+ggsave("Comparison_of_Penetrances.pdf", pen_compare, width = 14, height = 9, device = cairo_pdf)
 ```
 
 ```{r}
-GO_df <- filter(df, Protein %in% c("RFA1", "HTA2", "RDH54", "POL30", "NPL4", "CHK1", "MRC1", "MSH3", "MMS21", "RAD51", "RAD24", "RTT107", "RRD1", "SLD2", "DOA1", "ECO1", "RPN4", "SUB2", "RAD57", "DBF4", "PPH3", "RAD55", "CDC1", "RAD9", "XRS2", "LRS4", "SLD3", "INO80", "RAD54", "SAE2", "ZIP2", "ARP4", "DPB11", "SRS2", "CDC6", "RFC2", "SLX4", "TOP3", "NEJ1", "RAD33", "RAD52", "NAM7", "YKU80", "PSO2", "SGS1", "MRE11", "YKU70", "MGS1", "RAD50", "RFC3", "RFC4", "RTS1", "EXO1", "ULS1", "REV1", "RAD53", "DDC1", "RIM1"))
+GO_df <- filter(penetrances_updated, Protein %in% c("RFA1", "HTA2", "RDH54", "POL30", "NPL4", "CHK1", "MRC1", "MSH3", "MMS21", "RAD51", "RAD24", "RTT107", "RRD1", "SLD2", "DOA1", "ECO1", "RPN4", "SUB2", "RAD57", "DBF4", "PPH3", "RAD55", "CDC1", "RAD9", "XRS2", "LRS4", "SLD3", "INO80", "RAD54", "SAE2", "ZIP2", "ARP4", "DPB11", "SRS2", "CDC6", "RFC2", "SLX4", "TOP3", "NEJ1", "RAD33", "RAD52", "NAM7", "YKU80", "PSO2", "SGS1", "MRE11", "YKU70", "MGS1", "RAD50", "RFC3", "RFC4", "RTS1", "EXO1", "ULS1", "REV1", "RAD53", "DDC1", "RIM1"))
 GO_compare <- ggscatterstats(
               data = GO_df,
                y = Percentage_reloc_less,
@@ -123,9 +182,9 @@ GO_compare <- ggscatterstats(
                theme_ipsum(base_family = "")
               # ggthemes::theme_clean()
 GO_compare
-ggsave("Comparison_of_DNA_GO.png", GO_compare)
-ggsave("Comparison_of_DNA_GO.eps", GO_compare)
-ggsave("Comparison_of_DNA_GO.pdf", GO_compare)
+ggsave("Comparison_of_DNA_GO.png", GO_compare, width = 14, height = 9, device = cairo_pdf)
+ggsave("Comparison_of_DNA_GO.eps", GO_compare, width = 14, height = 9, device = cairo_pdf)
+ggsave("Comparison_of_DNA_GO.pdf", GO_compare, width = 14, height = 9, device = cairo_pdf)
 
 ```
 
@@ -175,17 +234,77 @@ ggsave(sprintf("lolliplot_%s.pdf", date), lolliplot, width = 15, height = 40)
 ```
 
 ```{r}
+use_comp_compare <- penetrances_updated %>%
+  filter(!MMS_localization_class %in% c("ER foci", "nuc periph", "nucleolus", "NA"))
 
-compartmental_comparison <-  ggplot(filter(penetrances_updated, !MMS_localization_class %in% c("ER foci", "nuc periph", "nucleolus")), aes (x = Percentage_reloc, y = Percentage_reloc_less, color = MMS_localization_class))+
+per_frame_comparments <- ggbetweenstats(use_comp_compare,
+               x = MMS_localization_class,
+               y = Percentage_reloc,
+               type = 'robust',
+               violin.args = list(alpha = 0.2, na.rm = TRUE, scale = 'area'),
+               point.args = list(size = 0)
+               )#+
+  # geom_sina(use_comp_compare, mapping = aes (color = MMS_localization_class), inherit.aes = T, size = 2, alpha = 0.6, scale = 'area')+
+  # ggtitle(label = 'Per-Frame')+
+  # scale_color_npg() +
+  # scale_fill_npg()
+# 
+per_frame_comparments
+# ggsave(paste0(date, "_perFrameCompartments.pdf"), plot = per_frame_comparments, width = 12, height = 9, device = cairo_pdf)
+# ggsave(paste0(date, "_perFrameCompartments.eps"), plot = per_frame_comparments, width = 12, height = 9, device = cairo_pdf)
+```
+
+
+```{r}
+tc_comparments <- ggbetweenstats(use_comp_compare,
+               x = MMS_localization_class,
+               y = Percentage_reloc_less,
+               type = 'robust',
+               violin.args = list(alpha = 0.2, na.rm = TRUE, scale = 'area'),
+               point.args = list(size = 0)
+                )#+
+  # geom_sina(use_comp_compare, mapping = aes (color = MMS_localization_class), inherit.aes = T, size = 2, alpha = 0.6, scale = 'area')+
+  # ggtitle(label = 'Tc-compartments')+
+  # scale_color_npg() +
+  # scale_fill_npg()
+
+# ggsave(paste0(date, "_TimecourseCompartments.pdf"), plot = tc_comparments, width = 12, height = 9, device = cairo_pdf)
+# ggsave(paste0(date, "_TimecourseCompartments.eps"), plot = tc_comparments, width = 12, height = 9, device = cairo_pdf)
+tc_comparments
+```
+
+
+```{r}
+penetrances_updated <- penetrances_updated %>% 
+  group_by(MMS_localization_class) %>%
+  mutate(level = paste0(MMS_localization_class, " (n = ", n(), ")"))
+
+compartmental_comparison <-  ggplot(penetrances_updated %>% 
+                                      filter(!MMS_localization_class %in% c("ER foci", "nuc periph", "nucleolus", "NA")) %>%
+                                      drop_na(MMS_localization_class),
+                                aes (x = Percentage_reloc, y = Percentage_reloc_less, color = MMS_localization_class))+
   geom_point()+
-  stat_ellipse() +
-  facet_grid(~MMS_localization_class)+
-  theme_minimal()+
-  theme(legend.position = "none",
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())
+  stat_ellipse(type = "t") +
+  sm_statCorr(corr_method = 'kendall', show_text = TRUE, text_size = 3)+
+  facet_grid(~level)+
+  theme_cowplot()+
+  theme(legend.position = "none")
+  
+  # sm_statCorr(corr_method = 'pearson', show_text = TRUE, text_size = 3)+
+  # theme(x.text = element_text(angle = 90)
+  # theme_classic()+
   
 compartmental_comparison
+
+ggsave(sprintf("%s_pen_compartments_kendall_MMS.pdf", date), compartmental_comparison, width = 20, height = 10)
+ggsave(sprintf("%s_pen_compartments_kendall_MMS.eps", date), compartmental_comparison, width = 20, height = 10)
+```
+```{r}
+ggbetweenstats(data = penetrances_updated %>% 
+                                      filter(!MMS_localization_class %in% c("ER foci", "nuc periph", "nucleolus", "NA")),
+              x = MMS_localization_class,
+              y = Percentage_reloc_less,
+              method = 'robust')
 ```
 
 ```{r}
@@ -210,7 +329,8 @@ penetrances_w_HUfill<- read_parquet("D:/ALL_FINAL/Combined_by_perc/penetrance_up
 penetrances_w_HU_g <- ggplot(filter(penetrances_w_HUfill, !MMS_HU_merged_class %in% c("cyto; nucleus", "ER foci")), aes (x = Percentage_reloc, y = updated_yet_perc, color = MMS_HU_merged_class))+
   geom_point()+
   stat_ellipse(type = "t")+
-  sm_statCorr(corr_method = 'pearson', show_text = TRUE, text_size = 3)+
+  # sm_statCorr(corr_method = 'pearson', show_text = TRUE, text_size = 3)+
+  sm_statCorr(corr_method = 'kendall', show_text = TRUE, text_size = 3)+
   facet_grid(~level)+
   # theme(x.text = element_text(angle = 90)
   # theme_classic()+

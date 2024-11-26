@@ -1,6 +1,6 @@
 import customtkinter
 import os
-import segmentation as segment #* This is my custom package to control the segmentation/pass off to snakemake written by Andreas Cuny
+import segmentation as segment #* This is my custom package to control the segmentation off to snakemake written by Andreas Cuny
 
 Experimental_info = {
     "timepoint_space": time_point_tk,
@@ -47,9 +47,9 @@ segment_button.pack(pady = 12, padx = 10)
 
 
 
-microfluidcs_results_tk = customtkinter.CTkEntry(master= frame, placeholder_text="") 
+microfluidcs_results_tk = customtkinter.CTkEntry(master= frame, placeholder_text="")
 
 analyze = slash_switch()
-microfluidcs_results = 
+microfluidcs_results =
 
 

@@ -3,10 +3,10 @@
 - [[__init__.py]]
 - **__pycache__**
 	- [[__init__.cpython-38.pyc]]
-	- [[img_indeexer.cpython-38.pyc]]
+	- [[img_indexer.cpython-38.pyc]]
 - [[compare_info_index_er.py]]
-- [[img_indeexer_compare.py]]
-- [[img_indeexer.py]]
+- [[img_indexer_compare.py]]
+- [[img_indexer.py]]
 - [[imgIndex_er.py]]
 - [[info_index_er.txt]]
 - [[manual_shifitng.py]]

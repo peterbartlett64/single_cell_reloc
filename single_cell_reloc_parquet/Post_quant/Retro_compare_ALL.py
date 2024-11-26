@@ -135,7 +135,7 @@ subset = subset.loc[subset['track_length'] >= 5]
 #%%
 subset.to_parquet('subset_end.parquet', index=True)
 #%%
-subset = pPosd.read_parquet("D:\ALL_FINAL\Combined_by_perc\merged_data_final.parquet")
+subset = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\merged_data_final.parquet")
 #%%
 test = subset.loc[subset['Protein'] == 'EXO70'].reset_index(drop = True)
 # print (100 * test.groupby(['Protein','V']).size() / len(df.index))

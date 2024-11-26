@@ -8,7 +8,7 @@ import single_cell_reloc_parquet.ImageJ as ImageJ
 from joblib import Parallel, delayed
 import pandas as pd
 from datetime import date
-import single_cell_reloc_parquet.Pre_seg.img_indeexer as img_er
+import single_cell_reloc_parquet.Pre_seg.img_indexer as img_er
 import single_cell_reloc_parquet.Pre_track.orgAllmask_er as org_er
 import logging
 #%%/

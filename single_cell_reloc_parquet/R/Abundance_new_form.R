@@ -195,11 +195,11 @@ npg_clrs <-  pal_npg("nrc", alpha = 0.7)(4)
 Real_Abundance <- read_excel("C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Code/Data_copies/Information_files/Localization_merging/TableS8_Final_MOD.xlsx")
 Real_foldChange <- read_excel("C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Code/Data_copies/Information_files/Localization_merging/foldAbundance_TableS9_MOD.xlsx")
 
-df <- read_parquet("D:/ALL_FINAL/Combined_by_perc/Loc_data_comp_merged_everything.parquet", as_data_frame = F) %>%
+df <- read_parquet("D:/ALL_FINAL/Combined_by_perc/Loc_data_comp_merged_everything.parquet", as_data_frame = F) %>% 
   select("Standard Name", Protein, MMS_localization_class, HU_localization_class, MMS_HU_merged_class, Cell_Barcode, Date,
                    Unique_Frame, Protein, Is_treated, Frames_post_treatment, Unique_pos,
-                   Loc_score, Relocalized, Abundance, log_Abundance, log_Loc_score, z_score_Loc,
-                   z_score_Abund, z_score_logLoc, z_score_logAbund) %>%
+                   Loc_score, Relocalized, Abundance, LogAbundance, log_Abundance, log_Loc_score, z_score_Loc,
+                   z_score_Abund, z_score_logLoc, z_score_logAbund, currProportion, currYetProportion) %>%
   filter(!(Protein %in% c("PPH22d0210", "LCD1", "RAD5", "RFA1d0210", "LSM3d0210r1", "RRP17d0210", "SLX8", "XRS2d0210", "Contam."))) %>%
   collect() %>%
   rename(Standard_Name = "Standard Name")
@@ -211,7 +211,8 @@ df <- read_parquet("D:/ALL_FINAL/Combined_by_perc/Loc_data_comp_merged_everythin
 zeroHours <- df %>%
   filter(Frames_post_treatment <= 0, Frames_post_treatment > -4) %>%
   group_by(Protein) %>%
-  summarise(Abundance_med = median(log_Abundance)) %>%
+  summarise(Abundance_med = median(LogAbundance)) %>% 
+  # summarise(Abundance_med = median(log_Abundance)) %>%
   left_join(Real_Abundance, by = c("Protein" = "Standard_Name")) %>%
   select(Protein, Abundance_med, UNT_MEAN, UNT_PercentileR) %>% 
   mutate(UNT_PercentileRn = percent_rank(UNT_MEAN))
@@ -220,18 +221,21 @@ zeroHours <- df %>%
 twoHours <- df %>%
   filter(Frames_post_treatment >= 14 & Frames_post_treatment <=18) %>%
   group_by(Protein) %>%
-  summarise(Abundance_med = median(log_Abundance)) %>%
+  summarise(Abundance_med = median(LogAbundance)) %>% 
+  # summarise(Abundance_med = median(log_Abundance)) %>%
   left_join(Real_Abundance, by = c("Protein" = "Standard_Name")) %>%
   select(Protein, Abundance_med, TKA_2h) %>% 
-  mutate(UNT_PercentileRn = percent_rank(TKA_2h))
-
+  mutate(TKA_PercentileRn = percent_rank(TKA_2h))
 
 fourHours <- df %>%
   filter(Frames_post_treatment >= 30 & Frames_post_treatment <=34) %>%
   group_by(Protein) %>%
-  summarise(Abundance_med = median(log_Abundance)) %>%
+  summarise(Abundance_med = median(LogAbundance)) %>% 
+  # summarise(Abundance_med = median(log_Abundance)) %>%
   left_join(Real_Abundance, by = c("Protein" = "Standard_Name")) %>%
-  select(Protein,Abundance_med, MAZ_4h)
+  select(Protein,Abundance_med, MAZ_4h) %>% 
+  mutate(MAZ_PercentileRn = percent_rank(MAZ_4h))
+
 
 
 abundance_0hr_corr <- ggscatterstats(filter(zeroHours, UNT_MEAN < 100000),
@@ -248,47 +252,113 @@ abundance_0hr_corr <- ggscatterstats(filter(zeroHours, UNT_MEAN < 100000),
                                      ysidehistogram.args = list(fill = npg_clrs[3]))
 abundance_0hr_corr
 # ggthemes::theme_clean()
-ggsave(sprintf("%s_0hrLogAbundance_plot.png", date), abundance_0hr_corr, width = 10, height = 10)
-ggsave(sprintf("%s_0hrLogAbundance_plot.pdf", date), abundance_0hr_corr, width = 10, height = 10)
-ggsave(sprintf("%s_0hrLogAbundance_plot.eps", date), abundance_0hr_corr, width = 10, height = 10)
+ggsave(sprintf("%s_0hrLogAbundance_plot.png", date), abundance_0hr_corr, width = 20, height = 10)
+ggsave(sprintf("%s_0hrLogAbundance_plot.pdf", date), abundance_0hr_corr, width = 20, height = 10)
+ggsave(sprintf("%s_0hrLogAbundance_plot.eps", date), abundance_0hr_corr, width = 20, height = 10)
 
-
-
-
-abundance_2hr_corr <- ggscatterstats(filter(twoHours, Abundance_med <180 & TKA_2h < 30000),
+abundance_2hr_corr <- ggscatterstats(filter(twoHours, TKA_2h < 100000),
                x = "TKA_2h",
                y = "Abundance_med",
                title = "Abundance at 2 hours",
+               type = 'robust',
                xlab = "Molecule Count (2h 0.03% MMS)",
                ylab = "Median Abundance (2 hours post treatment)",
                point.args = list(colour= npg_clrs[1]),
                label.var = Protein,
-               label.expression = Protein == 'RAD51'| Protein == 'RMI1' | Protein == 'SAE2',
+               label.expression = Protein == 'RAD51'| Protein == 'RMI1' | Protein == 'SAE2',# TKA_2h > 100000,
                xsidehistogram.args = list(fill = npg_clrs[2]),
                ysidehistogram.args = list(fill = npg_clrs[3]))
+abundance_2hr_corr
   # ggthemes::theme_clean()
-ggsave(sprintf("%s_2hrLogAbundance_plot.png", date), abundance_2hr_corr, width = 10, height = 10)
-ggsave(sprintf("%s_2hrLogAbundance_plot.pdf", date), abundance_2hr_corr, width = 10, height = 10)
-ggsave(sprintf("%s_2hrLogAbundance_plot.eps", date), abundance_2hr_corr, width = 10, height = 10)
+ggsave(sprintf("%s_2hrLogAbundance_plot.png", date), abundance_2hr_corr, width = 20, height = 10)
+ggsave(sprintf("%s_2hrLogAbundance_plot.pdf", date), abundance_2hr_corr, width = 20, height = 10)
+ggsave(sprintf("%s_2hrLogAbundance_plot.eps", date), abundance_2hr_corr, width = 20, height = 10)
 
 
-abundance_4hr_corr <- ggscatterstats(filter(fourHours, Abundance_med <180, MAZ_4h < 30000),
+abundance_4hr_corr <- ggscatterstats(filter(fourHours, MAZ_4h < 100000),
                x = "MAZ_4h",
                y = "Abundance_med",
                title = "Abundance at 4 hours",
                xlab = "Molecule Count (4h 0.03% MMS)",
+               type = 'robust',
                ylab = "Median Abundance (2 hours post treatment)",
                point.args = list(colour= npg_clrs[1]),
                label.var = Protein,
-               label.expression = Protein == 'RAD51'| Protein == 'RMI1' | Protein == 'SAE2',
+               label.expression = Protein == 'RAD51'| Protein == 'RMI1' | Protein == 'SAE2',# MAZ_4h > 100000,
                xsidehistogram.args = list(fill = npg_clrs[2]),
                ysidehistogram.args = list(fill = npg_clrs[3]))
+abundance_4hr_corr
 
-ggsave(sprintf("%s_4hrLogAbundance_plot.png", date), abundance_4hr_corr, width = 10, height = 10)
-ggsave(sprintf("%s_4hrLogAbundance_plot.pdf", date), abundance_4hr_corr, width = 10, height = 10)
-ggsave(sprintf("%s_4hrLogAbundance_plot.eps", date), abundance_4hr_corr, width = 10, height = 10)
+ggsave(sprintf("%s_4hrLogAbundance_plot.png", date), abundance_4hr_corr, width = 20, height = 10)
+ggsave(sprintf("%s_4hrLogAbundance_plot.pdf", date), abundance_4hr_corr, width = 20, height = 10)
+ggsave(sprintf("%s_4hrLogAbundance_plot.eps", date), abundance_4hr_corr, width = 20, height = 10)
+
+
+df_corr_pen <- df %>% 
+  group_by(Frames_post_treatment) %>% 
+  mutate(Abundance_med = median(LogAbundance)) %>% 
+  ungroup() %>% 
+  mutate(Frames_post_treatment = as.integer(Frames_post_treatment)) %>% 
+  mutate(currProportion = currProportion * 100)
+
+#* Attempt to see if there is a correlation between abundance and penetrance
+abundance_curr_penetrance<- grouped_ggscatterstats(filter(df_corr_pen, Frames_post_treatment %in% c(0, 8, 16, 24, 32)),
+                                     x = "currProportion",
+                                     y = "Abundance_med",
+                                     grouping.var = "Frames_post_treatment",
+                                     xlab = "Current Proportion",
+                                     type = 'robust',
+                                     ylab = "Median Abundance (2 hours post treatment)"
+                                     # point.args = list(colour= npg_clrs[1]),
+                                     # label.expression = Protein == 'RAD51'| Protein == 'RMI1' | Protein == 'SAE2',# MAZ_4h > 100000,
+                                     # label.var = Protein)
+)
+                                     # xsidehistogram.args = list(fill = npg_clrs[2]),
+   
+abundance_curr_penetrance
+
+df_g <- df %>% 
+  group_by(Protein, Frames_post_treatment) %>% 
+  mutate(log_Abundance = log(Abundance)) %>% 
+  mutate(Abundance_med = median(log_Abundance)) %>% 
+  ungroup() %>% 
+  mutate(currProportion = currProportion *100) %>% 
+  mutate(currYetProportion = currYetProportion * 100)
+
+                                  # ysidehistogram.args = list(fill = npg_clrs[3]))
+abundance_curr_penetrance <- ggplot(data = filter(df_g, Frames_post_treatment %in% c(0,8,16,24,32)),
+                               mapping = aes(x = currProportion, y = Abundance_med))+
+  geom_point() +
+  # geom_density2d()+
+  sm_statCorr(corr_method = 'pearson', show_text = TRUE, color = 'black')+
+  facet_row(~Frames_post_treatment)
+
+abundance_yet_penetrance <- ggplot(data = filter(df_g, Frames_post_treatment %in% c(0,8,16,24,32)),
+                               mapping = aes(x = currYetProportion, y = Abundance_med))+
+  geom_point() +
+  # geom_density2d()+
+  sm_statCorr(corr_method = 'pearson', show_text = TRUE, color = 'black')+
+  facet_row(~Frames_post_treatment)
+
+ggsave(sprintf("%s_Abundance_curr_plot.png", date), abundance_curr_penetrance, width = 30, height = 10)
+ggsave(sprintf("%s_Abundance_curr_plot.pdf", date), abundance_curr_penetrance, width = 30, height = 10)
+ggsave(sprintf("%s_Abundance_curr_plot.eps", date), abundance_curr_penetrance, width = 30, height = 10)
+
+ggsave(sprintf("%s_Abundance_yet_plot.png", date), abundance_yet_penetrance, width = 30, height = 10)
+ggsave(sprintf("%s_Abundance_yet_plot.pdf", date), abundance_yet_penetrance, width = 30, height = 10)
+ggsave(sprintf("%s_Abundance_yet_plot.eps", date), abundance_yet_penetrance, width = 30, height = 10)
+
+abundance_curr_penetrance
+abundance_yet_penetrance
+
+
+
+
+
+
 #
 #
+
 # twoHours <- df %>%
 #   filter(Frames_post_treatment >= 14 & Frames_post_treatment <=18) %>%
 #   group_by(Protein) %>%

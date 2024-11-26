@@ -141,7 +141,7 @@ new <- subset_controler(penetrance_values) %>%
 #   scale_fill_brewer(type = "qual", palette = "Set1") +
 #   ggtitle("UC Berkeley admissions and rejections, by sex and department")
 
-sankey_it <- function(df)
+# sankey_it <- function(df)
 
 sankeyed_data <- subset_controler(penetrance_values)%>%
   mutate(Percentage_reloc_less = as.integer(Percentage_reloc_less)) %>% 

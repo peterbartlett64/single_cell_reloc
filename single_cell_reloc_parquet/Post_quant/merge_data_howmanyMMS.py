@@ -690,43 +690,68 @@ if __name__ == "__main__":
 	# for f in files: #TODO: Add multi-read_functionality
 		# pd.read_csv(f).set_index()
 
-	# micro_map = microfluidics_map_f()
+	micro_map = microfluidics_map_f()
 	# # .drop(columns=['Predicted_localization_Change', 'Notes', 'Current_Stage', 'Location', 'Fullmicro_map'])
-	# map_drop_columns = ['Predicted_localization_Change', 'Notes', 'Current_Stage', 'Location', 'Fullmicro_map']
-	# micro_map.drop(micro_map.columns[micro_map.columns.str.contains('Unnamed',case = False)],axis = 1, inplace = True)
-	# micro_map.drop(columns=[col for col in micro_map if col in map_drop_columns], inplace=True)
+	map_drop_columns = ['Predicted_localization_Change', 'Notes', 'Current_Stage', 'Location', 'Fullmicro_map']
+	micro_map.drop(micro_map.columns[micro_map.columns.str.contains('Unnamed',case = False)],axis = 1, inplace = True)
+	micro_map.drop(columns=[col for col in micro_map if col in map_drop_columns], inplace=True)
 
 	sgd = sgd_map_f()
 	# micro_map = pd.merge(sgd, micro_map, left_index=True, right_index=True, how = 'left')
 	#. Decided that will just use the list of proteins from SGD to merge with the other datasets
 
-	#< tkach = tkach_f()
-	#< # denervaud = denervaud_f()
-	#< mazumder = Mazumder_f()
-	#< Den_ycd_map_df = denervaud_ycd_f()
-	#< Brandons_map = pd.read_excel("Brandons_Paper.xlsx", sheet_name="Sheet1").set_index('ORF')
-	#< Brandons_map = Brandons_map.drop(columns=['Protein']).rename(columns={'Subcellular Compartment Re-localization': 'Dest_Call'}).add_suffix('_Brandons')
-	#< Huh = Huh_f()
+	tkach = tkach_f()
+	# denervaud = denervaud_f()
+	mazumder = Mazumder_f()
+	Den_ycd_map_df = denervaud_ycd_f()
+	Brandons_map = pd.read_excel("Brandons_Paper.xlsx", sheet_name="Sheet1").set_index('ORF')
+	Brandons_map = Brandons_map.drop(columns=['Protein']).rename(columns={'Subcellular Compartment Re-localization': 'Dest_Call'}).add_suffix('_Brandons')
+	Huh = Huh_f()
 
 	tkach = pd.read_excel("C:/Users/pcnba/Grant Brown's Lab Dropbox/Peter Bartlett/Peter Bartlett Data/Code/Data_copies/Information_files/Localization_merging/Tkach_refined.xls", sheet_name='Localization scoring')
 	tkach = tkach.rename(columns={'MMS localization change class': 'MMS_localization_class', 'HU Localication change class': 'HU_localization_class'})
 	micro_map = sgd.merge(tkach, left_on = "Gene_Standard_Name", right_on = "Standard Name", how = 'left')
 	micro_map['MMS_HU_merged_class'] = micro_map['MMS_localization_class'].fillna(micro_map['HU_localization_class'])
 
+##################
+tkach.set_index('Systematic ORF', inplace = True)
+tkach = tkach.dropna(subset = "MMS_localization_class")
+
+den = denervaud_ycd.groupby('geneName').agg(lambda x: x.iloc[0])
+den.set_index('yORF', inplace = True)
+
+mms_merged = pd.merge(tkach, maz, left_index = True, right_index = True, how = 'outer')
+mms_merged = pd.merge(mms_merged, den, left_index = True, right_index = True, how = 'outer')
+#%%
+protein_list = [
+	'AAC1', 'ACE2', 'AFT1', 'AGR2', 'AIM20', 'AIM4', 'AIP1', 'AME1', 'APC1', 'APC4', 'APC5', 'APJ1', 'ARO4', 'ARP4', 'ARP6', 'ASE1', 'ATC1', 'ATG16', 'ATG18', 'ATG29', 'ATG3', 'AVL9', 'BCH1', 'BIR1', 'BMH1', 'BMH2', 'BTN2', 'BUD4', 'CAF8', 'CAP1', 'CAP2', 'CAT8', 'CBK1', 'CBP2', 'CCC1', 'CDC14', 'CDC15', 'CDC20', 'CDC24', 'CDC27', 'CDC40', 'CDC48', 'CDC6', 'CGR1', 'CHK1', 'CHS7', 'CLB3', 'CMS1', 'CRM11', 'CSM1', 'CTR1', 'CTR86', 'CYK3', 'DBF4', 'DCP1', 'DCP2', 'DDC1', 'DDC2', 'DHH1', 'DIP5', 'DMA2', 'DOA1', 'DOT6', 'DPB11', 'DSE1', 'DSE3', 'DSF2', 'DUS3', 'ECM29', 'ECM3', 'ECO1', 'EDC1', 'EDC2', 'EDC3', 'ENT1', 'ESP2', 'EXO1', 'EXO70', 'FAA1', 'FAA4', 'FAR1', 'FEN2', 'FGV2', 'FIG4', 'FIN1', 'FLR1', 'FPR2', 'FUI1', 'GCD8', 'GIC1', 'GLC3', 'GLN1', 'GSY1', 'GSY2', 'GTB1', 'GYL1', 'GYP5', 'HAA1', 'HAC1', 'HFA1', 'HGH1', 'HHF1', 'HMG1', 'HMG2', 'HNT3', 'HOS2', 'HSL7', 'HSP104', 'HSP26', 'HSP42', 'HTA2', 'INO80', 'IPL1', 'IQG1', 'ITR1', 'IWR1', 'IZH4', 'KTR1', 'KTR3', 'LAG1', 'LAP4', 'LCD1', 'LIF1', 'LOC1', 'LRS4', 'LSM1', 'LSM12', 'LSM2', 'LSM3d0217', 'LSM4', 'LSM7', 'LST8', 'MCM2', 'MGS1', 'MKT1', 'MMS21', 'MOB1', 'MRC1', 'MRE11', 'MRS8', 'MRT4', 'MSB1', 'MSB3', 'MSD1', 'MSH3', 'MSN1', 'MSN2d0222r2', 'MTC5', 'MTR10', 'NAM7', 'NEJ1', 'NMD4', 'NOB1', 'NOP13', 'NOP56', 'NOP58', 'NPL4', 'NSG1', 'NSP1', 'OPY2', 'PAT1', 'PBP1', 'PBP2', 'PBP4', 'PDR3', 'PEX21', 'PEX29', 'PHO81', 'PIL1', 'PKP2', 'PNC1', 'POL30', 'PPH21', 'PPH22d0214', 'PPH3', 'PPN1', 'PRE3', 'PRS5', 'PSO2', 'PSY1', 'PXL1', 'QCR6', 'RAD24', 'RAD5', 'RAD50', 'RAD51', 'RAD52d0220r1', 'RAD53', 'RAD54', 'RAD55', 'RAD57', 'RAD9', 'RAS1', 'RBD2', 'RDH54', 'REV1', 'RFA1d0213', 'RFA2', 'RFC2', 'RFC3', 'RFC4', 'RGA1', 'RIM1', 'RME1', 'RMI1', 'RMT2', 'RNR1d0216r1', 'RNR4', 'RPC10', 'RPL15B', 'RPL40A', 'RPN4', 'RPS18A', 'RQC2', 'RRB1', 'RRD1', 'RRP17d0210', 'RRP5', 'RSF2', 'RTR2d0215r2', 'RTS1', 'RTT107', 'RVB1', 'SAC6', 'SAE2', 'SCD6', 'SCH9', 'SEC11', 'SEC3', 'SFH5', 'SGS1', 'SGT2', 'SIP5', 'SIZ2', 'SKG3', 'SLD2', 'SLD3', 'SLX4', 'SLX8', 'SNT2', 'SPT21', 'SQS1', 'SRP68', 'SRS2', 'STB2', 'STB4', 'SUB2', 'SUT1', 'SVL3', 'TDR3', 'TIS11', 'TOF2', 'TOP3', 'TOS4', 'TRM112', 'TSA1', 'TSC13', 'TSR1', 'TSR3', 'TUB1', 'UBC9', 'UFD4', 'ULP1', 'ULP2', 'ULS1', 'VPH1', 'VPS1', 'XBP1', 'XRS2d0215', 'YAP1', 'YAR009C', 'YBR197C', 'YBR259W', 'YDL111C', 'YDL129W', 'YDL156W', 'YDR089W', 'YDR115W', 'YDR132C', 'YDR170W-A', 'YDR348C', 'YER064C', 'YGR042W', 'YGR122W', 'YGR151C', 'YHR182W', 'YIL108W', 'YJR056C', 'YKL060W', 'YKU70', 'YKU80', 'YLR108C', 'YLR126C', 'YLR297W', 'YLR363W-A', 'YML011C', 'YML108W', 'YMR031C', 'YMR061C', 'YMR160W', 'YMR291W', 'YOF1', 'YOR342C', 'YOX1', 'YPR174C', 'YTA8', 'ZIP2', 'ZPR1'
+]
+
+#%%
+
+
+
+
+#################
+
+
+
+
+
 
 
 	#< loqate = pd.read_excel('proteomesummarylamicro_mapversion.xlsx', sheet_name='Sheet1', usecols=['ORF', 'control Localization']).set_index('ORF').replace('below threshold', np.nan)
 
-	#< micro_map = sgd.merge(Den_ycd_map_df, left_index= True, right_index= True, how = 'left')
-	#< micro_map = micro_map.merge(tkach, left_index=True, right_index = True, how= "left")
+	micro_map = sgd.merge(Den_ycd_map_df, left_index= True, right_index= True, how = 'left')
+	micro_map = micro_map.merge(tkach, left_index=True, right_index = True, how= "left")
 
 	#< #Either should work below
 	#< micro_map = micro_map.merge(mazumder, left_index = True, right_index = True, how = "left")
-	#< # micro_map = micro_map.merge(mazumder, left_on = 'Gene_Standard_Name', right_on = 'CommName_Mazumder', how = "left")
+	micro_map = micro_map.merge(mazumder, left_on = 'Gene_Standard_Name', right_on = 'CommName_Mazumder', how = "left")
 
-	#< micro_map = pd.merge(micro_map, Brandons_map, right_index=True, left_index=True, how= 'left')
+	micro_map = pd.merge(micro_map, Brandons_map, right_index=True, left_index=True, how= 'left')
 	#< #Artifact of removed micorfluidics map
-	#< # micro_map = micro_map.sort_values(by = ['Date', 'Run_Number', 'MapID_(Col_Range)'])
+	micro_map = micro_map.sort_values(by = ['Date', 'Run_Number', 'MapID_(Col_Range)'])
 
 	#< micro_map = micro_map.merge(Huh, left_index=True, right_index=True, how='left')
 	#< micro_map = micro_map.merge(loqate, left_index=True, right_index=True, how='left')

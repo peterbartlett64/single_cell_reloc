@@ -112,7 +112,7 @@ if __name__ == "__main__":
 	analyze = 'E:/Microfluidics/Analyze'
 	os.chdir(microfluidics_results)
 
-	import single_cell_reloc_parquet.Pre_seg.img_indeexer as img_er
+	import single_cell_reloc_parquet.Pre_seg.img_indexer as img_er
 	img_er.imgIndex_er(analyze, microfluidics_results)
 	import single_cell_reloc_parquet.Pre_track.orgAllmask_er as org_er
 	org_er.orgAllmask_er(microfluidics_results=microfluidics_results)

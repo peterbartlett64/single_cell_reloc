@@ -12,8 +12,9 @@ df_testing <- read_parquet("D:/ALL_FINAL/Combined_by_perc/Loc_data_comp_merged_e
 df_testing[,-1] <-round(df_testing[,-1],digits = 2)
 
 under <- data.frame(cbind(names(df_testing), t(df_testing))) %>% 
-  gt() %>% 
-  gtsave(filename = "FLR1_udnerstats.pdf")
+  gt()
+gtsave(under, filename = "FLR1_udnerstats.pdf")
+gtsave(under, filename = "FLR1_udnerstats.html")
 
 
 

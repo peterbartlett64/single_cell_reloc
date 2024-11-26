@@ -10,6 +10,7 @@ import pickle as pk
 from datetime import datetime
 
 #%%
+
 def initiate_run():
 	global user_name
 	user_name = os.getlogin()
@@ -17,15 +18,16 @@ def initiate_run():
 		prefix = 'F:'
 	elif user_name == 'pcnba':
 		prefix = 'D:'
-	path_temp = f'{prefix}\\Microfluidics\\RESULTS\\{user_name}'
+	path_temp = os.path.join(prefix, 'Microfluidics', 'RESULTS')
+	# path_temp = f'{prefix}\\Microfluidics\\RESULTS'
 	try:os.mkdir(path_temp)
 	except FileExistsError: pass
 	return(user_name, prefix, path_temp)
 
 def setup_logging(logger_name, microfluidics_results): #* Setup a logger for each call
 
-	LOG_HOST = "logs.papertrailapp.com"
-	LOG_PORT = 31634
+	# LOG_HOST = "logs.papertrailapp.com"
+	# LOG_PORT = 31634
 
 	log_folder = os.path.join(microfluidics_results, 'logs')
 	try:
@@ -368,15 +370,6 @@ def global_manager():
 	cont = 0
 	while cont != 1:
 		cont = global_continue(Global_variables= Global_variables)
-
-	#// I don't know what this is from
-	#! None
-	#! Analyze at ,
-	#! microfluidics_results at ,
-	#! post_path at ,
-	#! percentiles are [[12], 95, 99].
-	#! Running with cpu_se cpu cores out of 12
-	#//
 	return(Global_variables)
 
 def position_range(results_dir): # Input in form "dMMDDrNpNN-NN", use the gloabl version of imgIndex #TODO: Move this function to gloabl functions
@@ -432,17 +425,18 @@ convert_dict = {'Path': object, #* This has to be converted from 1 and 0
 				'Protein': 'category',
 				'mKO_direction': 'category',
 				'mKa_direction': 'category',
-				'Run': 'int8', #* This leaves for -128 to 127 runs in a day
+				'Run': 'int8', #* This leaves room for -128 to 127 runs in a day
 				'Col': 'int32',
 				'Date': 'category'}
 
-def col_convert_with_larger_dict(df, dictionary_convert = convert_dict): #. This is a custom written function. I am not sure if there are potential issues
+def col_convert_with_larger_dict(df, dictionary_convert = convert_dict):
 	cols = df.columns
 	for c in cols:
 		df[c] = df[c].astype(dictionary_convert[c])
 	return(df)
 
 #? There is a version that makes global varaibles and there is a version that stores the globals in a dictionary
+
 if __name__ == "__main__": #* Allow the program to be run individually to change the global variables
 	global_manager()
 	print(Global_variables)

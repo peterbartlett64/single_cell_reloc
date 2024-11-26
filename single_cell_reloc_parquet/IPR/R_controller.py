@@ -35,7 +35,7 @@ def run_r_script(r_script_path, input_df1, input_df2 = None): #* Allow the funct
 
 if __name__ == "__main__":
     # Run the R script
-    GlobalVariables = glv.GlobalVariables()
+    GlobalVariables = gv.global_manager()
     file_name = input("Enter the file name: ")
     full_path_file =os.path.join(GlobalVariables.r_script_path, file_name)
     r_script_path = "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\single_cell_reloc_parquet\Visualizations\R_scripts\R_script_1.R"

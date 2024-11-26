@@ -30,7 +30,7 @@ interest_prots <- list('SAE2', 'RAD51', 'RMI1')
 
 #* The below is for the SAE2 plot
 df_for_facet_abundance = read_parquet("D:/ALL_FINAL/Combined_by_perc/Loc_data_comp_merged_everything.parquet", as_data_frame = F) %>% 
-  select(z_score_Loc, z_score_logAbund, Protein, Frames_post_treatment, Cell_Barcode, Unique_pos) %>% 
+  select(z_score_Loc, z_score_logAbund, Protein, Frames_post_treatment, Cell_Barcode, Unique_pos, Relocalized) %>% 
   filter(Frames_post_treatment %in% c(0,8,16,24,32)) %>% 
   filter(Protein %in% c('SAE2', 'RAD51', 'RMI1')) %>% 
   collect()
@@ -46,10 +46,25 @@ test <-  df_for_facet_abundance %>%
 
 # ggthemr('fresh')
 # ggthemr_reset()
-corr_facet <- function(df, protein, upper){
+corr_facet <- function(df, protein, upper, var_name){
+  list_reloc_zero <- df %>% 
+    filter(Protein == protein) %>% 
+    filter(Frames_post_treatment == 0 & Relocalized == 1) %>% 
+    distinct()
+  
+  df <- df %>% 
+    # filter(Protein == protein) %>% 
+    # filter(Cell_Barcode %in% list_reloc_zero$Cell_Barcode)
+    mutate(rel_zero = case_when((Cell_Barcode %in% list_reloc_zero$Cell_Barcode) ~ "Y",
+                            .default = "N")) %>%
+    mutate(rel_zero = as_factor(rel_zero))
+  
   gg_pearson <-ggplot(df %>% filter(Protein == protein, z_score_Loc <upper, z_score_logAbund< upper), aes(x = z_score_Loc, y = z_score_logAbund)) +
     # geom_pointdensity(adjust = .025) +
-    geom_point(aes(color = Unique_pos)) +
+    
+    # geom_point(aes(color = as_factor(Unique_pos))) +
+    # geom_point(aes(color = as_factor(Relocalized))) +
+    geom_point(aes(color = as_factor(.data[[var_name]]))) +
     # geom_density2d()+
     sm_statCorr(corr_method = 'pearson', show_text = TRUE, color = 'black') +
     #geom_pointdensity(x = 'z_score_logLoc', y = 'z_score_logAbund')+
@@ -62,8 +77,9 @@ corr_facet <- function(df, protein, upper){
     # scale_y_tufte()+
     facet_grid(cols = vars(Frames_post_treatment))+
     ggtitle(sprintf("Corr_facet_Pearson_%s", protein))
-  ggsave(sprintf("%s_Corr_facet_Pearson_%s.png", date, protein), gg_pearson, width = 30, height = 10)
-  ggsave(sprintf("%s_Corr_facet_Pearson_%s.eps", date, protein), gg_pearson, width = 30, height = 10)
+  ggsave(sprintf("%s_%s_Corr_facet_Pearson_%s.png", date, var_name, protein), gg_pearson, width = 30, height = 10)
+  # ggsave(sprintf("%s_Corr_facet_Pearson_%s.eps", date, protein), gg_pearson, width = 30, height = 10)
+  ggsave(sprintf("%s_%s_Corr_facet_Pearson_%s.pdf", date,var_name, protein), gg_pearson, width = 30, height = 10)
   
   # gg_spearman <-ggplot(df %>% filter(Protein == protein), aes(x = z_rank_Abund, y = z_rank_Loc)) +
   #   # geom_pointdensity(adjust = .025) +
@@ -80,36 +96,45 @@ corr_facet <- function(df, protein, upper){
   #   ggtitle(sprintf("Corr_facet_Spearman_%s", protein))
   # ggsave(sprintf("%s_Corr_facet_Spearman_%s.png", date, protein), gg_spearman, width = 30, height = 10)
   # ggsave(sprintf("%s_Corr_facet_Spearman_%s.eps", date, protein), gg_spearman, width = 30, height = 10)
+  return(gg_pearson)
 }
 
 # for (p in interest_prots) {
 #   corr_facet(test, p, xlims, ylims)
 # }
 
-corr_facet(df_for_facet_abundance, 'SAE2', upper = 5)
-corr_facet(df_for_facet_abundance, 'RAD51', upper = 8)
-corr_facet(df_for_facet_abundance, 'RMI1', upper = 4)
+corr_facet(df_for_facet_abundance, 'SAE2', upper = 8, "rel_zero")
+corr_facet(df_for_facet_abundance, 'RAD51', upper = 14, "rel_zero")
+corr_facet(df_for_facet_abundance, 'RMI1', upper = 8, "rel_zero")
+
+corr_facet(df_for_facet_abundance, 'SAE2', upper = 8, "Relocalized")
+corr_facet(df_for_facet_abundance, 'RAD51', upper = 14, "Relocalized")
+corr_facet(df_for_facet_abundance, 'RMI1', upper = 8, "Relocalized")
+
+corr_facet(df_for_facet_abundance, 'SAE2', upper = 8, "Unique_pos")
+corr_facet(df_for_facet_abundance, 'RAD51', upper = 14, "Unique_pos")
+corr_facet(df_for_facet_abundance, 'RMI1', upper = 8, "Unique_pos")
 
 
-gg_pearson <-ggplot(test %>% filter(Protein == 'SAE2', z_score_Loc <5, z_score_logAbund< 5), aes(x = z_score_Loc, y = z_score_logAbund)) +
-  # geom_pointdensity(adjust = .025) +
-  geom_point(aes(color = Unique_pos)) +
-  # geom_density2d()+
-  sm_statCorr(corr_method = 'pearson', show_text = TRUE, color = 'black') +
-  #geom_pointdensity(x = 'z_score_logLoc', y = 'z_score_logAbund')+
-  # geom_xsidedensity(aes(y = after_stat(density)), position = "stack") +
-  # geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
-  scale_color_npg()+
-  scale_fill_npg()+
-  theme_minimal()+
-  # scale_x_continuous(limits = c(-1,5))+
-  # scale_y_continuous(limits = c(-1,5))+
-  facet_grid(cols = vars(Frames_post_treatment))+
-  ggtitle(sprintf("Corr_facet_Pearson_%s", 'SAE2'))
-ggsave(sprintf("%s_Corr_facet_Pearson_%s.png", date, 'SAE2'), gg_pearson, width = 30, height = 10)
-ggsave(sprintf("%s_Corr_facet_Pearson_%s.eps", date, protein), gg_pearson, width = 30, height = 10)
 
-
+#* This is old
+# gg_pearson <-ggplot(test %>% filter(Protein == 'SAE2', z_score_Loc <5, z_score_logAbund< 5), aes(x = z_score_Loc, y = z_score_logAbund)) +
+#   # geom_pointdensity(adjust = .025) +
+#   geom_point(aes(color = Unique_pos)) +
+#   # geom_density2d()+
+#   sm_statCorr(corr_method = 'pearson', show_text = TRUE, color = 'black') +
+#   #geom_pointdensity(x = 'z_score_logLoc', y = 'z_score_logAbund')+
+#   # geom_xsidedensity(aes(y = after_stat(density)), position = "stack") +
+#   # geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+#   scale_color_npg()+
+#   scale_fill_npg()+
+#   theme_minimal()+
+#   # scale_x_continuous(limits = c(-1,5))+
+#   # scale_y_continuous(limits = c(-1,5))+
+#   facet_grid(cols = vars(Frames_post_treatment))+
+#   ggtitle(sprintf("Corr_facet_Pearson_%s", 'SAE2'))
+# ggsave(sprintf("%s_Corr_facet_Pearson_%s.png", date, 'SAE2'), gg_pearson, width = 30, height = 10)
+# ggsave(sprintf("%s_Corr_facet_Pearson_%s.eps", date, protein), gg_pearson, width = 30, height = 10)
 
 
 

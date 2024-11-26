@@ -49,7 +49,7 @@ def Abundance_log_manager(local_prot_df:pd.DataFrame): #* The abundacne could be
 	local_prot_df["z_score_logAbund"] = group_prot_frame["log_Abundance"].transform(stats.zscore)
 
 	#* Added these lines below for comparison to the original values
-	local_prot_df["log_Abundance"] = local_prot_df['factor_median_OBJ_GFP']
+	# local_prot_df["log_Abundance"] = local_prot_df['factor_median_OBJ_GFP'] #. This line should not have been here.
 	local_prot_df["z_score_Loc"] = group_prot_frame["Loc_score"].transform(stats.zscore)
 	local_prot_df["z_score_Abund"] = group_prot_frame["Abundance"].transform(stats.zscore)
 	return(local_prot_df)

@@ -78,8 +78,6 @@ len_end = 32
 
 #Define functions
 
-
-
 #, Paired t-test for variable protein. This takes a while to run, so not a great idea
 
 

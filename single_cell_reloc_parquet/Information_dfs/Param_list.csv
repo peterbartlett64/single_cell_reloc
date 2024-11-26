@@ -1,0 +1,91 @@
+﻿Parameter,Meaning
+Cell_Barcode,Unique indentifiers of each cell
+ImageID / Unique_Frame (dfs with use one or the other),"Unique indentifiers of each Image. Includes: Date, Position, and Frame information"
+Date,Unique indentifiers of each Date. In 'MMDD' format
+Frame,Frame number as integer
+x80thPercentile_norm_OBJ_Median_GFP, 80thPercentile of  GFP pixel intensity normalized by the MEDIAN pixel intensity for distribution (for an individual cell)
+x90thPercentile_norm_OBJ_Median_GFP, 90thPercentile of  GFP pixel intensity normalized by the MEDIAN pixel intensity for distribution (for an individual cell)
+x95thPercentile_norm_OBJ_Median_GFP, 95thPercentile of GFP pixel intensity normalized by the MEDIAN pixel intensity for distribution (for an individual cell)
+x99thPercentile_norm_OBJ_Median_GFP, 99thPercentile of  GFP pixel intensity normalized by the MEDIAN pixel intensity for distribution (for an individual cell)
+x90thPercentile_norm_OBJ_Mean_Intensity_GFP, 90thPercentile of  GFP pixel intensity normalized by the MEAN pixel intensity for distribution (for an individual cell)
+x95thPercentile_norm_OBJ_Mean_Intensity_GFP, 95thPercentile of  GFP pixel intensity normalized by the MEAN pixel intensity for distribution (for an individual cell)
+x99thPercentile_norm_OBJ_Mean_Intensity_GFP, 99thPercentile of  GFP pixel intensity normalized by the MEAN pixel intensity for distribution (for an individual cell)
+x90thPercentile_norm_OBJ_Total_Intensity_GFP, 90thPercentile of  GFP pixel intensity normalized by the TOTAL pixel intensity for distribution (for an individual cell)
+x95thPercentile_norm_OBJ_Total_Intensity_GFP, 95thPercentile of  GFP pixel intensity normalized by the TOTAL pixel intensity for distribution (for an individual cell)
+x99thPercentile_norm_OBJ_Total_Intensity_GFP, 99thPercentile of  GFP pixel intensity normalized by the TOTAL pixel intensity for distribution (for an individual cell)
+x90thPercentile_norm_BKGRND_Median_GFP, 90thPercentile of  GFP pixel intensity (for an individual cell) normalized by the BACKGROUND MEDIAN pixel intensity
+x95thPercentile_norm_BKGRND_Median_GFP, 95thPercentile of  GFP pixel intensity (for an individual cell) normalized by the BACKGROUND MEDIAN pixel intensity
+x99thPercentile_norm_BKGRND_Median_GFP, 99thPercentile of  GFP pixel intensity (for an individual cell) normalized by the BACKGROUND MEDIAN pixel intensity
+x90thPercentile_norm_BKGRND_Mean_GFP, 90thPercentile of  GFP pixel intensity (for an individual cell) normalized by the BACKGROUND MEAN pixel intensity
+x95thPercentile_norm_BKGRND_Mean_GFP, 95thPercentile of  GFP pixel intensity (for an individual cell) normalized by the BACKGROUND MEAN pixel intensity
+x99thPercentile_norm_BKGRND_Mean_GFP, 99thPercentile of  GFP pixel intensity (for an individual cell) normalized by the BACKGROUND MEAN pixel intensity
+x90thPercentile_norm_BKGRND_Total_intensity_GFP, 90thPercentile of GFP pixel intensity (for an individual cell) normalized by the BACKGROUND TOTAL pixel intensity
+x95thPercentile_norm_BKGRND_Total_intensity_GFP, 95thPercentile of GFP pixel intensity (for an individual cell) normalized by the BACKGROUND TOTAL pixel intensity
+x99thPercentile_norm_BKGRND_Total_intensity_GFP, 99thPercentile of GFP pixel intensity (for an individual cell) normalized by the BACKGROUND TOTAL pixel intensity
+averageIntensity_GFP_Frame,Average  (MEAN) intensity of GFP across the frame. Includes the cells and non-cell space
+averageIntesntiy_GFP_Background,Average  (MEAN) intensity of GFP backgound. Only the non-cell space
+averageIntensity_GFP_Object,Average  (MEAN) intensity of GFP all cells. Includes only the cell space
+GFP_spread,Number of GFP pixels within the individual cell (bounded by the cell mask)
+Progen_bud,Binary of whether this is the first frame that the cell is present (is there an associated cell mask)
+x80thPercentile_Diff_background_mKate,80th percentile of the mKate intensity (for an individual cell) minus the background MEDIAN pixel intensity
+x90thPercentile_Diff_background_mKate,90th percentile of the mKate intensity (for an individual cell) minus the background MEDIAN pixel intensity
+x99thPercentile_Diff_background_mKate,99th percentile of the mKate intensity (for an individual cell) minus the background MEDIAN pixel intensity
+x80thPercentile_Diff_background_mKO,80th percentile of the mKO intensity (for an individual cell) minus the background MEDIAN pixel intensity
+x90thPercentile_Diff_background_mKO,90th percentile of the mKO intensity (for an individual cell) minus the background MEDIAN pixel intensity
+x99thPercentile_Diff_background_mKO,99th percentile of the mKO intensity (for an individual cell) minus the background MEDIAN pixel intensity
+averageIntensity_mKO_Frame,Average  (MEAN) intensity of mKO across the frame. Includes the cells and non-cell space
+averageIntesntiy_mKO_Background,Average  (MEAN) intensity of mKO backgound. Only the non-cell space
+averageIntensity_mKO_Object,Average  (MEAN) intensity of mKO all cells. Includes only the cell space
+mKO_spread,Number of mKO pixels within the individual cell (bounded by the EXPANDED cell mask)
+averageIntensity_mKate_Frame,Average  (MEAN) intensity of mKate across the frame. Includes the cells and non-cell space
+averageIntesntiy_mKate_Background,Average  (MEAN) intensity of mKate backgound. Only the non-cell space
+averageIntensity_mKate_Object,Average  (MEAN) intensity of mKate all cells. Includes only the cell space
+mKate_spread,Number of mKate pixels within the individual cell (bounded by the EXPANDED cell mask)
+factor_median_OBJ_GFP,MEDIAN GFP intensity distribution for individual cell. Used for normalization and a basis for abundance
+factor_mean_OBJ_GFP,MEAN GFP intensity distribution for individual cell
+factor_total_OBJ_GFP,SUM of GFP pixel values from distribution of individual cell
+factor_GFP_background_Med,MEDIAN of GFP for non-cell space
+factor_GFP_background_Avg,MEAN of GFP for non-cell space
+factor_GFP_background_Tot,TOTAL pixel value of GFP for non-cell space
+factor_median _OBJ_KO,MEDIAN mKO intensity distribution for individual cell. Used for normalization and a basis for abundance
+factor_mean_OBJ_KO,MEAN mKO intensity distribution for individual cell
+factor_total_OBJ_KO,SUM of mKO pixel values from distribution of individual cell
+factor_mKO_background_Med,MEDIAN of mKO for non-cell space
+factor_mKO_background_Avg,MEAN of mKO for non-cell space
+factor_mKO_background_Tot,TOTAL pixel value of mKO for non-cell space
+factor_median_OBJ_mKate,MEDIAN mKate intensity distribution for individual cell. Used for normalization and a basis for abundance
+factor_mean_OBJ_mKate,MEAN mKate intensity distribution for individual cell
+factor_total_OBJ_mKate,SUM of mKate pixel values from distribution of individual cell
+factor_mKate_background_Med,MEDIAN of mKate for non-cell space
+factor_mKate_background_Avg,MEAN of mKate for non-cell space
+factor_mKate_background_Tot,TOTAL pixel value of mKate for non-cell space
+x80thPercentile_GFP_RAW, 80thPercentile of  GFP pixel intensity for an individual cell
+x60thPercentile_GFP_RAW, 60thPercentile of  GFP pixel intensity for an individual cell
+x90thPercentile_GFP_RAW, 90thPercentile of  GFP pixel intensity for an individual cell
+x95thPercentile_GFP_RAW, 95thPercentile of  GFP pixel intensity for an individual cell
+x99thPercentile_GFP_RAW, 99thPercentile of  GFP pixel intensity for an individual cell
+max_GFP_RAW,maximum GFP value for an individual cell (BEFORE NORMALIZATION)
+x60thPercentile_mKa_RAW, 80thPercentile of  mKa pixel intensity for an individual cell
+x80thPercentile_mKa_RAW, 60thPercentile of  mKa pixel intensity for an individual cell
+x90thPercentile_mKa_RAW, 90thPercentile of  mKa pixel intensity for an individual cell
+x95thPercentile_mKa_RAW, 95thPercentile of  mKa pixel intensity for an individual cell
+x99thPercentile_mKa_RAW, 99thPercentile of  mKa pixel intensity for an individual cell
+max_mKa_RAW,maximum mKa value for an individual cell (BEFORE NORMALIZATION)
+x60thPercentile_mKO_RAW, 80thPercentile of  mKO pixel intensity for an individual cell
+x80thPercentile_mKO_RAW, 60thPercentile of  mKO pixel intensity for an individual cell
+x90thPercentile_mKO_RAW, 90thPercentile of  mKO pixel intensity for an individual cell
+x95thPercentile_mKO_RAW, 95thPercentile of  mKO pixel intensity for an individual cell
+x99thPercentile_mKO_RAW, 99thPercentile of  mKO pixel intensity for an individual cell
+max_mKO_RAW,maximum mKO value for an individual cell (BEFORE NORMALIZATION)
+TrackID_valid,Unique identifier of each cell. Contains Postion and Cell information
+Myo1Identity,"For muliplexing. Either mKa or mKO. ""Myo1_<mKa/mKO>"""
+mKO_foldChange,Fold chang of mKO across timecourse for individual cell
+mKO_direction,Positive or negative to describe increase or derease in mKO range from around treatment
+mKA_foldChange,Fold chang of mKa across timecourse for individual cell
+mKa_direction,Positive or negative to describe increase or derease in mKate range from around treatment
+byProgen_bud,Binary of whether cell was identified by Myo1 (mKa or mKO) the birth intensity
+byRange,Binary of whether cell was identified by Myo1 (mKa or mKO) range change (last level)
+Col_info,Microfluidic chip column that the position fall within
+Protein,Assigned protein identity
+Is_treated,Binary of whether the cell has been treated
+Frames_post_treatment,Numberical (-/+) frames relative to the treatment frame

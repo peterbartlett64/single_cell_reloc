@@ -1,25 +1,33 @@
 #%%
+#, These functions are to compare the results of different post_quant outputs based on either 10 or 3 frame baseline.
+
 import pandas as pd
 from glob import glob
 import os
 import plotly.express as px
+import single_cell_reloc_parquet.global_functions.global_variables as gv
 
 #%% Do execution
 if __name__ == "__main__":
 	#, Define the varaibles
-	Global_variables = {'analyze': 'E:/Microfluidics/Analyze',
-		'microfluidics_results': 'E:/Microfluidics/RESULTS',
-		'post_path': 'E:/Microfluidics/MOST FINAL', #Todo: This needs to be changed to a input call
-		'subset': False,
-		'subset_by': '',
-		'subset_collection': '',
-		'cpu_se': os.cpu_count(),
-		'timepoint_gap': 7.5,
-		'percentiles': [95, 99],
-		'multiplex': True}
+	# Global_variables = {'analyze': 'E:/Microfluidics/Analyze',
+	# 	'microfluidics_results': 'E:/Microfluidics/RESULTS',
+	# 	'post_path': 'E:/Microfluidics/MOST FINAL', #Todo: This needs to be changed to a input call
+	# 	'subset': False,
+	# 	'subset_by': '',
+	# 	'subset_collection': '',
+	# 	'cpu_se': os.cpu_count(),
+	# 	'timepoint_gap': 7.5,
+	# 	'percentiles': [95, 99],
+	# 	'multiplex': True}
 
-	path_ten = "E:/Microfluidics/MOST FINAL"
-	path_three = "E:/Microfluidics/TRY THREE"
+	# Global_variables = gv.global_manager() #* Call the global variables manager fucniton to get the paths and required information, in the case that this is the main file
+
+	path_ten = gv.slash_switch(input("Where is the 10 frame post_quant dir?"))
+	path_three = gv.slash_switch(input("Where is the 3 frame post_quant dir?"))
+
+	# path_ten = "E:/Microfluidics/MOST FINAL"
+	# path_three = "E:/Microfluidics/TRY THREE"
 	os.path.join(path_ten,"Final_combined_comparison.parquet")
 	file_ten = pd.read_parquet(os.path.join(path_ten,"Final_combined_comparison.parquet")).loc[:, ["Percentage_reloc", "Percentage_reloc_less", "Protein"]].set_index("Protein", drop = True)
 	file_three = pd.read_parquet(os.path.join(path_three,"Final_combined_comparison.parquet")).loc[:, ["Percentage_reloc", "Percentage_reloc_less", "Protein"]]

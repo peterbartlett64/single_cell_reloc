@@ -88,7 +88,7 @@ def read_and_modify_intensity(image_path:str, cell_mask_path:str, quantification
 	return(True)
 #%%
 def reloc_mask_gen(cell_mask_path: str, reloc_df_small, unique_frame:str):
-	"""This function will take in t2023-10-28e image path and cell_mask to properly visualize cell measurements because of normalization methods. Function was written to be flexible to normalization method so that is can be used regardless of whether it was the background or the cell itself that the brightest pixel values done on. This will be modifying the image so the percentile on which calculations are made is blinded for the computer and user.
+	"""This function will take in the image path and cell_mask to properly visualize cell measurements because of normalization methods. Function was written to be flexible to normalization method so that is can be used regardless of whether it was the background or the cell itself that the brightest pixel values done on. This will be modifying the image so the percentile on which calculations are made is blinded for the computer and user.
 		Args:
 			cell_mask_path (path): path of the mask file to be designate which cell is which
 			reloc_df_small (pandas DataFrame): dataframe with the information on which cells are currently localized
@@ -189,8 +189,6 @@ def yet_mask_gen(cell_mask_path: str, reloc_df_small, unique_frame:str):
 	image_mod = Image.fromarray(image_mod_arr)
 	image_mod.save(filename)
 	# cv2.imwrite(filename, image_mod)
-
-	#. Need to save the new image
 	return(True)
 
 #%%
@@ -313,20 +311,21 @@ def yet_mask_manager(frame:str): #* This is the manager to call the paths for us
 #%%
 #* Confirm that any specified positions are correct
 if __name__ == '__main__':
-	# Global_Variables = gv.global_manager()
-	Global_variables = {'analyze': 'E:/Microfluidics/Analyze',
-	'microfluidics_results': 'E:/Microfluidics/RESULTS',
-	'post_path': 'D:/ALL_FINAL', #. gv.slash_switch(input("Post quant path?")) , #Todo: This needs to be changed to a input call
-	'subset': True,
-	'subset_by': 'Unique_pos',
-	'subset_collection': str.split(input("Positions"), ", "), #['d0223r1p240200', '0223r1p270300', '0223r1p300200'],
-	# 'subset_collection': ['d0218r2p540200', 'd0218r2p570300', 'd0218r2p600200'],
-	'cpu_se': int(math.floor(os.cpu_count()*0.7)),
-	'timepoint_gap': 7.5,
-	'percentiles': [95, 99],
-	'multiplex': True,
-	'figures_root': 'D:/Figures_root',
-	'image_mod_folder': 'D:/Manipulated/Testing', #Todo: Update this to be a input call
+	Global_Variables = gv.global_manager()
+
+	# Global_variables = {'analyze': 'E:/Microfluidics/Analyze',
+	# 'microfluidics_results': 'E:/Microfluidics/RESULTS',
+	# 'post_path': 'D:/ALL_FINAL', #. gv.slash_switch(input("Post quant path?")) , #Todo: This needs to be changed to a input call
+	# 'subset': True,
+	# 'subset_by': 'Unique_pos',
+	# 'subset_collection': str.split(input("Positions"), ", "), #['d0223r1p240200', '0223r1p270300', '0223r1p300200'],
+	# # 'subset_collection': ['d0218r2p540200', 'd0218r2p570300', 'd0218r2p600200'],
+	# 'cpu_se': int(math.floor(os.cpu_count()*0.7)),
+	# 'timepoint_gap': 7.5,
+	# 'percentiles': [95, 99],
+	# 'multiplex': True,
+	# 'figures_root': 'D:/Figures_root',
+	# 'image_mod_folder': 'D:/Manipulated/Testing', #Todo: Update this to be a input call
 
 	#'F:/FLR1'
 
@@ -345,22 +344,23 @@ if __name__ == '__main__':
 	else:
 		normalization_method = input("What was the normalization method?")
 
+
 	#* Get the masks for combining
-	imgIndex = pd.read_parquet("E:/Microfluidics/RESULTS/imgIndex.parquet").reset_index(drop = False)
+	imgIndex = pd.read_parquet(os.path.join(Global_variables['microfluidics_results'],"imgIndex.parquet")).reset_index(drop = False)
 	# mask_index = pd.read_parquet("E:/Microfluidics/RESULTS/Allmasks.parquet").reset_index(drop = False) #! This is the regualar mask. Testing out the expanded below
-	mask_index = pd.read_parquet("E:\Microfluidics\RESULTS\Allmasks_exp.parquet").reset_index(drop = False)
+	mask_index = pd.read_parquet(os.path.join(Global_variables['microfluidics_results'],"Allmasks_exp.parquet")).reset_index(drop = False)
 	# mask_index = pd.read_csv("E:\Microfluidics\RESULTS\Allmasks_exp.csv").reset_index(drop = False)
 
 
 	# quant_index = pd.read_parquet("D:\ALL_FINAL\Quantification_index.parquet")[['Path', 'Frame']].rename(columns={'Path':'Path_quant'}).sort_values(by = "Frame") #* Read in the quant_index and keep only the relevant columns
-	quant_index = pd.read_parquet("D:\ALL_FINAL\Quantification_index.parquet")[['Path', 'Frame']].rename(columns={'Path':'Path_quant'}).sort_values(by = "Frame") #* Read in the quant_index and keep only the relevant columns
+	quant_index = pd.read_parquet(os.path.join(Global_variables['post_path'],"Quantification_index.parquet"))[['Path', 'Frame']].rename(columns={'Path':'Path_quant'}).sort_values(by = "Frame") #* Read in the quant_index and keep only the relevant columns
 
 	#. The below is to use the temporary file. Should check the type of the version before
 	# results_final = pd.read_parquet("D:/Sandbox/subset_end.parquet", columns=['Cell_Barcode', 'ImageID', 'Relocalized', 'Loc_score', 'track_start_frame', 'track_end_frame', 'track_length', 'Myo1Identity']).reset_index(drop = False) #* This will take a milwhile since it is a 4G file
 
 	# results_final = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\merged_data_final.parquet", columns=['Cell_Barcode', 'ImageID', 'Relocalized', 'Loc_score', 'track_start_frame', 'track_end_frame', 'track_length'])
 	# results_final = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\Quant_ALL.parquet", columns=['Cell_Barcode', 'ImageID', 'Relocalized', 'Loc_score', 'Myo1Identity', 'Yet'])
-	results_final = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\Loc_data_comp_merged_everything.parquet", columns=['Cell_Barcode', 'ImageID', 'Yet'])
+	results_final = pd.read_parquet(os.path.join(Global_variables['microfluidics_results'], "Combined_by_perc\Loc_data_comp_merged_everything.parquet"), columns=['Cell_Barcode', 'ImageID', 'Yet'])
 
 	# results_final = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\ZIP2_selected.parquet", columns=['Cell_Barcode', 'ImageID', 'Relocalized', 'Loc_score', 'track_start_frame', 'track_end_frame', 'track_length', 'Myo1Identity'])
 	# results_final = pd.read_parquet("D:\ALL_FINAL\Combined_by_perc\Final_wAbund.parquet", columns=['Cell_Barcode', 'ImageID', 'Relocalized', 'Loc_score', 'track_start_frame', 'track_end_frame', 'track_length', 'Myo1Identity'])
@@ -390,7 +390,7 @@ if __name__ == '__main__':
 	for p_i in range(len(merged_indices)):
 		ic(correction_manager(p_i = p_i, normalization_method= normalization_method))
 
-	#. Right now this is not subsetted at all. This would be a quick fix
+
 	# Parallel(n_jobs=Global_variables['cpu_se'], verbose= 100)(delayed(move_mask_manager)(frame = f) for f in frames.unique())
 
 	# Parallel(n_jo bs=Global_variables['cpu_se'], verbose= 100)(delayed(yet_mask_manager)(frame = f) for f in frames.unique())
