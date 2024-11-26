@@ -27,5 +27,5 @@ DeepCAD-RT/
 tracx/
 CellX_Win_g2_12_c2.12/
 Denoise/
-Legacy/
-DataReview/
+Legacy*/
+single_cell_reloc_parquet\Visualizations\single_cell_reloc_parquet.code-workspace"
