@@ -15,3 +15,17 @@ single_cell_reloc_parquet/R/IPR
 single_cell_reloc/
 ConceptVisualization/
 IRP*/
+.git.bfg-report*/
+MiscLogs/
+tests/
+ExperimentSpecifics/
+run_files/
+GUI/
+snakemake_files/
+extern/
+DeepCAD-RT/
+tracx/
+CellX_Win_g2_12_c2.12/
+Denoise/
+Legacy/
+DataReview/
