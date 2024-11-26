@@ -23,6 +23,7 @@ def deloc_calc(row):
 #, Main function call
 if __name__ == '__main__':
 	#. Load temporary functions
+	Global_Variables
 	Global_Variables = {
 	# 	"analyze": "F:/Microfluidics/Missing_Analyze2",
 		"microfluidics_results": "F:/Microfluidics/RES_N_ULTS",
