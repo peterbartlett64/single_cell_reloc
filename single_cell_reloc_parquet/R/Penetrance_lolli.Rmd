@@ -1,0 +1,448 @@
+---
+title: "Penetrance Lolli"
+author: "Peter Bartlett"
+date: "2023-12-02"
+output:
+  html_document:
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_knit$set(root.dir = "D:/Second Mind/Academic/Project Stuff/Figures")
+library(ggplot2)
+library(ggExtra)
+library(arrow)
+library(ggpointdensity)
+library(dplyr)
+library(ggstatsplot)
+library(ggsci)
+library(dplyr)
+library(hrbrthemes)
+library(wesanderson)
+library(ggsci)
+library(gridExtra)
+library(stringr)
+library(cowplot)
+library(ggstatsplot)
+library(tidylog)
+library(smplot2)
+# library(data.table)
+
+date <- Sys.Date()
+#Create the color palette for comparison
+npg_clrs <-  pal_npg("nrc", alpha = 0.7)(4)
+```
+
+```{r}
+#Read in the dataframe with the updated penetrances
+penetrances_updated <- read_parquet("D:/ALL_FINAL/Combined_by_perc/penetrance_updated_trimmed.parquet", col_select = !c("Percentage_reloc_less")) %>%
+  rename(Percentage_reloc_less = 'updated_yet_perc')
+  # na.omit()
+
+penetrances_updated$Percentage_reloc = as.integer(penetrances_updated$Percentage_reloc)
+penetrances_updated$Percentage_reloc_less = as.integer(penetrances_updated$Percentage_reloc_less)
+penetrances_updated$Ho_max = as.integer(penetrances_updated$Ho_max)
+
+df_ddc2 <- penetrances_updated[str_detect(penetrances_updated$Protein, "DDC2"), ]
+
+penetrances_updated = penetrances_updated[!str_detect(penetrances_updated$Protein, "DDC2"), ]
+
+
+df_ddc2 <- df_ddc2[order(df_ddc2$Percentage_reloc_less),]
+df_ddc2$Protein <- factor(df_ddc2$Protein, levels = df_ddc2$Protein)
+df_ddc2
+```
+
+```{r}
+#This is the comparing the DDC2 values.
+df_ddc2 <- df_ddc2[order(df_ddc2$Protein),]
+df_ddc2$Protein <- factor(df_ddc2$Protein, levels = df_ddc2$Protein)
+df_ddc2
+```
+
+```{r}
+corr_Ho_me <- ggscatterstats(
+              data = penetrances_updated,
+               y = Ho_max,
+               x = Percentage_reloc,
+               type = 'nonparametric',
+               point.args = list(colour= npg_clrs[1]),
+               label.var = Protein,
+               label.expression = Ho_max > 85 | Percentage_reloc > 85,
+               xsidehistogram.args = list(fill = npg_clrs[2]),
+               ysidehistogram.args = list(fill = npg_clrs[3]),
+               # smooth.line.args = list(fill = npg_clrs[4]),
+               pakage = 'wesanderson',
+               palette = "Moonrise3")+
+               theme_ipsum(base_family = "")
+              # ggthemes::theme_clean()
+corr_Ho_me
+## Read in the file of interest
+```
+
+
+```{r}
+penetrances_updated <- penetrances_updated %>% 
+  filter(!(Protein %in% c("LCD1", "RAD5", 'DDC2d0224r1', 'Contam.'))) %>%
+  filter(!(Protein %like% 'DDC2')) %>%
+  filter(!(Protein %like% 'd0210')) %>%
+  filter(!(Protein %like% 'LSM3')) %>%
+  filter(!(Protein %like% 'LSM3')) %>%
+  filter(!(Protein %like% 'MSN2')) %>%
+  filter(!(Protein %like% 'RNR1')) %>%
+  filter(!(Protein %like% 'RRP17')) %>%
+  filter(!(Protein %like% 'RTR2')) %>%
+  filter(!(Protein %in% c("SLX4", "MSB3", "SIP5", "FGV2", "ZPR1", "HOS2", "RAD53", "CTR86", "MKT1", "SRP68", "BMH2", "EXO70")))
+```
+
+
+```{r}
+tc_den <- ggplot(data = penetrances_updated, mapping = aes(x = Percentage_reloc_less))+
+  geom_density(fill = npg_clrs[1], alpha = 0.3)+
+  geom_histogram(aes(y=..density..), colour=npg_clrs[2], fill=npg_clrs[1], alpha = 0.6, binwidth = 5, boundary = 0)+
+  geom_vline(xintercept = 95)+
+  scale_x_continuous(#breaks = round(seq(min(0), max(100), by = 10),1
+                      breaks = scales::breaks_extended(10),
+                      labels = scales::label_number())+
+  scale_y_continuous(breaks = scales::breaks_extended(6),
+                     labels = scales::label_number_auto())+
+  geom_vline(aes(xintercept=mean(Percentage_reloc_less, na.rm = T)),
+             linetype="dashed", color = 'blue')+
+  geom_vline(aes(xintercept=median(Percentage_reloc_less, na.rm = T)),
+             linetype="solid", color = 'green')+
+  theme_classic()
+
+tc_den
+ggsave("Timecourse_density.png", tc_den, width = 12, height = 9, device = cairo_pdf)
+ggsave("Timecourse_density.eps", tc_den, width = 12, height = 9, device = cairo_pdf)
+ggsave("Timecourse_density.pdf", tc_den, width = 12, height = 9, device = cairo_pdf)
+```
+
+
+```{r}
+pf_den <- ggplot(data = penetrances_updated, mapping = aes(x = Percentage_reloc))+
+  geom_density(fill = npg_clrs[4], alpha = 0.3)+
+  geom_histogram(aes(y=..density..), colour=npg_clrs[2], fill=npg_clrs[4], alpha = 0.6, binwidth = 5, boundary = 0)+
+  scale_x_continuous(#breaks = round(seq(min(0), max(100), by = 10),1
+                      breaks = scales::breaks_extended(10),
+                      labels = scales::label_number())+
+  geom_vline(aes(xintercept=mean(Percentage_reloc)),
+             linetype="dashed", color = 'blue')+
+  geom_vline(aes(xintercept=median(Percentage_reloc)),
+             linetype="solid", color = 'green')+
+  scale_y_continuous(breaks = scales::breaks_extended(6),
+                     labels = scales::label_number_auto())+
+  theme_classic()
+
+pf_den
+ggsave("per-frame_density.png", pf_den, width = 12, height = 9, device = cairo_pdf)
+ggsave("per-frame_density.eps", pf_den, width = 12, height = 9, device = cairo_pdf)
+ggsave("per-frame_density.pdf", pf_den, width = 12, height = 9, device = cairo_pdf)
+```
+
+
+```{r}
+pen_compare <- ggscatterstats(
+              data = penetrances_updated,
+               y = Percentage_reloc_less,
+               x = Percentage_reloc,
+               type = 'nonparametric',
+               point.args = list(colour= npg_clrs[1]),
+               # label.var = Protein,
+               # label.expression = Ho_max > 85 | Percentage_reloc > 85,
+               xsidehistogram.args = list(fill = npg_clrs[2]),
+               ysidehistogram.args = list(fill = npg_clrs[3]),
+               # smooth.line.args = list(fill = npg_clrs[4]),
+               pakage = 'wesanderson',
+               palette = "Moonrise3")+
+               theme_ipsum(base_family = "")
+              # ggthemes::theme_clean()
+pen_compare
+ggsave("Comparison_of_Penetrances.png", pen_compare, width = 14, height = 9, device = cairo_pdf)
+ggsave("Comparison_of_Penetrances.eps", pen_compare, width = 14, height = 9, device = cairo_pdf)
+ggsave("Comparison_of_Penetrances.pdf", pen_compare, width = 14, height = 9, device = cairo_pdf)
+```
+
+```{r}
+GO_df <- filter(penetrances_updated, Protein %in% c("RFA1", "HTA2", "RDH54", "POL30", "NPL4", "CHK1", "MRC1", "MSH3", "MMS21", "RAD51", "RAD24", "RTT107", "RRD1", "SLD2", "DOA1", "ECO1", "RPN4", "SUB2", "RAD57", "DBF4", "PPH3", "RAD55", "CDC1", "RAD9", "XRS2", "LRS4", "SLD3", "INO80", "RAD54", "SAE2", "ZIP2", "ARP4", "DPB11", "SRS2", "CDC6", "RFC2", "SLX4", "TOP3", "NEJ1", "RAD33", "RAD52", "NAM7", "YKU80", "PSO2", "SGS1", "MRE11", "YKU70", "MGS1", "RAD50", "RFC3", "RFC4", "RTS1", "EXO1", "ULS1", "REV1", "RAD53", "DDC1", "RIM1"))
+GO_compare <- ggscatterstats(
+              data = GO_df,
+               y = Percentage_reloc_less,
+               x = Percentage_reloc,
+               type = 'nonparametric',
+               point.args = list(colour= npg_clrs[1]),
+               # label.var = Protein,
+               # label.expression = Ho_max > 85 | Percentage_reloc > 85,
+               xsidehistogram.args = list(fill = npg_clrs[2]),
+               ysidehistogram.args = list(fill = npg_clrs[3]),
+               # smooth.line.args = list(fill = npg_clrs[4]),
+               pakage = 'wesanderson',
+               palette = "Moonrise3")+
+               theme_ipsum(base_family = "")
+              # ggthemes::theme_clean()
+GO_compare
+ggsave("Comparison_of_DNA_GO.png", GO_compare, width = 14, height = 9, device = cairo_pdf)
+ggsave("Comparison_of_DNA_GO.eps", GO_compare, width = 14, height = 9, device = cairo_pdf)
+ggsave("Comparison_of_DNA_GO.pdf", GO_compare, width = 14, height = 9, device = cairo_pdf)
+
+```
+
+
+```{r}
+model_pens <- lm(formula = Percentage_reloc_less ~ Percentage_reloc, data = penetrances_updated)
+model_pens
+
+library(performance)
+check_model(model_pens)
+```
+
+
+
+```{r}
+df <- read_parquet("D:/ALL_FINAL/Test_compartment_pen")
+
+# df_sorted <- df[order(df$Percentage_reloc_less),]
+# df$Protein <- factor(df$Protein, levels = df$Protein)
+df$control_Localization <-  factor(df$control_Localization)
+npg_clrs <-  pal_npg("nrc", alpha = 0.7)(3)
+
+df_smaller <- df[str_detect(df$Protein, "DDC2"),]
+show_col(npg_clrs)
+```
+
+## Produce lolliplot
+
+```{r pressure, echo=FALSE}
+# sort the data frame by column A in ascending order
+# (zis_colors <- wes_palette("Zissou1", type = "discrete"))
+
+lolliplot <- ggplot(penetrances_updated, aes(x = reorder(Protein, updated_yet_perc, desc = T))) +
+  geom_point(aes(y = Percentage_reloc_less), size=3, color=npg_clrs[2]) +
+  geom_point(aes(y=Percentage_reloc), size=3, color= npg_clrs[1]) +
+  geom_segment(aes(x=reorder(Protein, Percentage_reloc_less), xend=reorder(Protein, Percentage_reloc_less), y=Percentage_reloc, yend=Percentage_reloc_less), color="grey") +
+  coord_flip()+ # This is just to swtich the x with the y so that the plot is vertical
+  theme_ipsum(base_family = "") +
+  theme(
+    legend.position = "none",
+  ) +
+  xlab("Protein") +
+  ylab("Penetrance (blue = byFrame and organge = bySeries)")
+  
+setwd("D:/Second Mind/Academic/Project Stuff/Figures") #Save to folder in vault that will be copied to Dropbox
+ggsave(sprintf("lolliplot_%s.pdf", date), lolliplot, width = 15, height = 40)
+```
+
+```{r}
+use_comp_compare <- penetrances_updated %>%
+  filter(!MMS_localization_class %in% c("ER foci", "nuc periph", "nucleolus", "NA"))
+
+per_frame_comparments <- ggbetweenstats(use_comp_compare,
+               x = MMS_localization_class,
+               y = Percentage_reloc,
+               type = 'robust',
+               violin.args = list(alpha = 0.2, na.rm = TRUE, scale = 'area'),
+               point.args = list(size = 0)
+               )#+
+  # geom_sina(use_comp_compare, mapping = aes (color = MMS_localization_class), inherit.aes = T, size = 2, alpha = 0.6, scale = 'area')+
+  # ggtitle(label = 'Per-Frame')+
+  # scale_color_npg() +
+  # scale_fill_npg()
+# 
+per_frame_comparments
+# ggsave(paste0(date, "_perFrameCompartments.pdf"), plot = per_frame_comparments, width = 12, height = 9, device = cairo_pdf)
+# ggsave(paste0(date, "_perFrameCompartments.eps"), plot = per_frame_comparments, width = 12, height = 9, device = cairo_pdf)
+```
+
+
+```{r}
+tc_comparments <- ggbetweenstats(use_comp_compare,
+               x = MMS_localization_class,
+               y = Percentage_reloc_less,
+               type = 'robust',
+               violin.args = list(alpha = 0.2, na.rm = TRUE, scale = 'area'),
+               point.args = list(size = 0)
+                )#+
+  # geom_sina(use_comp_compare, mapping = aes (color = MMS_localization_class), inherit.aes = T, size = 2, alpha = 0.6, scale = 'area')+
+  # ggtitle(label = 'Tc-compartments')+
+  # scale_color_npg() +
+  # scale_fill_npg()
+
+# ggsave(paste0(date, "_TimecourseCompartments.pdf"), plot = tc_comparments, width = 12, height = 9, device = cairo_pdf)
+# ggsave(paste0(date, "_TimecourseCompartments.eps"), plot = tc_comparments, width = 12, height = 9, device = cairo_pdf)
+tc_comparments
+```
+
+
+```{r}
+penetrances_updated <- penetrances_updated %>% 
+  group_by(MMS_localization_class) %>%
+  mutate(level = paste0(MMS_localization_class, " (n = ", n(), ")"))
+
+compartmental_comparison <-  ggplot(penetrances_updated %>% 
+                                      filter(!MMS_localization_class %in% c("ER foci", "nuc periph", "nucleolus", "NA")) %>%
+                                      drop_na(MMS_localization_class),
+                                aes (x = Percentage_reloc, y = Percentage_reloc_less, color = MMS_localization_class))+
+  geom_point()+
+  stat_ellipse(type = "t") +
+  sm_statCorr(corr_method = 'kendall', show_text = TRUE, text_size = 3)+
+  facet_grid(~level)+
+  theme_cowplot()+
+  theme(legend.position = "none")
+  
+  # sm_statCorr(corr_method = 'pearson', show_text = TRUE, text_size = 3)+
+  # theme(x.text = element_text(angle = 90)
+  # theme_classic()+
+  
+compartmental_comparison
+
+ggsave(sprintf("%s_pen_compartments_kendall_MMS.pdf", date), compartmental_comparison, width = 20, height = 10)
+ggsave(sprintf("%s_pen_compartments_kendall_MMS.eps", date), compartmental_comparison, width = 20, height = 10)
+```
+```{r}
+ggbetweenstats(data = penetrances_updated %>% 
+                                      filter(!MMS_localization_class %in% c("ER foci", "nuc periph", "nucleolus", "NA")),
+              x = MMS_localization_class,
+              y = Percentage_reloc_less,
+              method = 'robust')
+```
+
+```{r}
+penetrances_w_HUfill<- read_parquet("D:/ALL_FINAL/Combined_by_perc/penetrance_updated.parquet", col_select = c("Protein", "Percentage_reloc", "updated_yet_perc", "MMS_HU_merged_class"))%>%
+  drop_na() %>%
+  group_by(MMS_HU_merged_class) %>%
+  mutate(level = paste0(MMS_HU_merged_class, " (n = ", n(), ")"))
+
+ggplot(penetrances_w_HUfill, aes(x = Percentage_reloc, y = updated_yet_perc, color = MMS_HU_merged_class))+
+  geom_smooth(method = "lm")
+
+
+```
+
+
+```{r, knittr.echo = FALSE}
+penetrances_w_HUfill<- read_parquet("D:/ALL_FINAL/Combined_by_perc/penetrance_updated.parquet", col_select = c("Protein", "Percentage_reloc", "updated_yet_perc", "MMS_HU_merged_class"))%>%
+  drop_na() %>%
+  group_by(MMS_HU_merged_class) %>%
+  mutate(level = paste0(MMS_HU_merged_class, " (n = ", n(), ")"))
+
+penetrances_w_HU_g <- ggplot(filter(penetrances_w_HUfill, !MMS_HU_merged_class %in% c("cyto; nucleus", "ER foci")), aes (x = Percentage_reloc, y = updated_yet_perc, color = MMS_HU_merged_class))+
+  geom_point()+
+  stat_ellipse(type = "t")+
+  # sm_statCorr(corr_method = 'pearson', show_text = TRUE, text_size = 3)+
+  sm_statCorr(corr_method = 'kendall', show_text = TRUE, text_size = 3)+
+  facet_grid(~level)+
+  # theme(x.text = element_text(angle = 90)
+  # theme_classic()+
+  theme(legend.position = "none")
+
+penetrances_w_HU_g
+ggsave(sprintf("%s_pen_compartments_wHU.pdf", date), penetrances_w_HU_g, width = 20, height = 10)
+ggsave(sprintf("%s_pen_compartments_wHU.eps", date), penetrances_w_HU_g, width = 20, height = 10)
+```
+
+
+```{r}
+
+# names(penetrances_updated)[names(penetrances_updated) == "MMS localization change class"] <- "MMS_localization_class"
+# penetrances_updated <- penetrances_updated %>% 
+#   select(updated_yet_perc, Percentage_reloc, MMS_localization_class, Protein) %>% 
+#   drop_na()
+
+lolliplot_grouped <- ggplot(penetrances_updated, aes(x = reorder(Protein, updated_yet_perc), color = MMS_localization_class ,desc = T))) +
+  geom_point(aes(y = updated_yet_perc), size=2) +
+  geom_point(aes(y=Percentage_reloc), size=2) +
+  geom_segment(aes(x=reorder(Protein, updated_yet_perc), xend=reorder(Protein, updated_yet_perc), y=Percentage_reloc, yend=updated_yet_perc), color="grey") +
+  # coord_flip()+ # This is just to swtich the x with the y so that the plot is vertical
+  # theme_ipsum(base_family = "") +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank()
+  ) +
+  xlab("Protein") +
+  ylab("Penetrance (blue = byFrame and organge = bySeries)")
+
+lolliplot_grouped
+setwd("D:/Second Mind/Academic/Project Stuff/Figures") #Save to folder in vault that will be copied to Dropbox
+ggsave(sprintf("lolliplot_grouped_change_%s.pdf", date), lolliplot_grouped, width = 15, height = 40)
+
+```
+
+```{r}
+ggscatterstats()
+
+
+
+# lolliplot_grouped_dest <- lolliplot + facet_wrap(~Combined_destination, scales="free_y")
+# setwd("D:/Second Mind/Academic/Project Stuff/Figures") #Save to folder in vault that will be copied to Dropbox
+# ggsave(sprintf("lolliplot_grouped_dest_%s.pdf", date), lolliplot_grouped_dest, width = 15, height = 40)
+```
+ 
+## DDC2 comparison
+```{r}
+ddc2_frame_pen_comparsion <- ggdotplotstats(data = df_ddc2,
+                                            x = Percentage_reloc,
+                                            y = Protein,
+                                            point.args = list(colour = npg_clrs[1]),
+                                            centrality.type = 'np',
+                                            title= "Confirmation of Frame_pen consistency",
+                                            x_lab = "Percentage relocalization by Frame"
+)+
+  scale_color_npg()
+
+ddc2_frame_pen_comparsion
+ggsave(sprintf("ddc2_framePen_%s.pdf", date), ddc2_frame_pen_comparsion, width = 20, height = 15)
+ggsave(sprintf("ddc2_framePen_%s.eps", date), ddc2_frame_pen_comparsion, width = 20, height = 15)
+
+
+ddc2_yet_pen_comparison <- ggdotplotstats(data = df_ddc2,
+                                         x = Percentage_reloc_less,
+                                         y = Protein,
+                                         point.args = list(colour = npg_clrs[1]),
+                                         centrality.type = 'np',
+                                         title= "Confirmation of Timecourse  Penetrance consistency",
+                                         x_lab = "Percentage relocalization by Tracked Cell Series"
+)+
+  scale_color_npg()
+ddc2_yet_pen_comparison
+ggsave(sprintf("ddc2_TcPen_%s.pdf", date), ddc2_yet_pen_comparison, width = 20, height = 15)
+ggsave(sprintf("ddc2_TcPen_%s.eps", date), ddc2_yet_pen_comparison, width = 20, height = 15)
+```
+
+
+
+#### OLD DDC2 comparison
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+lolliplot_ddc <- ggplot(df_ddc2, aes(x = Protein)) + # This will be ordered by name
+  geom_point(aes(y = Percentage_reloc_less), color=npg_clrs[1], size=3) +
+  geom_point(aes(y=Percentage_reloc), color= npg_clrs[3], size=3) +
+  geom_segment(aes(x=reorder(Protein, Percentage_reloc_less), xend=reorder(Protein, Percentage_reloc_less), y=Percentage_reloc, yend=Percentage_reloc_less), color=npg_clrs[2]) +
+  coord_flip()+ # This is just to swtich the x with the y so that the plot is vertical
+  theme(
+    legend.position = "none",
+  ) +
+  # scale_fill_manual(values = wes_palette("Royal1"))+
+  xlab("") +
+  ylab("Value of Y")
+# lolliplot
+
+lolliplot_ddc_order <- ggplot(df_ddc2, aes(x = reorder(Protein,- Percentage_reloc_less))) +
+  geom_point(aes(y = Percentage_reloc_less), color=npg_clrs[1], size=3) +
+  geom_point(aes(y=Percentage_reloc), color= npg_clrs[3], size=3) +
+  geom_segment(aes(x=reorder(Protein, Percentage_reloc_less), xend=reorder(Protein, Percentage_reloc_less), y=Percentage_reloc, yend=Percentage_reloc_less), color=npg_clrs[2]) +
+  coord_flip()+ # This is just to swtich the x with the y so that the plot is vertical
+  theme(
+    legend.position = "none",
+  ) +
+  # scale_fill_manual(values = wes_palette("Royal1"))+
+  xlab("") +
+  ylab("Value of Y")
+# lolliplot
+
+ddc2_both <- plot_grid(lolliplot_ddc, lolliplot_ddc_order, labels = c('A', 'B'), label_size = 12)
+
+setwd("D:/Second Mind/Academic/Project Stuff/Figures") #Save to folder in vault that will be copied to Dropbox
+ggsave(sprintf("lolliplot_ddc2_%s.pdf", date), ddc2_both, width = 15, height = 20)
+
+```

@@ -1,0 +1,39 @@
+---
+title: "Diagnose"
+author: "Peter Bartlett"
+date: "2023-11-27"
+output: html_document
+---
+
+```{r, echo=FALSE}
+#https://www.youtube.com/watch?v=M7eNYbd4n1Y&ab_channel=yuzaRDataScience
+knitr::opts_chunk$set(echo = TRUE)
+library(dlookr)
+library(flextable)
+library(tidyverse)
+```
+
+
+```{r, echo=FALSE}
+#types, missing_count, missing percent, unique_count, unique_rate
+diagnose(df) %>% flextable()
+
+diagnose_category(df) %>% flextable()
+diagnose_numeric(df) %>% flextable()
+
+#Can see the effect and size of outliers
+diagnose_outliers(df) %>% flextable()
+
+#Can see distribution with and without as histogram and boxplot
+plot_outliers(df)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot_na_pareto(df) #Can visualize the missing values for variables
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

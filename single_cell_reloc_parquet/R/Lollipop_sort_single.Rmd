@@ -1,0 +1,54 @@
+---
+title: "Lollipop_Asscociation_Plot"
+author: "Peter Bartlett"
+date: "2023-12-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(ggExtra)
+library(arrow)
+library(ggpointdensity)
+library(dplyr)
+library(ggstatsplot)
+library(ggsci)
+library(dplyr)
+library(hrbrthemes)
+library(wesanderson)
+library(ggsci)
+library(gridExtra)
+library(scales)
+library(stringr)
+library(cowplot)
+# library(data.table)
+
+date <- Sys.Date()
+npg_clrs <-  pal_npg("nrc", alpha = 0.7)(3) #* Define the color palette. Using the npg with some transparency
+
+```
+
+## R Markdown
+
+```{r cars}
+df <- read_parquet() #* This needs to be global large file
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+ggdotchart(mtcars, 
+           x = "Protein", 
+           y = "Pearson_corr", #*This needs to be corrected. Should be changed to the maximum pearson LogAbund-regLoc
+           color = "cyl_discr", 
+           #palette = c(npg_clrs[1], npg_clrs[2], npg_clrs[3]), #* This should be changed to a larger pallete for all the options of location and not globally defined
+           sorting = "descending", 
+           add = "segments", 
+           add.params = list(color = "lightgray", size = 1), 
+           group = "Location", #Todo: This is the location information. Should update to call for a final locations rather than the untreated 
+           dot.size = 4 ) + 
+geom_hline(yintercept = 0, linetype = 2, color = "lightgray")
+```

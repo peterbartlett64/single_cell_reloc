@@ -1,6 +1,0 @@
-licence.txt
-setup.py
-single_cell_reloc.egg-info/PKG-INFO
-single_cell_reloc.egg-info/SOURCES.txt
-single_cell_reloc.egg-info/dependency_links.txt
-single_cell_reloc.egg-info/top_level.txt

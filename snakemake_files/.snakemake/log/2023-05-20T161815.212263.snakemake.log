@@ -1,0 +1,3 @@
+Config file config.json is extended by additional config specified via the command line.
+Building DAG of jobs...
+Cancelling snakemake on user request.

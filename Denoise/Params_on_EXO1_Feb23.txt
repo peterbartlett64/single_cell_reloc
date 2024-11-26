@@ -1,0 +1,12 @@
+mKa
+Detector Gain: 3.04
+Offset 183.12
+Sd Gausian Noise 17.73
+2c 1f
+
+
+mKO
+Detector Gain: 3.03
+Offset 108.56
+Sd Gausian Noise 6.22
+2c 1f

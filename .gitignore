@@ -1,0 +1,17 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+MCR_R2016a_win64_installer.exe
+DataReview/
+Legacy/
+single_cell_reloc_parquet/IPR
+single_cell_reloc_parquet/R/.RData
+single_cell_reloc_parquet/R/.Rhistory
+single_cell_reloc_parquet/R/.Ruserdata
+single_cell_reloc_parquet/R/.RDataTmp
+single_cell_reloc_parquet/R/IPR
+single_cell_reloc/
+ConceptVisualization/
+IRP*/

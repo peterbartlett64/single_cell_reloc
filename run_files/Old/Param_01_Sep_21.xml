@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CellXConfiguration creator="CellXGui" timestamp="2021_09_01__12_51_32">
+    <CellXParam name="membraneIntensityProfile">
+        <ArrayElement value="0.018910277930662262"/>
+        <ArrayElement value="-3.465645121640226E-4"/>
+        <ArrayElement value="-0.04548295566861347"/>
+        <ArrayElement value="-0.07350531049207781"/>
+        <ArrayElement value="-0.10891714005053521"/>
+        <ArrayElement value="-0.15402358041330108"/>
+        <ArrayElement value="-0.19054436897562838"/>
+        <ArrayElement value="-0.20031593287163954"/>
+        <ArrayElement value="-0.15468787530224132"/>
+        <ArrayElement value="0.049928626964432295"/>
+        <ArrayElement value="0.24443399866515125"/>
+        <ArrayElement value="0.2680538373432551"/>
+        <ArrayElement value="0.22035946284759297"/>
+        <ArrayElement value="0.12613752453510688"/>
+    </CellXParam>
+    <CellXParam name="membraneLocation" value="9"/>
+    <CellXParam name="membraneWidth" value="2"/>
+    <CellXParam name="maximumCellLength" value="75"/>
+    <CellXParam name="seedRadiusLimit">
+        <ArrayElement value="4"/>
+        <ArrayElement value="23"/>
+    </CellXParam>
+    <CellXParam name="isHoughTransformOnCLAHE" value="1"/>
+    <CellXParam name="seedSensitivity" value="0.2"/>
+    <CellXParam name="isGraphCutOnCLAHE" value="1"/>
+    <CellXParam name="claheClipLimit" value="0.01"/>
+    <CellXParam name="claheBlockSize" value="100"/>
+    <CellXParam name="useWienerFilter" value="1"/>
+    <CellXParam name="wiener2params">
+        <ArrayElement value="3"/>
+        <ArrayElement value="3"/>
+    </CellXParam>
+    <CellXParam name="isNonConvexRegionDetectionEnabled" value="0"/>
+    <CellXParam name="maximumMinorAxisLengthHoughRadiusRatio" value="1.7"/>
+    <CellXParam name="requiredFractionOfAcceptedMembranePixels" value="0.8"/>
+    <CellXParam name="overlapMergeThreshold" value="0.8"/>
+    <CellXParam name="overlapResolveThreshold" value="0.2"/>
+    <CellXParam name="nuclearVolumeFraction" value="0.07"/>
+    <CellXParam name="intensityBrightAreaPercentage" value="0.3"/>
+    <CellXParam name="spatialMotionFactor" value="50"/>
+    <CellXParam name="maxGapConnectionDistance" value="3"/>
+    <CellXParam name="fluoQuantiles">
+        <ArrayElement value="25.0"/>
+        <ArrayElement value="50.0"/>
+        <ArrayElement value="75.0"/>
+    </CellXParam>
+    <CellXParam name="intensityClassesCount">
+        <ArrayElement value="3"/>
+    </CellXParam>
+    <CellXParam name="fluoAlignPixelMove" value="1"/>
+</CellXConfiguration>

@@ -1,0 +1,127 @@
+{
+    "editor.minimap.maxColumn": 2000,
+    "editor.minimap.renderCharacters": false,
+    "editor.insertSpaces": false,
+    "files.autoSave": "afterDelay",
+    "editor.wordWrap": "on",
+    "workbench.colorTheme": "Material Theme Ocean",
+    "workbench.iconTheme": "eq-material-theme-icons-palenight",
+    "editor.fontFamily": "Fira Code Retina",
+    "editor.fontLigatures": true,
+    "python.analysis.autoImportCompletions": false,
+    "workbench.activityBar.iconClickBehavior": "focus",
+    "jupyter.generateSVGPlots": true,
+    "notebook.output.textLineLimit": 200,
+    "explorer.sortOrder": "modified",
+    "jupyter.askForKernelRestart": false,
+    "git.mergeEditor": true,
+    "workbench.startupEditor": "none",
+    "better-comments.highlightPlainText": true,
+    "better-comments.tags": [
+        {
+            "tag": "!",
+            "color" : "#e93f6f",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "<",
+            "color" : "#0f9d58",
+            "strikethrough": false,
+            "underline": true,
+            "backgroundColor": "opaque",
+            "bold": true,
+            "italic": false
+        },
+        {
+            "tag": ">",
+            "color" : "#0f9d58",
+            "strikethrough": false,
+            "underline": true,
+            "backgroundColor": "opaque",
+            "bold": true,
+            "italic": false
+        },
+        {
+            "tag": "%%",
+            "color": "#a66ad7",
+            "strikethrough": false,
+            "underline": true,
+            "backgroundColor": "transparent",
+            "bold": true,
+            "italic": true
+        },
+        {
+            "tag": "?",
+            "color": "#3498DB",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": ".",
+            "color": "#FF2D00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": true,
+            "italic": false
+        },
+        {
+            "tag": "//",
+            "color": "#F49739",
+            "strikethrough": true,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": ",",
+            "color": "#ffffff",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": true,
+            "italic": true
+        },
+        {
+            "tag": "todo",
+            "color": "#FF8C00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "-",
+            "color": "#f4b400",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": true
+        },
+        {
+            "tag": "*",
+            "color": "#9d09dc",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        }
+    ],
+    "r.bracketedPaste": true,
+    "r.rterm.windows": "C:\\Users\\pcnba\\anaconda3\\Scripts\\radian.exe",
+    "security.workspace.trust.untrustedFiles": "open",
+    "python.defaultInterpreterPath": "C:\\Users\\pcnba\\anaconda3\\envs\\Microfluidics_Pipe_highest\\python.exe",
+    "window.zoomLevel": 1,
+    "jupyter.interactiveWindowMode": "perFile"
+}

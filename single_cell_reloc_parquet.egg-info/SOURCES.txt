@@ -1,0 +1,12 @@
+README.md
+licence.txt
+setup.py
+single_cell_reloc_parquet/AutoComposite_batch.py
+single_cell_reloc_parquet/Exclude.py
+single_cell_reloc_parquet/__init__.py
+single_cell_reloc_parquet/main.py
+single_cell_reloc_parquet/temp_compare.py
+single_cell_reloc_parquet.egg-info/PKG-INFO
+single_cell_reloc_parquet.egg-info/SOURCES.txt
+single_cell_reloc_parquet.egg-info/dependency_links.txt
+single_cell_reloc_parquet.egg-info/top_level.txt

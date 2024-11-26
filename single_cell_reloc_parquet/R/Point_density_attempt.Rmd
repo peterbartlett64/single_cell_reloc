@@ -1,0 +1,42 @@
+---
+title: "Heat Scatter"
+output: html_notebook
+---
+
+```{r}
+library(ggplot2)
+library(ggExtra)
+library(arrow)
+library(ggpointdensity)
+library(dplyr)
+library(ggstatsplot)
+```
+
+```{r}
+#setwd("E:/ALL_FINAL/Combined_by_perc")
+file <- 'E:/ALL_FINAL/Combined_by_perc/XRS2d0210_selected.parquet'
+df <- read_parquet(file)
+```
+
+```{r}
+df_f  = filter(df, Frames_post_treatment == 0 | Frames_post_treatment == 20)
+
+ggbetweenstats(df_f,
+Frame, Loc_score, outlier.tagging = TRUE)
+```
+
+
+
+```{r}
+ggplot(data = df_f, mapping = aes(x=factor(Frame), y = Loc_score)) +
+  geom_violin()#+
+  #geom_pointdensity()
+```
+
+
+
+
+
+
+
+

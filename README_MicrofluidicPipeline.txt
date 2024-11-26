@@ -4,15 +4,20 @@ All explanations given should be dated for pipeline protocol changes (DD/MM/YY)
 ---Image Aquisition Assumptions ---
 Files will be of the format: {"positon""[col 3dig eg. "010"][row 3 dig eg. "200"]"_time"[time 4dig eg. "0006"]}
 
---- Creating the Cellinformation.(csv/xlsx) file ---
+--- Image Processing Assumptions ---
+Distributions of TracX and CellX will be placed in the 'RUN_segProgLib' folder.
+
+--- Creating the Cell information.(csv/xlsx) file ---
 Files should be setup as:
 	Date |	Day	| Position ID |	Run Number	|Genotype/Condition element	|	Col	|	Row|
 	NOTE: for Genotype/Condition element, there can be multiple elements if doing multiplexing.
-	If above is true, you must set the color channels in the "flourescent dictrionary"
+	If above is true:
+		- you must set the color channels in the "flourescent dictionary"
+		- you must set the "multiplexing" variable to TRUE in the global variables pipeline file.
 
 --- Python subprocesses ---
-In the pipeline file, there both Windos and Unix comand line suprocesses to run Cellx.
-Comment out the opposite os based on needs.
+In the pipeline file, there both Windows and Unix comand line suprocesses to run Cellx.
+Comment out the opposite os based on needs. #Todo: make this a global variable.
 
 ***********************************************
 The pipeline uses quite a few python extension.
@@ -41,7 +46,7 @@ statistics []
 numba []
 pymongo []
 json []
-multiprocessing [] 
-concurrent.futures [] 
+multiprocessing []
+concurrent.futures []
 subprocess []
 time []

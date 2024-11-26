@@ -1,0 +1,20 @@
+MissingOutputException in rule CellX in file C:\Users\pcnba\OneDrive\Desktop\Test\snakemake_files\Snakefile, line 30:
+Job 2072  completed successfully, but some output files are missing. Missing files after 60 seconds. This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait:
+D:/Microfluidics/RES_N_ULTS/d0214r2p150300/GFP_mKO_mKa/control_00035.png
+D:/Microfluidics/RES_N_ULTS/d0214r2p150300/GFP_mKO_mKa/seeding_00035.png
+Removing output files of failed job CellX since they might be corrupted:
+D:/Microfluidics/RES_N_ULTS/d0214r2p150300/GFP_mKO_mKa/cells_00035.mat, D:/Microfluidics/RES_N_ULTS/d0214r2p150300/GFP_mKO_mKa/cells_00035.txt, D:/Microfluidics/RES_N_ULTS/d0214r2p150300/GFP_mKO_mKa/mask_00035.mat
+[Mon May 22 00:40:27 2023]
+Finished job 1352.
+1650 of 1677 steps (98%) done
+[Mon May 22 00:40:27 2023]
+Finished job 735.
+1651 of 1677 steps (98%) done
+[Mon May 22 00:40:27 2023]
+Finished job 2065.
+1652 of 1677 steps (99%) done
+[Mon May 22 00:40:27 2023]
+Finished job 855.
+1653 of 1677 steps (99%) done
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake\log\2023-05-21T203950.509808.snakemake.log

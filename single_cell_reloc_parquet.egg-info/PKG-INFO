@@ -1,0 +1,6 @@
+Metadata-Version: 2.1
+Name: single-cell-reloc-parquet
+Version: 0.0.0
+Summary: Integration and automation of segmentation, single cell tracking, quantification, protein relocalization measurment, and figure creation
+Author: Peter Bartlett
+License-File: licence.txt
