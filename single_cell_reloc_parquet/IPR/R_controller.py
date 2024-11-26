@@ -2,6 +2,7 @@ import subprocess
 import pandas as pd
 import single_cell_reloc_parquet.global_functions.global_variables as gv
 from pathlib import Path
+from rich import print
 import os
 
 #, Function for managing the input and output of seperate scipt
@@ -37,10 +38,12 @@ if __name__ == "__main__":
     # Run the R script
     GlobalVariables = gv.global_manager()
     file_name = input("Enter the file name: ")
-    full_path_file =os.path.join(GlobalVariables.r_script_path, file_name)
-    r_script_path = "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\single_cell_reloc_parquet\Visualizations\R_scripts\R_script_1.R"
+    full_path_file =os.path.join(Path(__file__).parent.absolute(), "R", file_name)
+
+    # full_path_file = "C:\Users\pcnba\Grant Brown's Lab Dropbox\Peter Bartlett\Peter Bartlett Data\Code\single_cell_reloc\single_cell_reloc_parquet\Visualizations\R_scripts\R_script_1.R"
+
     output_df = run_r_script(full_path_file)
 
     # Print the output
     print(output_df)
-    output_df.to_parquet("file_name_Red.parquet", index=False) #output the reconverted file from R to a parquet
+    output_df.to_parquet("file_name_Read.parquet", index=False) #output the reconverted file from R to a parquet

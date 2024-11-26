@@ -27,5 +27,14 @@ DeepCAD-RT/
 tracx/
 CellX_Win_g2_12_c2.12/
 Denoise/
-Legacy/
-DataReview/
+Legacy*/
+single_cell_reloc_parquet/Exploratory/
+single_cell_reloc_parquet/Visualizations/single_cell_reloc_parquet.code-workspace
+single_cell_reloc_parquet/Visualizations.md
+single_cell_reloc_parquet/R.md
+single_cell_reloc_parquet/Quantification.md
+single_cell_reloc_parquet/Pre_track.md
+single_cell_reloc_parquet/ImageJ.md
+single_cell_reloc_parquet/Post_quant.md
+single_cell_reloc_parquet/MATLAB.md
+single_cell_reloc_parquet/global_functions.md
