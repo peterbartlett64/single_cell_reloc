@@ -2,11 +2,11 @@ This README will walk you through the file standards to use the microfluidics pi
 All explanations given should be dated for pipeline protocol changes (DD/MM/YY)
 
 ----Comment structure---
-Code is commented throughout using the better comments extension for VScode. A copy of the markup types is included in the extra documentation.
+Code is commented throughout using the better comments extension for VScode. A copy of the markup types is included in the Further Documentation. (They are also listed at the bottom of this document)
 Refer to "better-comments.tags": [
 
-
 	]
+
 #! These are possible issues
 #* Description of single line. THis is the most commmon comment type throughout pipeline
 #< Start of related loop or logic
@@ -30,7 +30,7 @@ Files should be setup as:
 	If above is true, you must set the color channels in the "flourescent dictrionary"
 
 --- Python subprocesses ---
-In the pipeline file, there both Windos and Unix comand line suprocesses to run Cellx.
+In the pipeline file, there both Windows and Unix comand line suprocesses to run Cellx.
 Comment out the opposite os based on needs.
 
 ***********************************************
@@ -39,32 +39,13 @@ Before running the code, make sure that all programs and python extensions are u
 Listed below are the last used versions:
 
 -------------
-CellX version
-Java [1.6.08_45] (THis is very important. Program likely will not run without the proper version.)
+CellX: Win_g2.12_c2.12
+TracX: ver1.0
+Java [1.6.08_45] (This is very important. Program likely will not run without the proper version.)
+MATLAB: 2023b
+R: 4.3.2
 
-Anaconda 3.8.5 (Python 3):
-pandas []
-#datetime []
-PIL []
-numpy []
-scipy []
-matplotlib []
-seaborn []
-cv2 []
-scipy.io []
-PIL []
-glob []
-os[]
-ntpath []
-csv []
-statistics []
-numba []
-pymongo []
-json []
-multiprocessing []
-concurrent.futures []
-subprocess []
-time []
+For Python versioning, refer to the .yml files in "Distribution_envs"
 
 ----------- For increased readability, code was written using the better-comments extension in VSCode. These were my settings.
 
