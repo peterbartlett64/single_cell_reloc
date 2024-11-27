@@ -14,7 +14,7 @@ from datetime import datetime
 
 # 	exec(f"global {logger_name}")
 # 	PAPERTRAIL_HOST = "logs.papertrailapp.com"
-# 	PAPERTRAIL_PORT = 31634
+# 	PAPERTRAIL_PORT = secret
 
 # 	formatter = logging.Formatter("%(asctime)s %(funcName)s %(levelname)s %(message)s %(lineno)d")
 # 	logging.Formatter.converter = time.gmtime #* Set the date to be gmtime instead of local
