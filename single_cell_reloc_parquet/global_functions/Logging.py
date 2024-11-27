@@ -34,7 +34,7 @@ from datetime import datetime
 
 def setup_logging(logger_name, microfluidics_results):
 	PAPERTRAIL_HOST = "logs.papertrailapp.com"
-	PAPERTRAIL_PORT = 31634
+	PAPERTRAIL_PORT = Secret
 
 	log_folder = os.path.join(microfluidics_results, 'logs')
 	try:
