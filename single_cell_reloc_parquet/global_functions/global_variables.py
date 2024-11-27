@@ -29,7 +29,7 @@ from datetime import datetime
 def setup_logging(logger_name, microfluidics_results): #* Setup a logger for each call
 
 	# LOG_HOST = "logs.papertrailapp.com"
-	# LOG_PORT = 31634
+	# LOG_PORT = Secret
 
 	log_folder = os.path.join(microfluidics_results, 'logs')
 	try:
